@@ -22,15 +22,16 @@ import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
 data class Service(val title: String, val description: String)
 
 val servicesList = listOf(
-    Service("Wedding Photography & Videography", "Capturing every precious moment of your special day with elegance and artistry."),
+    Service("Wedding Photography & Videography", "We offer both cinematic and traditional styles of videography and photography to capture every precious moment of your special day with elegance and artistry."),
     Service("Ring Ceremony Shoot", "Beautifully documenting the start of your journey together."),
-    Service("Birthday Celebrations", "Making your birthday memories last a lifetime with vibrant photos and videos."),
+    Service("Birthday Celebrations", "Making your birthday memories last a lifetime with vibrant photos and videos. We cover all types of birthday shoots."),
     Service("Pre-Wedding Shoots", "Creative and romantic shoots to tell your unique love story."),
     Service("Maternity Shoots", "Cherishing the beautiful journey of motherhood with tender photographs."),
     Service("Baby Shoots", "Adorable and heartwarming captures of your little one's early days."),
     Service("Corporate Events", "Professional coverage for your business events, conferences, and parties."),
     Service("Fashion & Portfolio Shoots", "Showcasing your style and personality with stunning visuals."),
-    Service("Product Photography", "High-quality images to highlight your products.")
+    Service("Product Photography", "High-quality images to highlight your products."),
+    Service("Wedding Card Design", "We design beautiful and unique wedding cards to match your style.")
 )
 
 @Composable

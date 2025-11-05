@@ -12,7 +12,7 @@ import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContent {
             GouravActStudioTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
