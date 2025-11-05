@@ -11,7 +11,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.suvojeet.gouravactstudio.ui.theme.AccentColor
 import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
 
 @Composable
@@ -21,7 +20,7 @@ fun AppLogo(modifier: Modifier = Modifier) {
             text = "Gourav",
             fontSize = 48.sp,
             fontWeight = FontWeight.ExtraBold,
-            color = AccentColor,
+            color = MaterialTheme.colorScheme.primary, // Use primary color from theme
             fontFamily = FontFamily.Cursive // Or a more elegant font
         )
         Text(
