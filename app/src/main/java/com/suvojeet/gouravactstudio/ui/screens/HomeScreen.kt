@@ -1,76 +1,373 @@
 package com.suvojeet.gouravactstudio.ui.screens
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.suvojeet.gouravactstudio.Screen
 import com.suvojeet.gouravactstudio.ui.components.AppLogo
 import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
+import kotlinx.coroutines.delay
 
-@Composable
+ @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
+    var isVisible by remember { mutableStateOf(false) }
+    
+    LaunchedEffect(Unit) {
+        delay(100)
+        isVisible = true
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.White,
-                        Color(0xFFE0E0E0)
+                        Color(0xFFF8F9FA),
+                        Color(0xFFE9ECEF),
+                        Color(0xFFDEE2E6)
                     )
                 )
             )
     ) {
+        // Decorative background circles
+        DecorativeBackground()
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
+                .padding(24.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AppLogo()
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Your Vision, Our Art.",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Capturing Moments, Creating Memories.",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            Button(onClick = { navController.navigate(Screen.Services.route) }) {
-                Text(text = "Explore Our Services")
+            Spacer(modifier = Modifier.height(40.dp))
+
+            // Hero Section
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center
+            ) {
+                AnimatedContent(isVisible) {
+                    AppLogo()
+                }
+                
+                Spacer(modifier = Modifier.height(32.dp))
+                
+                AnimatedContent(isVisible, delay = 200) {
+                    Text(
+                        text = "Your Vision, Our Art.",
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(12.dp))
+                
+                AnimatedContent(isVisible, delay = 400) {
+                    Text(
+                        text = "Capturing Moments, Creating Memories.",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(40.dp))
+                
+                AnimatedContent(isVisible, delay = 600) {
+                    Button(
+                        onClick = { navController.navigate(Screen.Services.route) },
+                        modifier = Modifier
+                            .height(56.dp)
+                            .fillMaxWidth(0.8f),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        ),
+                        elevation = ButtonDefaults.buttonElevation(
+                            defaultElevation = 8.dp,
+                            pressedElevation = 12.dp
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PhotoCamera,
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = "Explore Our Services",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
             }
+
+            // Quick Stats Section
+            AnimatedContent(isVisible, delay = 800) {
+                QuickStatsSection()
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Features Section
+            AnimatedContent(isVisible, delay = 1000) {
+                FeaturesSection()
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
+ @Composable
+fun AnimatedContent(
+    isVisible: Boolean,
+    delay: Long = 0,
+    content: @Composable () -> Unit
+) {
+    val alpha by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 800,
+            delayMillis = delay.toInt(),
+            easing = FastOutSlowInEasing
+        )
+    )
+    
+    val offsetY by animateFloatAsState(
+        targetValue = if (isVisible) 0f else 30f,
+        animationSpec = tween(
+            durationMillis = 800,
+            delayMillis = delay.toInt(),
+            easing = FastOutSlowInEasing
+        )
+    )
+
+    Box(
+        modifier = Modifier
+            .alpha(alpha)
+            .offset(y = offsetY.dp)
+    ) {
+        content()
+    }
+}
+
+ @Composable
+fun DecorativeBackground() {
+    val infiniteTransition = rememberInfiniteTransition()
+    
+    val scale1 by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.2f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    
+    val scale2 by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.3f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(4000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Top right circle
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .scale(scale1)
+                .offset(x = 150.dp, y = (-50).dp)
+                .clip(CircleShape)
+                .background(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            Color(0x40EC4899),
+                            Color(0x10EC4899)
+                        )
+                    )
+                )
+        )
+        
+        // Bottom left circle
+        Box(
+            modifier = Modifier
+                .size(250.dp)
+                .scale(scale2)
+                .offset(x = (-100).dp, y = 500.dp)
+                .clip(CircleShape)
+                .background(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            Color(0x408B5CF6),
+                            Color(0x108B5CF6)
+                        )
+                    )
+                )
+        )
+    }
+}
+
+ @Composable
+fun QuickStatsSection() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        StatItem(number = "500+", label = "Happy Clients", icon = Icons.Filled.People)
+        StatItem(number = "1000+", label = "Events Covered", icon = Icons.Filled.Event)
+        StatItem(number = "5★", label = "Rated Service", icon = Icons.Filled.Star)
+    }
+}
+
+ @Composable
+fun StatItem(number: String, label: String, icon: ImageVector) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(8.dp)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(28.dp)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = number,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+ @Composable
+fun FeaturesSection() {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White.copy(alpha = 0.7f)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+            Text(
+                text = "Why Choose Us?",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            FeatureItem(
+                icon = Icons.Filled.HighQuality,
+                title = "Premium Quality",
+                description = "4K videography and high-resolution photography"
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            FeatureItem(
+                icon = Icons.Filled.Speed,
+                title = "Fast Delivery",
+                description = "Quick turnaround time for your precious memories"
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            FeatureItem(
+                icon = Icons.Filled.PriceCheck,
+                title = "Affordable Packages",
+                description = "Flexible pricing to suit every budget"
+            )
+        }
+    }
+}
+
+ @Composable
+fun FeatureItem(icon: ImageVector, title: String, description: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(
+                    brush = Brush.linearGradient(
+                        colors = listOf(
+                            Color(0xFFEC4899),
+                            Color(0xFF8B5CF6)
+                        )
+                    )
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+        
+        Spacer(modifier = Modifier.width(16.dp))
+        
+        Column {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+            )
+        }
+    }
+}
+
+ @Preview(showBackground = true)
+ @Composable
 fun HomeScreenPreview() {
     GouravActStudioTheme {
         HomeScreen(navController = rememberNavController())
