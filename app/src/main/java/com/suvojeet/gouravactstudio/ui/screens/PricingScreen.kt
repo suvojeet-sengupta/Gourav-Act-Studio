@@ -42,6 +42,25 @@ val pricingList = listOf(
             "32GB USB",
             "Album"
         )
+    ),
+    PricePackage(
+        name = "Premium Package",
+        price = "₹35,000",
+        features = listOf(
+            "Cinematic + Traditional Video & Photo",
+            "Highlight Video",
+            "2 Videographers",
+            "2 Photographers"
+        )
+    ),
+    PricePackage(
+        name = "Elite Package",
+        price = "₹55,000",
+        features = listOf(
+            "Pre-Wedding Shoot",
+            "Ring Ceremony Shoot",
+            "Wedding Shoot (Cinematic + Traditional)"
+        )
     )
 )
 

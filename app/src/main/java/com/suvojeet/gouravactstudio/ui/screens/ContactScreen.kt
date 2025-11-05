@@ -55,7 +55,7 @@ fun ContactScreen(modifier: Modifier = Modifier) {
         ContactInfoItem(
             icon = Icons.Filled.LocationOn,
             title = "Address",
-            subtitle = "123 Studio Lane, Creative City, State - 123456"
+            subtitle = "Village Nagla Dhimar, Etah Road near Bhondela Polytechnic College, Tundla Firozabad (UP) Pin code 283204"
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
