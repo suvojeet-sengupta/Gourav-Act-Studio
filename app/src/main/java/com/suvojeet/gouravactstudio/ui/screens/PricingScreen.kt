@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
 import kotlinx.coroutines.delay
+import com.suvojeet.gouravactstudio.ui.components.AnimatedContent
 
 data class PricePackage(
     val name: String,
@@ -188,38 +189,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
     }
 }
 
- @Composable
-fun AnimatedContent(
-    isVisible: Boolean,
-    delay: Long = 0,
-    content: @Composable () -> Unit
-) {
-    val alpha by animateFloatAsState(
-        targetValue = if (isVisible) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 600,
-            delayMillis = delay.toInt(),
-            easing = FastOutSlowInEasing
-        )
-    )
-    
-    val scale by animateFloatAsState(
-        targetValue = if (isVisible) 1f else 0.9f,
-        animationSpec = tween(
-            durationMillis = 600,
-            delayMillis = delay.toInt(),
-            easing = FastOutSlowInEasing
-        )
-    )
 
-    Box(
-        modifier = Modifier
-            .alpha(alpha)
-            .scale(scale)
-    ) {
-        content()
-    }
-}
 
  @Composable
 fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) {

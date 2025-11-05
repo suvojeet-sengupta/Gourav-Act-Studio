@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.suvojeet.gouravactstudio.Screen
 import com.suvojeet.gouravactstudio.ui.components.AppLogo
+import com.suvojeet.gouravactstudio.ui.components.AnimatedContent
 import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
 import kotlinx.coroutines.delay
 
@@ -145,38 +146,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
     }
 }
 
- @Composable
-fun AnimatedContent(
-    isVisible: Boolean,
-    delay: Long = 0,
-    content: @Composable () -> Unit
-) {
-    val alpha by animateFloatAsState(
-        targetValue = if (isVisible) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 800,
-            delayMillis = delay.toInt(),
-            easing = FastOutSlowInEasing
-        )
-    )
-    
-    val offsetY by animateFloatAsState(
-        targetValue = if (isVisible) 0f else 30f,
-        animationSpec = tween(
-            durationMillis = 800,
-            delayMillis = delay.toInt(),
-            easing = FastOutSlowInEasing
-        )
-    )
 
-    Box(
-        modifier = Modifier
-            .alpha(alpha)
-            .offset(y = offsetY.dp)
-    ) {
-        content()
-    }
-}
 
  @Composable
 fun DecorativeBackground() {
