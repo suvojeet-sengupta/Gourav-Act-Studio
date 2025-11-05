@@ -62,15 +62,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(32.dp))
-            Button(onClick = {
-                navController.navigate(Screen.Services.route) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }) {
+            Button(onClick = { navController.navigate(Screen.Services.route) }) {
                 Text(text = "Explore Our Services")
             }
         }
