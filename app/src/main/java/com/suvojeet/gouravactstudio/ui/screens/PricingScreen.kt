@@ -64,24 +64,30 @@ val pricingList = listOf(
     )
 )
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Button
+
 @Composable
 fun PricingScreen(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "Our Pricing",
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-        LazyColumn {
-            items(pricingList) { pricePackage ->
-                PricePackageCard(pricePackage = pricePackage)
-                Spacer(modifier = Modifier.height(16.dp))
+    Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Our Pricing",
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            LazyColumn {
+                items(pricingList) { pricePackage ->
+                    PricePackageCard(pricePackage = pricePackage)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
         }
     }
@@ -117,6 +123,13 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) 
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                     )
                 }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { /* Handle button click */ },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Get Started")
             }
         }
     }

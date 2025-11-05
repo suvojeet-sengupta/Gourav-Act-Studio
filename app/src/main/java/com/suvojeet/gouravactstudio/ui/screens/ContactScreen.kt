@@ -24,8 +24,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Card
+import androidx.compose.ui.platform.LocalContext
+
 @Composable
 fun ContactScreen(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -40,36 +50,58 @@ fun ContactScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        ContactInfoItem(
-            icon = Icons.Filled.Call,
-            title = "Phone",
-            subtitle = "+91 93546 54066, +91 70179 72737"
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        ContactInfoItem(
-            icon = Icons.Filled.Email,
-            title = "Email",
-            subtitle = "gauravkumarpjt@gmail.com"
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        ContactInfoItem(
-            icon = Icons.Filled.LocationOn,
-            title = "Address",
-            subtitle = "Village Nagla Dhimar, Etah Road near Bhondela Polytechnic College, Tundla Firozabad (UP) Pin code 283204"
-        )
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                ContactInfoItem(
+                    icon = Icons.Filled.Call,
+                    title = "Phone",
+                    subtitle = "+91 93546 54066, +91 70179 72737",
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_DIAL).apply {
+                            data = Uri.parse("tel:+919354654066")
+                        }
+                        context.startActivity(intent)
+                    }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                ContactInfoItem(
+                    icon = Icons.Filled.Email,
+                    title = "Email",
+                    subtitle = "gauravkumarpjt@gmail.com",
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:gauravkumarpjt@gmail.com")
+                        }
+                        context.startActivity(intent)
+                    }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                ContactInfoItem(
+                    icon = Icons.Filled.LocationOn,
+                    title = "Address",
+                    subtitle = "Village Nagla Dhimar, Etah Road near Bhondela Polytechnic College, Tundla Firozabad (UP) Pin code 283204"
+                )
+            }
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Feel free to reach out to us for bookings and inquiries!",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
-            modifier = Modifier.padding(horizontal = 8.dp)
+
+        // MapView placeholder
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
         )
     }
 }
 
 @Composable
-fun ContactInfoItem(icon: ImageVector, title: String, subtitle: String) {
+fun ContactInfoItem(icon: ImageVector, title: String, subtitle: String, onClick: (() -> Unit)? = null) {
     ListItem(
+        modifier = if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier,
         leadingContent = {
             Icon(
                 imageVector = icon,

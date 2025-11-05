@@ -43,7 +43,7 @@ fun MainScreen() {
                 items.forEach { item ->
                     NavigationBarItem(
                         icon = { Icon(item.icon, contentDescription = item.screen.route) },
-                        label = { Text(item.screen.route) },
+                        label = { Text(item.screen.title) },
                         selected = currentDestination?.hierarchy?.any { it.route == item.screen.route } == true,
                         onClick = {
                             navController.navigate(item.screen.route) {

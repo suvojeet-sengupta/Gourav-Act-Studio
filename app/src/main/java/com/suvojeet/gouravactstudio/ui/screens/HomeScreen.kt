@@ -16,28 +16,53 @@ import androidx.compose.ui.unit.dp
 import com.suvojeet.gouravactstudio.ui.components.AppLogo
 import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import com.suvojeet.gouravactstudio.R
+import com.suvojeet.gouravactstudio.Screen
+
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        AppLogo()
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Your Vision, Our Art.",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center
+fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.home_background),
+            contentDescription = "Background",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Capturing Moments, Creating Memories.",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-            textAlign = TextAlign.Center
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AppLogo()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Your Vision, Our Art.",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Capturing Moments, Creating Memories.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            Button(onClick = { navController.navigate(Screen.Services.route) }) {
+                Text(text = "Explore Our Services")
+            }
+        }
     }
 }
 

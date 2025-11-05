@@ -26,7 +26,7 @@ fun AppNavHost(
 ) {
     NavHost(navController = navController, startDestination = Screen.Home.route, modifier = modifier) {
         composable(Screen.Home.route) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
         composable(Screen.Services.route) {
             ServicesScreen()

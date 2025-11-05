@@ -13,34 +13,34 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryColor,
-    secondary = SecondaryColor,
-    tertiary = AccentColor,
-    background = PrimaryColor,
-    surface = SecondaryColor,
-    onPrimary = TextColor,
-    onSecondary = TextColor,
-    onTertiary = TextColor,
-    onBackground = TextColor,
-    onSurface = TextColor
+    primary = DarkAccent,
+    secondary = DarkSurface,
+    tertiary = DarkAccent,
+    background = DarkBackground,
+    surface = DarkSurface,
+    onPrimary = DarkTextColor,
+    onSecondary = DarkTextColor,
+    onTertiary = DarkTextColor,
+    onBackground = DarkTextColor,
+    onSurface = DarkTextColor
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = AccentColor, // Using accent as primary for light theme
-    secondary = LightGray,
-    tertiary = PrimaryColor,
-    background = TextColor,
-    surface = LightGray,
-    onPrimary = PrimaryColor,
-    onSecondary = PrimaryColor,
-    onTertiary = TextColor,
-    onBackground = PrimaryColor,
-    onSurface = PrimaryColor
+    primary = LightAccent,
+    secondary = LightSecondaryText,
+    tertiary = LightAccent,
+    background = LightBackground,
+    surface = LightSurface,
+    onPrimary = LightPrimaryText,
+    onSecondary = LightPrimaryText,
+    onTertiary = LightPrimaryText,
+    onBackground = LightPrimaryText,
+    onSurface = LightPrimaryText
 )
 
 @Composable
 fun GouravActStudioTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false, // Always use light theme
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
