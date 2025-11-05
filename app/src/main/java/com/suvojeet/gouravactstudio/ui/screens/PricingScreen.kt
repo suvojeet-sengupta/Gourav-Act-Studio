@@ -24,36 +24,23 @@ data class PricePackage(val name: String, val price: String, val features: List<
 
 val pricingList = listOf(
     PricePackage(
-        name = "Basic Package",
+        name = "Standard Package",
         price = "₹12,000",
         features = listOf(
-            "4 Hours Coverage",
-            "1 Photographer",
-            "100 Edited Photos",
-            "Online Gallery"
+            "30-sheet album (200 photos)",
+            "32GB pen drive",
+            "2 cameras for photo and video"
         )
     ),
     PricePackage(
-        name = "Standard Package",
+        name = "Deluxe Package",
         price = "₹25,000",
         features = listOf(
-            "8 Hours Coverage",
-            "1 Photographer, 1 Videographer",
-            "250 Edited Photos",
-            "Highlight Video (3-5 min)",
-            "Online Gallery & USB Drive"
-        )
-    ),
-    PricePackage(
-        name = "Premium Package",
-        price = "₹50,000",
-        features = listOf(
-            "Full Day Coverage",
-            "2 Photographers, 2 Videographers",
-            "500+ Edited Photos",
-            "Cinematic Video (10-15 min)",
-            "Pre-Wedding Shoot",
-            "Custom Album & USB Drive"
+            "2 cameras",
+            "1 drone",
+            "1-2 highlight videos",
+            "32GB USB",
+            "Album"
         )
     )
 )
