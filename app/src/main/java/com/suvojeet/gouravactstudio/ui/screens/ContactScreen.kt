@@ -16,12 +16,12 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.ContactMail
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Facebook
-import androidx.compose.material.icons.filled.Instagram
+
+
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.YouTube
+
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -345,21 +345,7 @@ fun SocialMediaSection() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                SocialMediaButton(
-                    icon = Icons.Filled.Instagram,
-                    label = "Instagram",
-                    gradient = listOf(Color(0xFFE4405F), Color(0xFFFCAF45))
-                )
-                SocialMediaButton(
-                    icon = Icons.Filled.Facebook,
-                    label = "Facebook",
-                    gradient = listOf(Color(0xFF1877F2), Color(0xFF42B0FF))
-                )
-                SocialMediaButton(
-                    icon = Icons.Filled.YouTube,
-                    label = "YouTube",
-                    gradient = listOf(Color(0xFFFF0000), Color(0xFFFF6B6B))
-                )
+
             }
         }
     }
