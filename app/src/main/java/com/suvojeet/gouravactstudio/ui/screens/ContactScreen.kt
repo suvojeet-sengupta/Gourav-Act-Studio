@@ -43,13 +43,13 @@ fun ContactScreen(modifier: Modifier = Modifier) {
         ContactInfoItem(
             icon = Icons.Filled.Call,
             title = "Phone",
-            subtitle = "+91 98765 43210"
+            subtitle = "+91 93546 54066, +91 70179 72737"
         )
         Spacer(modifier = Modifier.height(8.dp))
         ContactInfoItem(
             icon = Icons.Filled.Email,
             title = "Email",
-            subtitle = "info@gouravactstudio.com"
+            subtitle = "gauravkumarpjt@gmail.com"
         )
         Spacer(modifier = Modifier.height(8.dp))
         ContactInfoItem(
