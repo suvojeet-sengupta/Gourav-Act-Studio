@@ -1,1 +1,79 @@
-package com.suvojeet.gouravactstudio.ui.screens\n\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.lazy.LazyColumn\nimport androidx.compose.foundation.lazy.items\nimport androidx.compose.material3.Card\nimport androidx.compose.material3.CardDefaults\nimport androidx.compose.material3.MaterialTheme\nimport androidx.compose.material3.Text\nimport androidx.compose.runtime.Composable\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.ui.tooling.preview.Preview\nimport androidx.compose.ui.unit.dp\nimport com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme\n\ndata class Service(val title: String, val description: String)\n\nval servicesList = listOf(\n    Service(\"Wedding Photography & Videography\", \"Capturing every precious moment of your special day with elegance and artistry.\"),\n    Service(\"Ring Ceremony Shoot\", \"Beautifully documenting the start of your journey together.\"),\n    Service(\"Birthday Celebrations\", \"Making your birthday memories last a lifetime with vibrant photos and videos.\"),\n    Service(\"Pre-Wedding Shoots\", \"Creative and romantic shoots to tell your unique love story.\"),\n    Service(\"Maternity Shoots\", \"Cherishing the beautiful journey of motherhood with tender photographs.\"),\n    Service(\"Baby Shoots\", \"Adorable and heartwarming captures of your little one's early days.\"),\n    Service(\"Corporate Events\", \"Professional coverage for your business events, conferences, and parties.\"),\n    Service(\"Fashion & Portfolio Shoots\", \"Showcasing your style and personality with stunning visuals.\"),\n    Service(\"Product Photography\", \"High-quality images to highlight your products for e-commerce and marketing.\"),\n    Service(\"Live Events & Concerts\", \"Dynamic coverage of performances and public gatherings.\")\n)\n\n@Composable\nfun ServicesScreen(modifier: Modifier = Modifier) {\n    Column(\n        modifier = modifier\n            .fillMaxSize()\n            .padding(16.dp)\n    ) {\n        Text(\n            text = \"Our Services\",\n            style = MaterialTheme.typography.headlineLarge,\n            fontWeight = FontWeight.Bold,\n            color = MaterialTheme.colorScheme.onBackground,\n            modifier = Modifier.padding(bottom = 16.dp)\n        )\n        LazyColumn {\n            items(servicesList) {\ service ->\n                ServiceCard(service = service)\n                Spacer(modifier = Modifier.height(8.dp))\n            }\n        }\n    }\n}\n\n@Composable\nfun ServiceCard(service: Service, modifier: Modifier = Modifier) {\n    Card(\n        modifier = modifier.fillMaxWidth(),\n        colors = CardDefaults.cardColors(\n            containerColor = MaterialTheme.colorScheme.surface\n        )\n    ) {\n        Column(modifier = Modifier.padding(16.dp)) {\n            Text(\n                text = service.title,\n                style = MaterialTheme.typography.titleLarge,\n                fontWeight = FontWeight.SemiBold,\n                color = MaterialTheme.colorScheme.onSurface\n            )\n            Spacer(modifier = Modifier.height(4.dp))\n            Text(\n                text = service.description,\n                style = MaterialTheme.typography.bodyMedium,\n                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)\n            )\n        }\n    }\n}\n\n@Preview(showBackground = true)\n@Composable\nfun ServicesScreenPreview() {\n    GouravActStudioTheme {\n        ServicesScreen()\n    }\n}
+package com.suvojeet.gouravactstudio.ui.screens
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
+
+data class Service(val title: String, val description: String)
+
+val servicesList = listOf(
+    Service("Wedding Photography & Videography", "Capturing every precious moment of your special day with elegance and artistry."),
+    Service("Ring Ceremony Shoot", "Beautifully documenting the start of your journey together."),
+    Service("Birthday Celebrations", "Making your birthday memories last a lifetime with vibrant photos and videos."),
+    Service("Pre-Wedding Shoots", "Creative and romantic shoots to tell your unique love story."),
+    Service("Maternity Shoots", "Cherishing the beautiful journey of motherhood with tender photographs."),
+    Service("Baby Shoots", "Adorable and heartwarming captures of your little one's early days."),
+    Service("Corporate Events", "Professional coverage for your business events, conferences, and parties."),
+    Service("Fashion & Portfolio Shoots", "Showcasing your style and personality with stunning visuals."),
+    Service("Product Photography", "High-quality images to highlight your products.")
+)
+
+@Composable
+fun ServicesScreen() {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(servicesList) { service ->
+            ServiceCard(service = service)
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+fun ServiceCard(service: Service) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = service.title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = service.description,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ServicesScreenPreview() {
+    GouravActStudioTheme {
+        ServicesScreen()
+    }
+}

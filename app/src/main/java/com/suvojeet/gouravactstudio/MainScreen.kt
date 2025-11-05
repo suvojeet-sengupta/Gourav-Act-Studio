@@ -1,1 +1,64 @@
-package com.suvojeet.gouravactstudio\n\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.material.icons.Icons\nimport androidx.compose.material.icons.filled.Call\nimport androidx.compose.material.icons.filled.Home\nimport androidx.compose.material.icons.filled.Info\nimport androidx.compose.material.icons.filled.PhotoLibrary\nimport androidx.compose.material.icons.filled.ShoppingCart\nimport androidx.compose.material3.Icon\nimport androidx.compose.material3.NavigationBar\nimport androidx.compose.material3.NavigationBarItem\nimport androidx.compose.material3.Scaffold\nimport androidx.compose.material3.Text\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.getValue\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.graphics.vector.ImageVector\nimport androidx.navigation.NavDestination.Companion.hierarchy\nimport androidx.navigation.NavGraph.Companion.findStartDestination\nimport androidx.navigation.NavHostController\nimport androidx.navigation.compose.currentBackStackEntryAsState\nimport androidx.navigation.compose.rememberNavController\n\ndata class BottomNavItem(val screen: Screen, val icon: ImageVector)\n\n@Composable\nfun MainScreen() {\n    val navController = rememberNavController()\n\n    val items = listOf(\n        BottomNavItem(Screen.Home, Icons.Filled.Home),\n        BottomNavItem(Screen.Services, Icons.Filled.Info),\n        BottomNavItem(Screen.Pricing, Icons.Filled.ShoppingCart),\n        BottomNavItem(Screen.Portfolio, Icons.Filled.PhotoLibrary),\n        BottomNavItem(Screen.Contact, Icons.Filled.Call)\n    )\n\n    Scaffold(\n        bottomBar = {\n            NavigationBar {\n                val navBackStackEntry by navController.currentBackStackEntryAsState()\n                val currentDestination = navBackStackEntry?.destination\n                items.forEach { item ->\n                    NavigationBarItem(\n                        icon = { Icon(item.icon, contentDescription = item.screen.title) },\n                        label = { Text(item.screen.title) },\n                        selected = currentDestination?.hierarchy?.any { it.route == item.screen.route } == true,\n                        onClick = {\n                            navController.navigate(item.screen.route) {\n                                // Pop up to the start destination of the graph to\n                                // avoid building up a large stack of destinations\n                                // on the back stack as users select items\n                                popUpTo(navController.graph.findStartDestination().id) {\n                                    saveState = true\n                                }\n                                // Avoid multiple copies of the same destination when\n                                // reselecting the same item\n                                launchSingleTop = true\n                                // Restore state when reselecting a previously selected item\n                                restoreState = true\n                            }\n                        }\n                    )\n                }\n            }\n        }\n    ) {\ innerPadding ->\n        AppNavHost(navController = navController, modifier = Modifier.padding(innerPadding))\n    }\n}
+package com.suvojeet.gouravactstudio
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+
+data class BottomNavItem(val screen: Screen, val icon: ImageVector)
+
+@Composable
+fun MainScreen() {
+    val navController = rememberNavController()
+
+    val items = listOf(
+        BottomNavItem(Screen.Home, Icons.Filled.Home),
+        BottomNavItem(Screen.Services, Icons.Filled.Info),
+        BottomNavItem(Screen.Pricing, Icons.Filled.ShoppingCart),
+        BottomNavItem(Screen.Portfolio, Icons.Filled.PhotoLibrary),
+        BottomNavItem(Screen.Contact, Icons.Filled.Call)
+    )
+
+    Scaffold(
+        bottomBar = {
+            NavigationBar {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+                items.forEach { item ->
+                    NavigationBarItem(
+                        icon = { Icon(item.icon, contentDescription = item.screen.route) },
+                        label = { Text(item.screen.route) },
+                        selected = currentDestination?.hierarchy?.any { it.route == item.screen.route } == true,
+                        onClick = {
+                            navController.navigate(item.screen.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    ) { innerPadding ->
+        NavGraph(navController = navController, modifier = Modifier.padding(innerPadding))
+    }
+}
