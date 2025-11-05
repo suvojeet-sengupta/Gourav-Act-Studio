@@ -147,7 +147,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                     AnimatedContent(isVisible, delay = 200) {
                         Text(
                             text = "Our Pricing Plans",
-                            style = MaterialTheme.typography.headlineLarge,
+                            style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -203,8 +203,9 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) 
 
     Card(
         modifier = modifier
-            .fillMaxWidth()
-            .then(borderModifier),
+            .fillMaxWidth(0.9f)
+            .then(borderModifier)
+            .align(Alignment.CenterHorizontally),
         shape = RoundedCornerShape(24.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (pricePackage.isPopular) 12.dp else 6.dp
