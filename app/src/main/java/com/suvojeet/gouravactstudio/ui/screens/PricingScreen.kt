@@ -174,14 +174,18 @@ fun PricingScreen(modifier: Modifier = Modifier) {
             ) {
                 itemsIndexed(pricingList) { index, pricePackage ->
                     AnimatedContent(isVisible, delay = 600L + (index * 150L)) {
-                        PricePackageCard(pricePackage = pricePackage)
+                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                            PricePackageCard(pricePackage = pricePackage)
+                        }
                     }
                 }
                 
                 // Custom Package Card at the end
                 item {
                     AnimatedContent(isVisible, delay = 1200L) {
-                        CustomPackageCard()
+                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                            CustomPackageCard()
+                        }
                     }
                 }
             }
@@ -204,8 +208,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) 
     Card(
         modifier = modifier
             .fillMaxWidth(0.9f)
-            .then(borderModifier)
-            .align(Alignment.CenterHorizontally),
+            .then(borderModifier),
         shape = RoundedCornerShape(24.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (pricePackage.isPopular) 12.dp else 6.dp
