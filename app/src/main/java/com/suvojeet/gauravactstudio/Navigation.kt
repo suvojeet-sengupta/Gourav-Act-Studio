@@ -7,7 +7,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.suvojeet.gauravactstudio.ui.screens.AboutScreen
-import com.suvojeet.gauravactstudio.ui.screens.ContactScreen
 import com.suvojeet.gauravactstudio.ui.screens.HomeScreen
 import com.suvojeet.gauravactstudio.ui.screens.PortfolioScreen
 import com.suvojeet.gauravactstudio.ui.screens.PricingScreen
