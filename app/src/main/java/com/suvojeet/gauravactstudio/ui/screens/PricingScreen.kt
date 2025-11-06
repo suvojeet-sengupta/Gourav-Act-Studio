@@ -30,7 +30,6 @@ import kotlinx.coroutines.delay
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-// FIX 1: Added the import for the R class
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.ui.components.InquiryDialog
 import com.suvojeet.gauravactstudio.util.EmailService
@@ -388,6 +387,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
 
  @Composable
  fun CustomPackageCard(onContact: (String) -> Unit) {
+     val customPackageTitle = stringResource(R.string.pricing_custom_package_title)
      Card(
          modifier = Modifier.fillMaxWidth(),
          shape = RoundedCornerShape(24.dp),
@@ -422,7 +422,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
              Spacer(modifier = Modifier.height(16.dp))
              
              Text(
-                 text = stringResource(R.string.pricing_custom_package_title),
+                 text = customPackageTitle,
                  style = MaterialTheme.typography.titleLarge,
                  fontWeight = FontWeight.Bold,
                  textAlign = TextAlign.Center
@@ -440,7 +440,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
              Spacer(modifier = Modifier.height(20.dp))
              
              OutlinedButton(
-                 onClick = { onContact(stringResource(R.string.pricing_custom_package_title)) },
+                 onClick = { onContact(customPackageTitle) },
                  modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
@@ -475,5 +475,3 @@ fun PricingScreenPreview() {
         PricingScreen()
     }
 }
-// FIX 2: Removed the extra closing brace from the end of the file
-
