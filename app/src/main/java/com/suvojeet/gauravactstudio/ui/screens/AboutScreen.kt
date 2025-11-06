@@ -34,13 +34,16 @@ import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.ui.components.FeatureItem
 import kotlinx.coroutines.delay
 
+import androidx.compose.ui.graphics.vector.path
+import androidx.compose.material.icons.materialIcon
+
 val Icons.Filled.Instagram: ImageVector
     get() {
         if (_instagram != null) {
             return _instagram!!
         }
         _instagram = materialIcon(name = "Filled.Instagram") {
-            materialPath {
+            path {
                 moveTo(7.8f, 2.0f)
                 horizontalLineToRelative(8.4f)
                 curveToRelative(2.9f, 0.0f, 5.2f, 2.3f, 5.2f, 5.2f)
@@ -81,7 +84,7 @@ val Icons.Filled.YouTube: ImageVector
             return _youTube!!
         }
         _youTube = materialIcon(name = "Filled.YouTube") {
-            materialPath {
+            path {
                 moveTo(21.58f, 7.19f)
                 curveTo(21.35f, 6.4f, 20.8f, 5.85f, 20.01f, 5.62f)
                 curveTo(18.2f, 5.0f, 12.0f, 5.0f, 12.0f, 5.0f)
