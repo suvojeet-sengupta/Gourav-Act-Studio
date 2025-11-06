@@ -1,5 +1,8 @@
 # Added by Google Gemini
 -dontwarn org.slf4j.impl.StaticLoggerBinder
+# EmailJS Data Classes ko R8/Proguard se bachao
+-keep class com.suvojeet.gauravactstudio.util.EmailRequest { *; }
+-keep class com.suvojeet.gauravactstudio.util.TemplateParams { *; }
 
 # Add project specific ProGuard rules here.
 # You can control the set of applied configuration files using the
