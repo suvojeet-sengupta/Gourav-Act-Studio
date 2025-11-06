@@ -3,7 +3,7 @@
     <string name="home_screen">होम</string>
     <string name="services_screen">सेवाएं</string>
     <string name="pricing_screen">मूल्य निर्धारण</string>
-    <string name="portfolio_screen">पोर्टफोलियो</string>
+    <string name="gallery_screen">गैलरी</string>
     <string name="about_screen">हमारे बारे में</string>
     <string name="app_logo_gaurav">गौरव</string>
     <string name="app_logo_act_studio">एक्ट स्टूडियो</string>
@@ -42,7 +42,7 @@
     <string name="contact_status_closed">बंद है</string>
     <string name="contact_view_on_map">गूगल मैप्स पर देखें</string>
     <string name="contact_tap_to_directions">दिशा-निर्देश प्राप्त करने के लिए टैप करें</string>
-    <string name="portfolio_title">हमारा पोर्टफोलियो</string>
+    <string name="gallery_title">हमारी गैलरी</string>
     <string-array name="portfolio_items">
         <item>वेडिंग एल्बम 1</item>
         <item>वेडिंग एल्बम 2</item>
