@@ -1,5 +1,8 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
+import androidx.compose.ui.graphics.vector.path
+import androidx.compose.material.icons.materialIcon
+
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.core.*
@@ -32,10 +35,11 @@ import androidx.navigation.NavController
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.ui.components.FeatureItem
+import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import kotlinx.coroutines.delay
 
-import androidx.compose.ui.graphics.vector.path
-import androidx.compose.material.icons.materialIcon
+
+
 
 val Icons.Filled.Instagram: ImageVector
     get() {
@@ -254,9 +258,7 @@ fun AboutScreen(navController: NavController) {
     }
 }
 
-import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
-import com.suvojeet.gauravactstudio.ui.components.FeatureItem
-import kotlinx.coroutines.delay
+
 
 @Composable
 fun AboutCard() {
