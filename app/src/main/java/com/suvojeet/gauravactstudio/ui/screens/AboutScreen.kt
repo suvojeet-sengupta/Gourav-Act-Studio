@@ -1,6 +1,7 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
 import coil.compose.AsyncImage
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.layout.ContentScale
 
 import androidx.compose.ui.graphics.vector.path
