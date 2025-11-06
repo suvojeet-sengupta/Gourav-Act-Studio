@@ -11,6 +11,7 @@ import com.suvojeet.gauravactstudio.ui.screens.HomeScreen
 import com.suvojeet.gauravactstudio.ui.screens.PortfolioScreen
 import com.suvojeet.gauravactstudio.ui.screens.PricingScreen
 import com.suvojeet.gauravactstudio.ui.screens.ServicesScreen
+import com.suvojeet.gauravactstudio.ui.screens.SettingsScreen
 
 sealed class Screen(val route: String, @StringRes val title: Int) {
     object Home : Screen("home", R.string.home_screen)

@@ -27,12 +27,9 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import com.suvojeet.gauravactstudio.R
 
-val portfolioItems: List<String>
-    @Composable
-    get() = stringArrayResource(id = R.array.portfolio_items).toList()
-
 @Composable
 fun PortfolioScreen(modifier: Modifier = Modifier) {
+    val portfolioItems = stringArrayResource(id = R.array.portfolio_items).toList()
     Column(
         modifier = modifier
             .fillMaxSize()
