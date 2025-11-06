@@ -34,7 +34,7 @@ data class BottomNavItem(
 )
 
  @Composable
-fun BottomNavigationBar(navController: NavHostController) {
+ fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         BottomNavItem(
             Screen.Home,
@@ -50,9 +50,15 @@ fun BottomNavigationBar(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Portfolio,
-            Icons.Filled.GridView,
-            Icons.Outlined.GridView,
+            Icons.Filled.PhotoLibrary,
+            Icons.Outlined.PhotoLibrary,
             "Portfolio"
+        ),
+        BottomNavItem(
+            Screen.Pricing,
+            Icons.Filled.MonetizationOn,
+            Icons.Outlined.MonetizationOn,
+            "Pricing"
         ),
         BottomNavItem(
             Screen.Contact,
@@ -62,12 +68,11 @@ fun BottomNavigationBar(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Settings,
-            Icons.Filled.Person,
-            Icons.Outlined.Person,
-            "Profile"
+            Icons.Filled.Info,
+            Icons.Outlined.Info,
+            "About"
         )
     )
-
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = Color.White,
@@ -169,9 +174,15 @@ fun InstagramStyleBottomNav(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Portfolio,
-            Icons.Filled.GridView,
-            Icons.Outlined.GridView,
+            Icons.Filled.PhotoLibrary,
+            Icons.Outlined.PhotoLibrary,
             "Portfolio"
+        ),
+        BottomNavItem(
+            Screen.Pricing,
+            Icons.Filled.MonetizationOn,
+            Icons.Outlined.MonetizationOn,
+            "Pricing"
         ),
         BottomNavItem(
             Screen.Contact,
@@ -181,9 +192,9 @@ fun InstagramStyleBottomNav(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Settings,
-            Icons.Filled.Person,
-            Icons.Outlined.Person,
-            "Profile"
+            Icons.Filled.Info,
+            Icons.Outlined.Info,
+            "About"
         )
     )
 
@@ -277,9 +288,15 @@ fun YouTubeStyleBottomNav(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Portfolio,
-            Icons.Filled.VideoLibrary,
-            Icons.Outlined.VideoLibrary,
+            Icons.Filled.PhotoLibrary,
+            Icons.Outlined.PhotoLibrary,
             "Portfolio"
+        ),
+        BottomNavItem(
+            Screen.Pricing,
+            Icons.Filled.MonetizationOn,
+            Icons.Outlined.MonetizationOn,
+            "Pricing"
         ),
         BottomNavItem(
             Screen.Contact,
@@ -289,9 +306,9 @@ fun YouTubeStyleBottomNav(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Settings,
-            Icons.Filled.Person,
-            Icons.Outlined.Person,
-            "You"
+            Icons.Filled.Info,
+            Icons.Outlined.Info,
+            "About"
         )
     )
 
@@ -396,9 +413,15 @@ fun MinimalBottomNav(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Portfolio,
-            Icons.Filled.Collections,
-            Icons.Outlined.Collections,
+            Icons.Filled.PhotoLibrary,
+            Icons.Outlined.PhotoLibrary,
             "Portfolio"
+        ),
+        BottomNavItem(
+            Screen.Pricing,
+            Icons.Filled.MonetizationOn,
+            Icons.Outlined.MonetizationOn,
+            "Pricing"
         ),
         BottomNavItem(
             Screen.Contact,
@@ -408,9 +431,9 @@ fun MinimalBottomNav(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Settings,
-            Icons.Filled.AccountCircle,
-            Icons.Outlined.AccountCircle,
-            "Account"
+            Icons.Filled.Info,
+            Icons.Outlined.Info,
+            "About"
         )
     )
 
