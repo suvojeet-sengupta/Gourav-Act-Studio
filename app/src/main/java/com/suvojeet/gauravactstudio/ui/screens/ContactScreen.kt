@@ -446,30 +446,40 @@ fun BusinessHoursCard() {
             val statusColor = if (isOpen) Color(0xFF10B981) else MaterialTheme.colorScheme.error
             val statusIcon = if (isOpen) Icons.Filled.CheckCircle else Icons.Filled.Close
 
-            AnimatedContent(targetState = statusText, label = "BusinessStatusAnimation") { targetStatus ->
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    color = if (isOpen) Color(0xFFF0FDF4) else statusColor.copy(alpha = 0.1f)
+            val animatedAlpha by animateFloatAsState(
+                targetValue = if (true) 1f else 0f, // Always visible, animation for state change
+                animationSpec = tween(durationMillis = 300)
+            )
+            val animatedOffset by animateDpAsState(
+                targetValue = if (true) 0.dp else 10.dp, // Subtle slide effect
+                animationSpec = tween(durationMillis = 300)
+            )
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .alpha(animatedAlpha)
+                    .offset(y = animatedOffset),
+                shape = RoundedCornerShape(12.dp),
+                color = if (isOpen) Color(0xFFF0FDF4) else statusColor.copy(alpha = 0.1f)
+            ) {
+                Row(
+                    modifier = Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier.padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = statusIcon,
-                            contentDescription = null,
-                            tint = statusColor,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = targetStatus,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = statusColor
-                        )
-                    }
+                    Icon(
+                        imageVector = statusIcon,
+                        contentDescription = null,
+                        tint = statusColor,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = statusText,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = statusColor
+                    )
                 }
             }
         }
