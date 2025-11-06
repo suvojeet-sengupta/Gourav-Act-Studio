@@ -69,12 +69,9 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
-
             // Hero Section
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
                 AnimatedContent(isVisible) {
