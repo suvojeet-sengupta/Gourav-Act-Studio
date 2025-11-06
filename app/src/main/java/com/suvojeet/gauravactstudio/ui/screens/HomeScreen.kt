@@ -132,7 +132,10 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                 ),
                 fontWeight = FontWeight.ExtraBold,
                 color = Color(0xFF1A1A1A),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                softWrap = false,
+                overflow = TextOverflow.Ellipsis
             )
         }
         
