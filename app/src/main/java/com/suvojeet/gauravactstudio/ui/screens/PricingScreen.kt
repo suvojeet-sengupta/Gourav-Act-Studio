@@ -30,6 +30,7 @@ import kotlinx.coroutines.delay
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import com.suvojeet.gauravactstudio.ui.components.InquiryDialog
 import com.suvojeet.gauravactstudio.R
 
 data class PricePackage(
@@ -41,7 +42,43 @@ data class PricePackage(
     val icon: ImageVector = Icons.Filled.PhotoCamera
 )
 
- @Composable
+@Composable
+fun PricingScreen(modifier: Modifier = Modifier) {
+    val pricingList = listOf(
+        PricePackage(
+            name = stringResource(R.string.pricing_package_standard_name),
+            price = "₹12,000",
+            features = stringArrayResource(id = R.array.pricing_package_standard_features).toList(),
+            gradient = listOf(Color(0xFF10B981), Color(0xFF14B8A6)),
+            icon = Icons.Filled.CameraAlt
+        ),
+        PricePackage(
+            name = stringResource(R.string.pricing_package_deluxe_name),
+            price = "₹25,000",
+            features = stringArrayResource(id = R.array.pricing_package_deluxe_features).toList(),
+            isPopular = true,
+            gradient = listOf(Color(0xFF3B82F6), Color(0xFF06B6D4)),
+            icon = Icons.Filled.Videocam
+        ),
+        PricePackage(
+            name = stringResource(R.string.pricing_package_premium_name),
+            price = "₹35,000",
+            features = stringArrayResource(id = R.array.pricing_package_premium_features).toList(),
+            gradient = listOf(Color(0xFFEC4899), Color(0xFFF97316)),
+            icon = Icons.Filled.Movie
+        ),
+        PricePackage(
+            name = stringResource(R.string.pricing_package_elite_name),
+            price = "₹55,000",
+            features = stringArrayResource(id = R.array.pricing_package_elite_features).toList(),
+            gradient = listOf(Color(0xFF8B5CF6), Color(0xFFEC4899)),
+            icon = Icons.Filled.Diamond
+        )
+    )
+import com.suvojeet.gauravactstudio.util.EmailService
+import kotlinx.coroutines.launch
+
+@Composable
 fun PricingScreen(modifier: Modifier = Modifier) {
     val pricingList = listOf(
         PricePackage(
@@ -75,7 +112,33 @@ fun PricingScreen(modifier: Modifier = Modifier) {
         )
     )
     var isVisible by remember { mutableStateOf(false) }
-    
+    var showInquiryDialog by remember { mutableStateOf(false) }
+    var selectedPackage by remember { mutableStateOf("") }
+
+    val coroutineScope = rememberCoroutineScope()
+    val emailService = remember { EmailService() }
+
+    if (showInquiryDialog) {
+        InquiryDialog(
+            packageName = selectedPackage,
+            onDismiss = { showInquiryDialog = false },
+            onSubmit = { name, phone, eventType, otherEventType, date, notes ->
+                coroutineScope.launch {
+                    emailService.sendEmail(
+                        name = name,
+                        phone = phone,
+                        eventType = eventType,
+                        otherEventType = otherEventType,
+                        date = date,
+                        notes = notes,
+                        packageName = selectedPackage
+                    )
+                }
+                showInquiryDialog = false
+            }
+        )
+    }
+
     LaunchedEffect(Unit) {
         delay(100)
         isVisible = true
@@ -115,7 +178,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    
+
                     AnimatedContent(isVisible, delay = 200) {
                         Text(
                             text = stringResource(R.string.pricing_title),
@@ -124,9 +187,9 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
-                    
+
                     Spacer(modifier = Modifier.height(8.dp))
-                    
+
                     AnimatedContent(isVisible, delay = 400) {
                         Text(
                             text = stringResource(R.string.pricing_subtitle),
@@ -147,16 +210,22 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                 itemsIndexed(pricingList) { index, pricePackage ->
                     AnimatedContent(isVisible, delay = 600L + (index * 150L)) {
                         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                            PricePackageCard(pricePackage = pricePackage)
+                            PricePackageCard(pricePackage = pricePackage, onChoosePlan = {
+                                selectedPackage = it
+                                showInquiryDialog = true
+                            })
                         }
                     }
                 }
-                
+
                 // Custom Package Card at the end
                 item {
                     AnimatedContent(isVisible, delay = 1200L) {
                         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                            CustomPackageCard()
+                            CustomPackageCard {
+                                selectedPackage = it
+                                showInquiryDialog = true
+                            }
                         }
                     }
                 }
@@ -165,10 +234,8 @@ fun PricingScreen(modifier: Modifier = Modifier) {
     }
 }
 
-
-
- @Composable
-fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) {
+@Composable
+fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, onChoosePlan: (String) -> Unit) {
     val borderModifier = if (pricePackage.isPopular) {
         Modifier.border(
             width = 2.dp,
@@ -322,7 +389,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) 
 
             // CTA Button
             Button(
-                onClick = { /* Handle button click */ },
+                onClick = { onChoosePlan(pricePackage.name) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
@@ -353,61 +420,60 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) 
 }
 
  @Composable
-fun CustomPackageCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(64.dp)
-                    .clip(CircleShape)
-                    .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(Color(0xFFF59E0B), Color(0xFFFBBF24))
-                        )
-                    ),
-                    contentAlignment = Alignment.Center
-                ) {
-                Icon(
-                    imageVector = Icons.Filled.AutoAwesome,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Text(
-                text = stringResource(R.string.pricing_custom_package_title),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Text(
-                text = stringResource(R.string.pricing_custom_package_description),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-            
-            Spacer(modifier = Modifier.height(20.dp))
-            
-            OutlinedButton(
-                onClick = { /* Handle contact click */ },
-                modifier = Modifier
+ fun CustomPackageCard(onContact: (String) -> Unit) {
+     Card(
+         modifier = Modifier.fillMaxWidth(),
+         shape = RoundedCornerShape(24.dp),
+         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+         colors = CardDefaults.cardColors(
+             containerColor = Color.White
+         )
+     ) {
+         Column(
+             modifier = Modifier.padding(24.dp),
+             horizontalAlignment = Alignment.CenterHorizontally
+         ) {
+             Box(
+                 modifier = Modifier
+                     .size(64.dp)
+                     .clip(CircleShape)
+                     .background(
+                         brush = Brush.linearGradient(
+                             colors = listOf(Color(0xFFF59E0B), Color(0xFFFBBF24))
+                         )
+                     ),
+                 contentAlignment = Alignment.Center
+             ) {
+                 Icon(
+                     imageVector = Icons.Filled.AutoAwesome,
+                     contentDescription = null,
+                     tint = Color.White,
+                     modifier = Modifier.size(32.dp)
+                 )
+             }
+             
+             Spacer(modifier = Modifier.height(16.dp))
+             
+             Text(
+                 text = stringResource(R.string.pricing_custom_package_title),
+                 style = MaterialTheme.typography.titleLarge,
+                 fontWeight = FontWeight.Bold,
+                 textAlign = TextAlign.Center
+             )
+             
+             Spacer(modifier = Modifier.height(8.dp))
+             
+             Text(
+                 text = stringResource(R.string.pricing_custom_package_description),
+                 style = MaterialTheme.typography.bodyMedium,
+                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                 textAlign = TextAlign.Center
+             )
+             
+             Spacer(modifier = Modifier.height(20.dp))
+             
+             OutlinedButton(
+                 onClick = { onContact(stringResource(R.string.pricing_custom_package_title)) },                modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
                 shape = RoundedCornerShape(16.dp),

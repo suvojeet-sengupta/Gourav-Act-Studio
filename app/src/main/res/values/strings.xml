@@ -134,4 +134,14 @@
     <string name="settings_language">Language</string>
     <string name="settings_select_language">Select Language</string>
     <string name="settings_cancel">Cancel</string>
+    <string-array name="event_types">
+        <item>Wedding</item>
+        <item>Pre-wedding</item>
+        <item>Engagement</item>
+        <item>Birthday Party</item>
+        <item>Corporate Event</item>
+        <item>Fashion Shoot</item>
+        <item>Product Photography</item>
+        <item>Other</item>
+    </string-array>
 </resources>
