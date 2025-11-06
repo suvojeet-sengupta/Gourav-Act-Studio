@@ -1,5 +1,6 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
+import android.util.Log // Error logging ke liye import
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -80,27 +81,58 @@ fun PricingScreen(modifier: Modifier = Modifier) {
     var isVisible by remember { mutableStateOf(false) }
     var showInquiryDialog by remember { mutableStateOf(false) }
     var selectedPackage by remember { mutableStateOf("") }
+    var isSubmittingInquiry by remember { mutableStateOf(false) } // <-- YEH HAI NAYA LOADING STATE
 
     val coroutineScope = rememberCoroutineScope()
     val emailService = remember { EmailService() }
+    val snackbarHostState = remember { SnackbarHostState() } // <-- YEH HAI SNACKBAR KE LIYE
 
     if (showInquiryDialog) {
         InquiryDialog(
             packageName = selectedPackage,
-            onDismiss = { showInquiryDialog = false },
-            onSubmit = { name, phone, eventType, otherEventType, date, notes ->
-                coroutineScope.launch {
-                    emailService.sendEmail(
-                        name = name,
-                        phone = phone,
-                        eventType = eventType,
-                        otherEventType = otherEventType,
-                        date = date,
-                        notes = notes,
-                        packageName = selectedPackage
-                    )
+            // Yeh prop pass karo. Tumhe apne InquiryDialog.kt mein isko accept karna padega
+            // aur jab yeh true ho toh ek CircularProgressIndicator dikhana padega.
+            isSubmitting = isSubmittingInquiry,
+            onDismiss = {
+                // Agar loading chal raha hai toh dismiss mat karne do
+                if (!isSubmittingInquiry) {
+                    showInquiryDialog = false
                 }
-                showInquiryDialog = false
+            },
+            onSubmit = { name, phone, eventType, otherEventType, date, notes ->
+                // Coroutine launch karo
+                coroutineScope.launch {
+                    isSubmittingInquiry = true // Loading shuru
+                    try {
+                        emailService.sendEmail(
+                            name = name,
+                            phone = phone,
+                            eventType = eventType,
+                            otherEventType = otherEventType,
+                            date = date,
+                            notes = notes,
+                            packageName = selectedPackage
+                        )
+                        // Success! Ab dialog band karo aur confirmation dikhao
+                        showInquiryDialog = false
+                        snackbarHostState.showSnackbar(
+                            message = "Inquiry sent successfully! We will contact you soon.",
+                            duration = SnackbarDuration.Short
+                        )
+                    } catch (e: Exception) {
+                        // OOPS! Error aa gaya
+                        Log.e("PricingScreen", "Failed to send email", e) // Error ko log karo
+                        snackbarHostState.showSnackbar(
+                            message = "Error: Could not send inquiry. Please check your connection.",
+                            duration = SnackbarDuration.Long
+                        )
+                    } finally {
+                        // Kaam ho gaya (success ya fail), loading band karo
+                        isSubmittingInquiry = false
+                    }
+                }
+                // Yahan se dialog close mat karo! Woh coroutine ke andar hoga.
+                // showInquiryDialog = false <-- YEH GALAT THA
             }
         )
     }
@@ -110,88 +142,96 @@ fun PricingScreen(modifier: Modifier = Modifier) {
         isVisible = true
     }
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFF8F9FA),
-                        Color(0xFFE9ECEF)
+    // Scaffold add kiya hai taaki Snackbar dikha sakein
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        containerColor = Color.Transparent
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .padding(innerPadding) // Padding apply karo Scaffold se
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFFF8F9FA),
+                            Color(0xFFE9ECEF)
+                        )
                     )
                 )
-            )
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
         ) {
-            // Header Section
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.surface,
-                tonalElevation = 2.dp
+            Column(
+                modifier = Modifier.fillMaxSize()
             ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                // Header Section
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.surface,
+                    tonalElevation = 2.dp
                 ) {
-                    AnimatedContent(isVisible) {
-                        Icon(
-                            imageVector = Icons.Filled.Payments,
-                            contentDescription = null,
-                            modifier = Modifier.size(48.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Column(
+                        modifier = Modifier.padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AnimatedContent(isVisible) {
+                            Icon(
+                                imageVector = Icons.Filled.Payments,
+                                contentDescription = null,
+                                modifier = Modifier.size(48.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
 
-                    AnimatedContent(isVisible, delay = 200) {
-                        Text(
-                            text = stringResource(R.string.pricing_title),
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                        AnimatedContent(isVisible, delay = 200) {
+                            Text(
+                                text = stringResource(R.string.pricing_title),
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
-                    AnimatedContent(isVisible, delay = 400) {
-                        Text(
-                            text = stringResource(R.string.pricing_subtitle),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-            }
-
-            // Pricing Cards
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                itemsIndexed(pricingList) { index, pricePackage ->
-                    AnimatedContent(isVisible, delay = 600L + (index * 150L)) {
-                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                            PricePackageCard(pricePackage = pricePackage, onChoosePlan = {
-                                selectedPackage = it
-                                showInquiryDialog = true
-                            })
+                        AnimatedContent(isVisible, delay = 400) {
+                            Text(
+                                text = stringResource(R.string.pricing_subtitle),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
+                            )
                         }
                     }
                 }
 
-                // Custom Package Card at the end
-                item {
-                    AnimatedContent(isVisible, delay = 1200L) {
-                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                            CustomPackageCard(onContact = {
-                                selectedPackage = it
-                                showInquiryDialog = true
-                            })
+                // Pricing Cards
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    itemsIndexed(pricingList) { index, pricePackage ->
+                        AnimatedContent(isVisible, delay = 600L + (index * 150L)) {
+                            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                                PricePackageCard(pricePackage = pricePackage, onChoosePlan = {
+                                    selectedPackage = it
+                                    showInquiryDialog = true
+                                })
+                            }
+                        }
+                    }
+
+                    // Custom Package Card at the end
+                    item {
+                        AnimatedContent(isVisible, delay = 1200L) {
+                            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                                CustomPackageCard(onContact = {
+                                    selectedPackage = it
+                                    showInquiryDialog = true
+                                })
+                            }
                         }
                     }
                 }
