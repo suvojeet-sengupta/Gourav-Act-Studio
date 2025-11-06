@@ -12,25 +12,27 @@ import kotlinx.serialization.json.Json
 import io.ktor.client.plugins.expectSuccess
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.SerialName // <-- YEH HAI ASLI HERO
 
-// STEP 1: Request object se keys hata di. Sirf data jaayega.
+// STEP 1: Saari fields ko @SerialName se annotate kar diya
 @Serializable
 data class EmailRequest(
-    val service_id: String,
-    val template_id: String,
-    val template_params: TemplateParams
-    // user_id aur accessToken yahaan se HATA DIYE HAIN.
+    @SerialName("service_id") val service_id: String,
+    @SerialName("template_id") val template_id: String,
+    @SerialName("user_id") val user_id: String, // R8 isko 'a' bhi bana de, JSON mein 'user_id' hi jaayega
+    @SerialName("accessToken") val accessToken: String, // R8 isko 'b' bhi bana de, JSON mein 'accessToken' hi jaayega
+    @SerialName("template_params") val template_params: TemplateParams
 )
 
 @Serializable
 data class TemplateParams(
-    val name: String,
-    val phone: String,
-    val event_type: String,
-    val date: String,
-    val package_name: String,
-    val notes: String,
-    val user_email: String
+    @SerialName("name") val name: String,
+    @SerialName("phone") val phone: String,
+    @SerialName("event_type") val event_type: String,
+    @SerialName("date") val date: String,
+    @SerialName("package_name") val package_name: String,
+    @SerialName("notes") val notes: String,
+    @SerialName("user_email") val user_email: String
 )
 
 class EmailService {
@@ -44,7 +46,7 @@ class EmailService {
         expectSuccess = true
     }
 
-    // STEP 2: Sirf Private Key ki zaroorat hai. Public Key hata di.
+    private val PUBLIC_KEY = "TbJu090thBBTkuHRO"
     private val PRIVATE_KEY = "nqvC8yyG26lrXjr-vTSa8"
 
     suspend fun sendEmail(
@@ -58,9 +60,12 @@ class EmailService {
     ) {
         val finalEventType = if (eventType == "Other") otherEventType else eventType
 
+        // STEP 2: Request object ab R8-proof hai
         val request = EmailRequest(
             service_id = "service_ovxd5wh",
             template_id = "template_z67rf0m",
+            user_id = PUBLIC_KEY,
+            accessToken = PRIVATE_KEY,
             template_params = TemplateParams(
                 name = name,
                 phone = phone,
@@ -74,17 +79,14 @@ class EmailService {
 
         try {
             val jsonPayload = Json.encodeToString(EmailRequest.serializer(), request)
-            Log.d("EmailService", "Sending payload: $jsonPayload")
+            Log.d("EmailService", "Sending R8-Proof payload: $jsonPayload") // Log check kar sakte ho
         } catch (e: SerializationException) {
             Log.e("EmailService", "Failed to serialize request", e)
         }
 
-        // STEP 3: ASLI FIX YEH HAI
         val response = client.post("https://api.emailjs.com/api/v1.0/email/send") {
-            // Private Key ko JSON body ki jagah HEADER mein bhej rahe hain
-            header(HttpHeaders.Authorization, "Bearer $PRIVATE_KEY")
             contentType(ContentType.Application.Json)
-            setBody(request) // Body mein ab sirf data hai, keys nahi
+            setBody(request)
         }
 
         Log.d("EmailService", "Got response: ${response.status} ${response.bodyAsText()}")
