@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Store
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -94,6 +95,12 @@ val servicesList = listOf(
         "Beautiful and unique wedding card designs to match your style.",
         Icons.Filled.Create,
         listOf(Color(0xFFF97316), Color(0xFFFBBF24))
+    ),
+    Service(
+        "Business & Promotion Shoots",
+        "High-quality photography and videography for business promotion and e-commerce shops.",
+        Icons.Filled.Store,
+        listOf(Color(0xFF4CAF50), Color(0xFF8BC34A))
     )
 )
 
