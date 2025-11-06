@@ -44,7 +44,7 @@ fun AppNavHost(
             AboutScreen(navController = navController)
         }
         composable(Screen.Settings.route) {
-            SettingsScreen()
+            SettingsScreen(navController = navController)
         }
     }
 }
