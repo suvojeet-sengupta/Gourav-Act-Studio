@@ -30,6 +30,8 @@ import kotlinx.coroutines.delay
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+// FIX 1: Added the import for the R class
+import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.ui.components.InquiryDialog
 import com.suvojeet.gauravactstudio.util.EmailService
 import kotlinx.coroutines.launch
@@ -438,7 +440,8 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
              Spacer(modifier = Modifier.height(20.dp))
              
              OutlinedButton(
-                 onClick = { onContact(stringResource(R.string.pricing_custom_package_title)) },                modifier = Modifier
+                 onClick = { onContact(stringResource(R.string.pricing_custom_package_title)) },
+                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
                 shape = RoundedCornerShape(16.dp),
@@ -472,3 +475,5 @@ fun PricingScreenPreview() {
         PricingScreen()
     }
 }
+// FIX 2: Removed the extra closing brace from the end of the file
+

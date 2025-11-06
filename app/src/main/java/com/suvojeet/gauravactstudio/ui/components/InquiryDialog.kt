@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -131,7 +132,7 @@ fun InquiryDialog(
                     readOnly = true,
                     trailingIcon = {
                         IconButton(onClick = { showDatePicker(context) { date = it } }) {
-                            Icon(imageVector = Icons.Default.DateRange, contentDescription = "Select Date")
+                            Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Select Date")
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
