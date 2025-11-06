@@ -34,6 +34,8 @@ import com.suvojeet.gauravactstudio.ui.components.FeatureItem
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
  @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -60,11 +62,11 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
         // Decorative background circles
         DecorativeBackground()
 
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .verticalScroll(scrollState)
                 .padding(24.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(40.dp))
