@@ -254,38 +254,9 @@ fun AboutScreen(navController: NavController) {
     }
 }
 
-@Composable
-fun AnimatedContent(
-    isVisible: Boolean,
-    delay: Long = 0,
-    content: @Composable () -> Unit
-) {
-    val alpha by animateFloatAsState(
-        targetValue = if (isVisible) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 600,
-            delayMillis = delay.toInt(),
-            easing = FastOutSlowInEasing
-        )
-    )
-    
-    val scale by animateFloatAsState(
-        targetValue = if (isVisible) 1f else 0.9f,
-        animationSpec = tween(
-            durationMillis = 600,
-            delayMillis = delay.toInt(),
-            easing = FastOutSlowInEasing
-        )
-    )
-
-    Box(
-        modifier = Modifier
-            .alpha(alpha)
-            .scale(scale)
-    ) {
-        content()
-    }
-}
+import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+import com.suvojeet.gauravactstudio.ui.components.FeatureItem
+import kotlinx.coroutines.delay
 
 @Composable
 fun AboutCard() {

@@ -1,6 +1,8 @@
 package com.suvojeet.gauravactstudio.ui.components
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
@@ -19,7 +21,7 @@ fun AnimatedContent(
     val alpha by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0f,
         animationSpec = tween(
-            durationMillis = 600,
+            durationMillis = 200,
             delayMillis = delay.toInt(),
             easing = FastOutSlowInEasing
         )
@@ -28,7 +30,7 @@ fun AnimatedContent(
     val scale by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0.9f,
         animationSpec = tween(
-            durationMillis = 600,
+            durationMillis = 200,
             delayMillis = delay.toInt(),
             easing = FastOutSlowInEasing
         )
