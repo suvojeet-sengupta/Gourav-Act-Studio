@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -30,12 +31,12 @@ import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
 import androidx.compose.ui.res.stringResource
 import com.suvojeet.gauravactstudio.R
-import com.suvojeet.gauravactstudio.ui.components.FeatureItem
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.blur
 
  @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -52,165 +53,261 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFFF8F9FA),
-                        Color(0xFFE9ECEF),
-                        Color(0xFFDEE2E6)
+                        Color(0xFFFAFAFA),
+                        Color(0xFFFFFBFE),
+                        Color(0xFFF5F5F7)
                     )
                 )
             )
     ) {
-        // Decorative background circles
-        DecorativeBackground()
+        // Enhanced decorative background
+        LightDecorativeBackground()
 
         val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
-                .padding(24.dp),
+                .padding(horizontal = 20.dp, vertical = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Hero Section
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                AnimatedContent(isVisible) {
-                    AppLogo()
-                }
-                
-                Spacer(modifier = Modifier.height(32.dp))
-                
-                AnimatedContent(isVisible, delay = 200) {
-                    Text(
-                        text = stringResource(R.string.home_hero_title),
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary,
-                        textAlign = TextAlign.Center
-                    )
-                }
-                
-                Spacer(modifier = Modifier.height(12.dp))
-                
-                AnimatedContent(isVisible, delay = 400) {
-                    Text(
-                        text = stringResource(R.string.home_hero_subtitle),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-                        textAlign = TextAlign.Center
-                    )
-                }
-                
-                Spacer(modifier = Modifier.height(40.dp))
-                
-                AnimatedContent(isVisible, delay = 600) {
-                    Button(
-                        onClick = { navController.navigate(Screen.Services.route) },
-                        modifier = Modifier
-                            .height(56.dp)
-                            .fillMaxWidth(0.8f),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        ),
-                        elevation = ButtonDefaults.buttonElevation(
-                            defaultElevation = 8.dp,
-                            pressedElevation = 12.dp
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.PhotoCamera,
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            text = stringResource(R.string.home_explore_services),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
-            }
+            // Hero Section with modern design
+            HeroSection(isVisible, navController)
 
-            // Quick Stats Section
+            Spacer(modifier = Modifier.height(48.dp))
+
+            // Quick Stats with Modern Cards
             AnimatedContent(isVisible, delay = 800) {
-                QuickStatsSection()
+                ModernQuickStatsSection()
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
-            // Features Section
+            // Features with modern design
             AnimatedContent(isVisible, delay = 1000) {
-                FeaturesSection()
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Address Section
-            AnimatedContent(isVisible, delay = 1200) {
-                AddressSection()
+                ModernFeaturesSection()
             }
 
             Spacer(modifier = Modifier.height(32.dp))
+
+            // Address with Modern Design
+            AnimatedContent(isVisible, delay = 1200) {
+                ModernAddressSection()
+            }
+
+            Spacer(modifier = Modifier.height(48.dp))
         }
     }
 }
 
-
+ @Composable
+fun HeroSection(isVisible: Boolean, navController: NavController) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        // Logo with glow effect
+        AnimatedContent(isVisible) {
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .shadow(
+                        elevation = 24.dp,
+                        shape = CircleShape,
+                        ambientColor = Color(0xFFEC4899).copy(alpha = 0.3f),
+                        spotColor = Color(0xFF8B5CF6).copy(alpha = 0.3f)
+                    )
+            ) {
+                AppLogo()
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(32.dp))
+        
+        AnimatedContent(isVisible, delay = 200) {
+            Text(
+                text = stringResource(R.string.home_hero_title),
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    fontSize = 34.sp,
+                    letterSpacing = (-0.5).sp
+                ),
+                fontWeight = FontWeight.ExtraBold,
+                color = Color(0xFF1A1A1A),
+                textAlign = TextAlign.Center
+            )
+        }
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        AnimatedContent(isVisible, delay = 400) {
+            Text(
+                text = stringResource(R.string.home_hero_subtitle),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontSize = 16.sp,
+                    lineHeight = 24.sp
+                ),
+                color = Color(0xFF666666),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+        }
+        
+        Spacer(modifier = Modifier.height(48.dp))
+        
+        AnimatedContent(isVisible, delay = 600) {
+            var isPressed by remember { mutableStateOf(false) }
+            val scale by animateFloatAsState(
+                targetValue = if (isPressed) 0.95f else 1f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
+            
+            Button(
+                onClick = { 
+                    isPressed = true
+                    navController.navigate(Screen.Services.route)
+                },
+                modifier = Modifier
+                    .height(64.dp)
+                    .fillMaxWidth(0.85f)
+                    .scale(scale)
+                    .shadow(
+                        elevation = 20.dp,
+                        shape = RoundedCornerShape(32.dp),
+                        ambientColor = Color(0xFFEC4899).copy(alpha = 0.4f),
+                        spotColor = Color(0xFF8B5CF6).copy(alpha = 0.4f)
+                    ),
+                shape = RoundedCornerShape(32.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color(0xFFEC4899),
+                                    Color(0xFF8B5CF6)
+                                )
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PhotoCamera,
+                            contentDescription = null,
+                            modifier = Modifier.size(28.dp),
+                            tint = Color.White
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = stringResource(R.string.home_explore_services),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            letterSpacing = 0.5.sp
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
 
  @Composable
-fun DecorativeBackground() {
+fun LightDecorativeBackground() {
     val infiniteTransition = rememberInfiniteTransition()
     
-    val scale1 by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.2f,
+    val offsetX1 by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 50f,
         animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = FastOutSlowInEasing),
+            animation = tween(6000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         )
     )
     
-    val scale2 by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.3f,
+    val offsetY1 by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 30f,
         animationSpec = infiniteRepeatable(
-            animation = tween(4000, easing = FastOutSlowInEasing),
+            animation = tween(4000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         )
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Top right circle
+        // Gradient orb 1 - Pink
         Box(
             modifier = Modifier
-                .size(200.dp)
-                .scale(scale1)
-                .offset(x = 150.dp, y = (-50).dp)
+                .size(350.dp)
+                .offset(x = (120 + offsetX1).dp, y = (-80 + offsetY1).dp)
+                .blur(100.dp)
                 .clip(CircleShape)
                 .background(
                     brush = Brush.radialGradient(
                         colors = listOf(
                             Color(0x40EC4899),
-                            Color(0x10EC4899)
+                            Color(0x00EC4899)
                         )
                     )
                 )
         )
         
-        // Bottom left circle
+        // Gradient orb 2 - Purple
         Box(
             modifier = Modifier
-                .size(250.dp)
-                .scale(scale2)
-                .offset(x = (-100).dp, y = 500.dp)
+                .size(400.dp)
+                .offset(x = (-150 - offsetX1).dp, y = (350 - offsetY1).dp)
+                .blur(120.dp)
                 .clip(CircleShape)
                 .background(
                     brush = Brush.radialGradient(
                         colors = listOf(
-                            Color(0x408B5CF6),
-                            Color(0x108B5CF6)
+                            Color(0x358B5CF6),
+                            Color(0x008B5CF6)
+                        )
+                    )
+                )
+        )
+        
+        // Gradient orb 3 - Cyan
+        Box(
+            modifier = Modifier
+                .size(320.dp)
+                .offset(x = 80.dp, y = (650 + offsetY1).dp)
+                .blur(110.dp)
+                .clip(CircleShape)
+                .background(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            Color(0x3006B6D4),
+                            Color(0x0006B6D4)
+                        )
+                    )
+                )
+        )
+        
+        // Gradient orb 4 - Orange
+        Box(
+            modifier = Modifier
+                .size(280.dp)
+                .offset(x = 200.dp, y = (450 + offsetX1).dp)
+                .blur(90.dp)
+                .clip(CircleShape)
+                .background(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            Color(0x28F97316),
+                            Color(0x00F97316)
                         )
                     )
                 )
@@ -219,182 +316,381 @@ fun DecorativeBackground() {
 }
 
  @Composable
-fun QuickStatsSection() {
+fun ModernQuickStatsSection() {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        StatItem(number = "500+", label = stringResource(R.string.home_stat_happy_clients), icon = Icons.Filled.People)
-        StatItem(number = "1000+", label = stringResource(R.string.home_stat_events_covered), icon = Icons.Filled.Event)
-        StatItem(number = "5★", label = stringResource(R.string.home_stat_rated_service), icon = Icons.Filled.Star)
-    }
-}
-
- @Composable
-fun StatItem(number: String, label: String, icon: ImageVector) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(8.dp)
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(28.dp)
+        ModernStatCard(
+            modifier = Modifier.weight(1f),
+            number = "500+",
+            label = stringResource(R.string.home_stat_happy_clients),
+            icon = Icons.Filled.People,
+            gradientColors = listOf(Color(0xFFEC4899), Color(0xFFF97316))
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = number,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
+        ModernStatCard(
+            modifier = Modifier.weight(1f),
+            number = "1000+",
+            label = stringResource(R.string.home_stat_events_covered),
+            icon = Icons.Filled.Event,
+            gradientColors = listOf(Color(0xFF8B5CF6), Color(0xFF6366F1))
         )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-            textAlign = TextAlign.Center
+        ModernStatCard(
+            modifier = Modifier.weight(1f),
+            number = "5★",
+            label = stringResource(R.string.home_stat_rated_service),
+            icon = Icons.Filled.Star,
+            gradientColors = listOf(Color(0xFF06B6D4), Color(0xFF0EA5E9))
         )
     }
 }
 
  @Composable
-fun FeaturesSection() {
+fun ModernStatCard(
+    modifier: Modifier = Modifier,
+    number: String,
+    label: String,
+    icon: ImageVector,
+    gradientColors: List<Color>
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        modifier = modifier
+            .aspectRatio(0.85f)
+            .shadow(
+                elevation = 12.dp,
+                shape = RoundedCornerShape(24.dp),
+                ambientColor = gradientColors[0].copy(alpha = 0.25f)
+            ),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White.copy(alpha = 0.7f)
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            containerColor = Color.White
+        )
     ) {
-        Column(
-            modifier = Modifier.padding(20.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.home_features_title),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            FeatureItem(
-                icon = Icons.Filled.HighQuality,
-                title = stringResource(R.string.home_feature_quality_title),
-                description = stringResource(R.string.home_feature_quality_description)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            
-            FeatureItem(
-                icon = Icons.Filled.Speed,
-                title = stringResource(R.string.home_feature_delivery_title),
-                description = stringResource(R.string.home_feature_delivery_description)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            
-            FeatureItem(
-                icon = Icons.Filled.PriceCheck,
-                title = stringResource(R.string.home_feature_packages_title),
-                description = stringResource(R.string.home_feature_packages_description)
-            )
-        }
-    }
-}
-
-@Composable
-fun AddressSection() {
-    val context = LocalContext.current
-    val mapUrl = "https://maps.app.goo.gl/Wg2P5A4AafHxZsJF6"
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White.copy(alpha = 0.7f)
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Our Studio Location",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Village nagla dhimar, Etah road near bhondela politecnic college, tundla firozabad (up), Pin code 283204",
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
-                    context.startActivity(intent)
-                },
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            gradientColors[0].copy(alpha = 0.08f),
+                            Color.Transparent
+                        )
+                    )
                 )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Icon(
-                    imageVector = Icons.Filled.LocationOn,
-                    contentDescription = null
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(
+                            brush = Brush.linearGradient(gradientColors)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = number,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF1A1A1A)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "View on Google Maps")
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
+                    color = Color(0xFF666666),
+                    textAlign = TextAlign.Center,
+                    maxLines = 2
+                )
             }
         }
     }
 }
 
  @Composable
-fun FeatureItem(icon: ImageVector, title: String, description: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
+fun ModernFeaturesSection() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 16.dp,
+                shape = RoundedCornerShape(28.dp),
+                ambientColor = Color(0xFF8B5CF6).copy(alpha = 0.15f)
+            ),
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
     ) {
         Box(
             modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
+                .fillMaxWidth()
                 .background(
-                    brush = Brush.linearGradient(
+                    brush = Brush.verticalGradient(
                         colors = listOf(
-                            Color(0xFFEC4899),
-                            Color(0xFF8B5CF6)
+                            Color(0xFF8B5CF6).copy(alpha = 0.05f),
+                            Color.Transparent
                         )
                     )
-                ),
+                )
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xFFEC4899),
+                                        Color(0xFF8B5CF6)
+                                    )
+                                )
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.AutoAwesome,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = stringResource(R.string.home_features_title),
+                        style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp),
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color(0xFF1A1A1A)
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(24.dp))
+                
+                ModernFeatureItem(
+                    icon = Icons.Filled.HighQuality,
+                    title = stringResource(R.string.home_feature_quality_title),
+                    description = stringResource(R.string.home_feature_quality_description),
+                    accentColor = Color(0xFFEC4899)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                ModernFeatureItem(
+                    icon = Icons.Filled.Speed,
+                    title = stringResource(R.string.home_feature_delivery_title),
+                    description = stringResource(R.string.home_feature_delivery_description),
+                    accentColor = Color(0xFF8B5CF6)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                ModernFeatureItem(
+                    icon = Icons.Filled.PriceCheck,
+                    title = stringResource(R.string.home_feature_packages_title),
+                    description = stringResource(R.string.home_feature_packages_description),
+                    accentColor = Color(0xFF06B6D4)
+                )
+            }
+        }
+    }
+}
+
+ @Composable
+fun ModernFeatureItem(
+    icon: ImageVector,
+    title: String,
+    description: String,
+    accentColor: Color
+) {
+    Row(
+        verticalAlignment = Alignment.Top,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .size(52.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(accentColor.copy(alpha = 0.12f))
+                .padding(2.dp)
+                .clip(RoundedCornerShape(14.dp))
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(20.dp)
+                tint = accentColor,
+                modifier = Modifier.size(24.dp)
             )
         }
         
         Spacer(modifier = Modifier.width(16.dp))
         
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onBackground
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1A1A1A)
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    lineHeight = 20.sp
+                ),
+                color = Color(0xFF666666)
             )
+        }
+    }
+}
+
+ @Composable
+fun ModernAddressSection() {
+    val context = LocalContext.current
+    val mapUrl = "https://maps.app.goo.gl/Wg2P5A4AafHxZsJF6"
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 16.dp,
+                shape = RoundedCornerShape(28.dp),
+                ambientColor = Color(0xFFEC4899).copy(alpha = 0.15f)
+            ),
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFFEC4899).copy(alpha = 0.05f),
+                            Color.Transparent
+                        )
+                    )
+                )
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(CircleShape)
+                        .background(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    Color(0xFFEC4899),
+                                    Color(0xFFF97316)
+                                )
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.LocationOn,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                Text(
+                    text = "Our Studio Location",
+                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp),
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF1A1A1A)
+                )
+                
+                Spacer(modifier = Modifier.height(12.dp))
+                
+                Text(
+                    text = "Village nagla dhimar, Etah road near bhondela politecnic college, tundla firozabad (up), Pin code 283204",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        lineHeight = 22.sp
+                    ),
+                    textAlign = TextAlign.Center,
+                    color = Color(0xFF666666)
+                )
+                
+                Spacer(modifier = Modifier.height(24.dp))
+                
+                Button(
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
+                        context.startActivity(intent)
+                    },
+                    modifier = Modifier
+                        .height(56.dp)
+                        .fillMaxWidth()
+                        .shadow(
+                            elevation = 12.dp,
+                            shape = RoundedCornerShape(28.dp),
+                            ambientColor = Color(0xFFEC4899).copy(alpha = 0.3f)
+                        ),
+                    shape = RoundedCornerShape(28.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        Color(0xFFEC4899),
+                                        Color(0xFFF97316)
+                                    )
+                                )
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Map,
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "View on Google Maps",
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                                fontSize = 16.sp
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
