@@ -426,20 +426,12 @@ fun BusinessHoursCard() {
             
             Spacer(modifier = Modifier.height(16.dp))
             
-            BusinessHourRow("Monday - Saturday", "9:00 AM - 8:00 PM")
-            Spacer(modifier = Modifier.height(8.dp))
-            BusinessHourRow("Sunday", "10:00 AM - 6:00 PM")
-            
+            BusinessHourRow("Monday - Sunday", "8:00 AM - 8:00 PM")
             Spacer(modifier = Modifier.height(12.dp))
             
             val currentTime = LocalTime.now()
-            val currentDay = DayOfWeek.values()[java.time.LocalDate.now().dayOfWeek.value - 1] // Adjust for 0-indexed DayOfWeek
-
-            val isOpen = remember(currentTime, currentDay) {
-                when (currentDay) {
-                    DayOfWeek.SUNDAY -> currentTime.isAfter(LocalTime.of(10, 0)) && currentTime.isBefore(LocalTime.of(18, 0))
-                    else -> currentTime.isAfter(LocalTime.of(8, 0)) && currentTime.isBefore(LocalTime.of(20, 0))
-                }
+            val isOpen = remember(currentTime) {
+                currentTime.isAfter(LocalTime.of(8, 0)) && currentTime.isBefore(LocalTime.of(20, 0))
             }
 
             val statusText = if (isOpen) "Currently Open" else "Closed"
