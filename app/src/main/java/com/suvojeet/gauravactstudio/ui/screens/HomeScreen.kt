@@ -31,6 +31,9 @@ import kotlinx.coroutines.delay
 import androidx.compose.ui.res.stringResource
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.ui.components.FeatureItem
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 
  @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -141,6 +144,13 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             // Features Section
             AnimatedContent(isVisible, delay = 1000) {
                 FeaturesSection()
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Address Section
+            AnimatedContent(isVisible, delay = 1200) {
+                AddressSection()
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -289,6 +299,58 @@ fun FeaturesSection() {
                 title = stringResource(R.string.home_feature_packages_title),
                 description = stringResource(R.string.home_feature_packages_description)
             )
+        }
+    }
+}
+
+@Composable
+fun AddressSection() {
+    val context = LocalContext.current
+    val mapUrl = "https://maps.app.goo.gl/Wg2P5A4AafHxZsJF6"
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White.copy(alpha = 0.7f)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Our Studio Location",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Village nagla dhimar, Etah road near bhondela politecnic college, tundla firozabad (up), Pin code 283204",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
+                    context.startActivity(intent)
+                },
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.LocationOn,
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "View on Google Maps")
+            }
         }
     }
 }
