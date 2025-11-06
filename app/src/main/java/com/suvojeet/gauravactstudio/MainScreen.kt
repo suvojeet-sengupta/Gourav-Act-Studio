@@ -20,16 +20,3 @@ fun MainScreen() {
         AppNavHost(navController = navController, modifier = Modifier.padding(innerPadding))
     }
 }
-
-@Composable
-fun MainScreen() {
-    val navController = rememberNavController()
-
-    Scaffold(
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        }
-    ) { innerPadding ->
-        AppNavHost(navController = navController, modifier = Modifier.padding(innerPadding))
-    }
-}
