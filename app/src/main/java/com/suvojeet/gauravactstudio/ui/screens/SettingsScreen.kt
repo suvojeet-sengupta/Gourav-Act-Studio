@@ -181,10 +181,13 @@ fun SettingsItem(icon: ImageVector, title: String, onClick: () -> Unit) {
     }
 }
 
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+
 @Preview(showBackground = true)
 @Composable
 fun SettingsScreenPreview() {
     GauravActStudioTheme {
-        SettingsScreen()
+        SettingsScreen(navController = rememberNavController())
     }
 }
