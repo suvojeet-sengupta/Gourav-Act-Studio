@@ -38,7 +38,7 @@ fun AppNavHost(
             PricingScreen()
         }
         composable(Screen.Gallery.route) {
-            PortfolioScreen()
+            GalleryScreen()
         }
         composable(Screen.About.route) {
             AboutScreen(navController = navController)

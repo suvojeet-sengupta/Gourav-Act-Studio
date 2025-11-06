@@ -82,8 +82,8 @@ fun PortfolioItemCard(title: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun PortfolioScreenPreview() {
+fun GalleryScreenPreview() {
     GauravActStudioTheme {
-        PortfolioScreen()
+        GalleryScreen()
     }
 }
