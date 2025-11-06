@@ -205,10 +205,7 @@ fun ContactScreen(modifier: Modifier = Modifier) {
 
                 // Map Placeholder with CTA
                 AnimatedContent(isVisible, delay = 1600) {
-                    MapCard(
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                data = Uri.parse("geo:0,0?q=Village+Nagla+Dhimar,+Tundla,+Firozabad,+UP")
+                            data = Uri.parse("https://maps.app.goo.gl/Wg2P5A4AafHxZsJF6?g_st=aw")
                             }
                             context.startActivity(intent)
                         }

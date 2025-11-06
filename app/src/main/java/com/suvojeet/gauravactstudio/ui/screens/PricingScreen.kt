@@ -76,7 +76,7 @@ val pricingList = listOf(
             "2 professional videographers",
             "2 professional photographers",
             "Drone coverage included",
-            "Luxury album & USB combo",
+            "40-sheet album & USB combo",
             "Fast 7-day delivery"
         ),
         gradient = listOf(Color(0xFFEC4899), Color(0xFFF97316)),
@@ -92,9 +92,9 @@ val pricingList = listOf(
             "2 professional videographers",
             "2 professional photographers",
             "Multiple drones for aerial shots",
-            "Premium albums (3 copies)",
+            "40-sheet premium album",
             "Same-day photo delivery",
-            "Lifetime cloud backup"
+
         ),
         gradient = listOf(Color(0xFF8B5CF6), Color(0xFFEC4899)),
         icon = Icons.Filled.Diamond
