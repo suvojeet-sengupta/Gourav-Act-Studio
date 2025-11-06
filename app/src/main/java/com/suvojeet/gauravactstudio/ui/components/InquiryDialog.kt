@@ -29,6 +29,7 @@ import java.util.*
 @Composable
 fun InquiryDialog(
     packageName: String,
+    isSubmitting: Boolean,
     onDismiss: () -> Unit,
     onSubmit: (
         name: String,
@@ -50,7 +51,7 @@ fun InquiryDialog(
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(onDismissRequest = { if (!isSubmitting) onDismiss() }) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -69,7 +70,8 @@ fun InquiryDialog(
                     value = name,
                     onValueChange = { name = it },
                     label = { Text("Full Name") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !isSubmitting
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -78,13 +80,14 @@ fun InquiryDialog(
                     onValueChange = { phone = it },
                     label = { Text("Phone Number") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !isSubmitting
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 ExposedDropdownMenuBox(
                     expanded = expanded,
-                    onExpandedChange = { expanded = !expanded }
+                    onExpandedChange = { if (!isSubmitting) expanded = !expanded }
                 ) {
                     OutlinedTextField(
                         value = eventType,
@@ -96,7 +99,8 @@ fun InquiryDialog(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .menuAnchor()
+                            .menuAnchor(),
+                        enabled = !isSubmitting
                     )
                     ExposedDropdownMenu(
                         expanded = expanded,
@@ -120,7 +124,8 @@ fun InquiryDialog(
                         value = otherEventType,
                         onValueChange = { otherEventType = it },
                         label = { Text("Please specify event type") },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = !isSubmitting
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -131,11 +136,15 @@ fun InquiryDialog(
                     label = { Text("Event Date") },
                     readOnly = true,
                     trailingIcon = {
-                        IconButton(onClick = { showDatePicker(context) { date = it } }) {
+                        IconButton(
+                            onClick = { showDatePicker(context) { date = it } },
+                            enabled = !isSubmitting
+                        ) {
                             Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Select Date")
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !isSubmitting
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -144,22 +153,34 @@ fun InquiryDialog(
                     onValueChange = { notes = it },
                     label = { Text("Additional Requirements") },
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 3
+                    maxLines = 3,
+                    enabled = !isSubmitting
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextButton(onClick = onDismiss) {
+                    TextButton(onClick = onDismiss, enabled = !isSubmitting) {
                         Text("Cancel")
                     }
                     Spacer(modifier = Modifier.width(8.dp))
-                    Button(onClick = {
-                        onSubmit(name, phone, eventType, otherEventType, date, notes)
-                    }) {
-                        Text("Submit Inquiry")
+                    Button(
+                        onClick = {
+                            onSubmit(name, phone, eventType, otherEventType, date, notes)
+                        },
+                        enabled = !isSubmitting
+                    ) {
+                        if (isSubmitting) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(24.dp),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        } else {
+                            Text("Submit Inquiry")
+                        }
                     }
                 }
             }
