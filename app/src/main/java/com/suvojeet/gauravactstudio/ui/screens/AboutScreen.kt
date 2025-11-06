@@ -154,15 +154,25 @@ fun AboutScreen(navController: NavController) {
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    var showFullScreenImage by remember { mutableStateOf(false) }
+
                     AsyncImage(
                         model = "https://lh3.googleusercontent.com/pw/AP1GczM7cermp0wVG-gn5GUM_fFVqUx6ZL64ckbrJO8UA0mP8W6v4Y860-7EFFhXiwvsUZkV7TAOKiQ6IFd1xYSQfgb3_LbVifTeAyBi-PVELrr0zQmlE9kK1mNfDHbuqn3HEFjQeyK4o00yOBuU_iPbC4qwyw=w1081-h250-s-no-gm?authuser=0",
                         contentDescription = "Gaurav Act Studio Banner",
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
-                            .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)),
+                            .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
+                            .clickable { showFullScreenImage = true },
                         contentScale = ContentScale.Crop
                     )
+
+                    if (showFullScreenImage) {
+                        FullScreenImageDialog(
+                            imageUrl = "https://lh3.googleusercontent.com/pw/AP1GczM7cermp0wVG-gn5GUM_fFVqUx6ZL64ckbrJO8UA0mP8W6v4Y860-7EFFhXiwvsUZkV7TAOKiQ6IFd1xYSQfgb3_LbVifTeAyBi-PVELrr0zQmlE9kK1mNfDHbuqn3HEFjQeyK4o00yOBuU_iPbC4qwyw=w1081-h250-s-no-gm?authuser=0",
+                            onDismiss = { showFullScreenImage = false }
+                        )
+                    }
 
                     AnimatedContent(isVisible, delay = 200) {
                         Text(
@@ -644,5 +654,39 @@ fun SettingsButton(navController: NavController) {
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold
         )
+    }
+}
+
+@Composable
+fun FullScreenImageDialog(imageUrl: String, onDismiss: () -> Unit) {
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color.Black
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+                IconButton(
+                    onClick = onDismiss,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "Close",
+                        tint = Color.White
+                    )
+                }
+            }
+        }
     }
 }
