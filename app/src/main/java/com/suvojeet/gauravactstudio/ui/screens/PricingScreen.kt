@@ -45,7 +45,7 @@ data class PricePackage(
     val icon: ImageVector = Icons.Filled.PhotoCamera
 )
 
-@Composable
+ @Composable
 fun PricingScreen(modifier: Modifier = Modifier) {
     val pricingList = listOf(
         PricePackage(
@@ -81,28 +81,24 @@ fun PricingScreen(modifier: Modifier = Modifier) {
     var isVisible by remember { mutableStateOf(false) }
     var showInquiryDialog by remember { mutableStateOf(false) }
     var selectedPackage by remember { mutableStateOf("") }
-    var isSubmittingInquiry by remember { mutableStateOf(false) } // <-- YEH HAI NAYA LOADING STATE
+    var isSubmittingInquiry by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
     val emailService = remember { EmailService() }
-    val snackbarHostState = remember { SnackbarHostState() } // <-- YEH HAI SNACKBAR KE LIYE
+    val snackbarHostState = remember { SnackbarHostState() }
 
     if (showInquiryDialog) {
         InquiryDialog(
             packageName = selectedPackage,
-            // Yeh prop pass karo. Tumhe apne InquiryDialog.kt mein isko accept karna padega
-            // aur jab yeh true ho toh ek CircularProgressIndicator dikhana padega.
             isSubmitting = isSubmittingInquiry,
             onDismiss = {
-                // Agar loading chal raha hai toh dismiss mat karne do
                 if (!isSubmittingInquiry) {
                     showInquiryDialog = false
                 }
             },
             onSubmit = { name, phone, eventType, otherEventType, date, notes ->
-                // Coroutine launch karo
                 coroutineScope.launch {
-                    isSubmittingInquiry = true // Loading shuru
+                    isSubmittingInquiry = true
                     try {
                         emailService.sendEmail(
                             name = name,
@@ -113,26 +109,22 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                             notes = notes,
                             packageName = selectedPackage
                         )
-                        // Success! Ab dialog band karo aur confirmation dikhao
-                        showInquiryDialog = false
                         snackbarHostState.showSnackbar(
                             message = "Inquiry sent successfully! We will contact you soon.",
                             duration = SnackbarDuration.Short
                         )
+                        showInquiryDialog = false // Dialog ko success par band karein
+
                     } catch (e: Exception) {
-                        // OOPS! Error aa gaya
-                        Log.e("PricingScreen", "Failed to send email", e) // Error ko log karo
+                        Log.e("PricingScreen", "Failed to send email", e)
                         snackbarHostState.showSnackbar(
                             message = e.message ?: "An unknown error occurred.",
                             duration = SnackbarDuration.Long
                         )
                     } finally {
-                        // Kaam ho gaya (success ya fail), loading band karo
                         isSubmittingInquiry = false
                     }
                 }
-                // Yahan se dialog close mat karo! Woh coroutine ke andar hoga.
-                // showInquiryDialog = false <-- YEH GALAT THA
             }
         )
     }
@@ -142,7 +134,6 @@ fun PricingScreen(modifier: Modifier = Modifier) {
         isVisible = true
     }
 
-    // Scaffold add kiya hai taaki Snackbar dikha sakein
     Scaffold(
         modifier = modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -150,7 +141,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         Box(
             modifier = Modifier
-                .padding(innerPadding) // Padding apply karo Scaffold se
+                .padding(innerPadding)
                 .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
@@ -209,29 +200,25 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                 // Pricing Cards
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     itemsIndexed(pricingList) { index, pricePackage ->
                         AnimatedContent(isVisible, delay = 600L + (index * 150L)) {
-                            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                                PricePackageCard(pricePackage = pricePackage, onChoosePlan = {
-                                    selectedPackage = it
-                                    showInquiryDialog = true
-                                })
-                            }
+                            PricePackageCard(pricePackage = pricePackage, onChoosePlan = {
+                                selectedPackage = it
+                                showInquiryDialog = true
+                            })
                         }
                     }
 
                     // Custom Package Card at the end
                     item {
                         AnimatedContent(isVisible, delay = 1200L) {
-                            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                                CustomPackageCard(onContact = {
-                                    selectedPackage = it
-                                    showInquiryDialog = true
-                                })
-                            }
+                            CustomPackageCard(onContact = {
+                                selectedPackage = it
+                                showInquiryDialog = true
+                            })
                         }
                     }
                 }
@@ -240,11 +227,11 @@ fun PricingScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
+ @Composable
 fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, onChoosePlan: (String) -> Unit) {
     val borderModifier = if (pricePackage.isPopular) {
         Modifier.border(
-            width = 2.dp,
+            width = 3.dp,
             brush = Brush.linearGradient(pricePackage.gradient),
             shape = RoundedCornerShape(24.dp)
         )
@@ -252,17 +239,17 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
 
     Card(
         modifier = modifier
-            .fillMaxWidth(0.9f)
+            .fillMaxWidth()
             .then(borderModifier),
         shape = RoundedCornerShape(24.dp),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = if (pricePackage.isPopular) 12.dp else 6.dp
+            defaultElevation = if (pricePackage.isPopular) 16.dp else 8.dp
         ),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
     ) {
-        Column(modifier = Modifier.padding(24.dp)) {
+        Column(modifier = Modifier.padding(28.dp)) {
             // Popular Badge
             if (pricePackage.isPopular) {
                 Box(
@@ -304,7 +291,10 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
                         .size(56.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(
-                            brush = Brush.linearGradient(pricePackage.gradient)
+                            brush = Brush.linearGradient(pricePackage.gradient) +
+                            Brush.linearGradient(
+                                colors = listOf(Color(0xFF6366F1), Color(0xFF8B5CF6))
+                            )
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -398,7 +388,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
                 onClick = { onChoosePlan(pricePackage.name) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
+                    .height(56.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (pricePackage.isPopular) 
@@ -406,12 +396,13 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
                     else MaterialTheme.colorScheme.primary.copy(alpha = 0.9f)
                 ),
                 elevation = ButtonDefaults.buttonElevation(
-                    defaultElevation = 4.dp
+                    defaultElevation = 6.dp,
+                    pressedElevation = 10.dp
                 )
             ) {
                 Text(
                     text = if (pricePackage.isPopular) stringResource(R.string.pricing_choose_this_plan) else stringResource(R.string.pricing_get_started),
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -426,64 +417,64 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
 }
 
  @Composable
- fun CustomPackageCard(onContact: (String) -> Unit) {
-     val customPackageTitle = stringResource(R.string.pricing_custom_package_title)
-     Card(
-         modifier = Modifier.fillMaxWidth(),
-         shape = RoundedCornerShape(24.dp),
-         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-         colors = CardDefaults.cardColors(
-             containerColor = Color.White
-         )
-     ) {
-         Column(
-             modifier = Modifier.padding(24.dp),
-             horizontalAlignment = Alignment.CenterHorizontally
-         ) {
-             Box(
-                 modifier = Modifier
-                     .size(64.dp)
-                     .clip(CircleShape)
-                     .background(
-                         brush = Brush.linearGradient(
-                             colors = listOf(Color(0xFFF59E0B), Color(0xFFFBBF24))
-                         )
-                     ),
-                 contentAlignment = Alignment.Center
-             ) {
-                 Icon(
-                     imageVector = Icons.Filled.AutoAwesome,
-                     contentDescription = null,
-                     tint = Color.White,
-                     modifier = Modifier.size(32.dp)
-                 )
-             }
-             
-             Spacer(modifier = Modifier.height(16.dp))
-             
-             Text(
-                 text = customPackageTitle,
-                 style = MaterialTheme.typography.titleLarge,
-                 fontWeight = FontWeight.Bold,
-                 textAlign = TextAlign.Center
-             )
-             
-             Spacer(modifier = Modifier.height(8.dp))
-             
-             Text(
-                 text = stringResource(R.string.pricing_custom_package_description),
-                 style = MaterialTheme.typography.bodyMedium,
-                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                 textAlign = TextAlign.Center
-             )
-             
-             Spacer(modifier = Modifier.height(20.dp))
-             
-             OutlinedButton(
-                 onClick = { onContact(customPackageTitle) },
-                 modifier = Modifier
+fun CustomPackageCard(onContact: (String) -> Unit) {
+    val customPackageTitle = stringResource(R.string.pricing_custom_package_title)
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(72.dp)
+                    .clip(CircleShape)
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(Color(0xFFF59E0B), Color(0xFFFBBF24))
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.AutoAwesome,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(36.dp)
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(20.dp))           
+            Text(
+                text = customPackageTitle,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            Text(
+                text = stringResource(R.string.pricing_custom_package_description),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                lineHeight = 24.sp
+            )
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            OutlinedButton(
+                onClick = { onContact(customPackageTitle) },
+                modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
+                    .height(56.dp),
                 shape = RoundedCornerShape(16.dp),
                 border = ButtonDefaults.outlinedButtonBorder.copy(
                     width = 2.dp,
@@ -495,12 +486,12 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
                 Icon(
                     imageVector = Icons.Filled.Phone,
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(22.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = stringResource(R.string.pricing_contact_for_custom_quote),
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
             }
