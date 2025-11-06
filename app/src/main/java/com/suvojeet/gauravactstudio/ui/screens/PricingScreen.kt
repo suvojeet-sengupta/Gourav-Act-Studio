@@ -291,10 +291,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
                         .size(56.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(
-                            brush = Brush.linearGradient(pricePackage.gradient) +
-                            Brush.linearGradient(
-                                colors = listOf(Color(0xFF6366F1), Color(0xFF8B5CF6))
-                            )
+                            brush = Brush.linearGradient(pricePackage.gradient)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
