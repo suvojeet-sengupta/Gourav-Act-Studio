@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
@@ -29,6 +28,8 @@ import com.suvojeet.gauravactstudio.ui.components.AppLogo
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
+import androidx.compose.ui.res.stringResource
+import com.suvojeet.gauravactstudio.R
 
  @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -78,7 +79,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 
                 AnimatedContent(isVisible, delay = 200) {
                     Text(
-                        text = "Your Vision, Our Art.",
+                        text = stringResource(R.string.home_hero_title),
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary,
@@ -90,7 +91,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 
                 AnimatedContent(isVisible, delay = 400) {
                     Text(
-                        text = "Capturing Moments, Creating Memories.",
+                        text = stringResource(R.string.home_hero_subtitle),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                         textAlign = TextAlign.Center
@@ -121,7 +122,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = "Explore Our Services",
+                            text = stringResource(R.string.home_explore_services),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -213,9 +214,9 @@ fun QuickStatsSection() {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        StatItem(number = "500+", label = "Happy Clients", icon = Icons.Filled.People)
-        StatItem(number = "1000+", label = "Events Covered", icon = Icons.Filled.Event)
-        StatItem(number = "5★", label = "Rated Service", icon = Icons.Filled.Star)
+        StatItem(number = "500+", label = stringResource(R.string.home_stat_happy_clients), icon = Icons.Filled.People)
+        StatItem(number = "1000+", label = stringResource(R.string.home_stat_events_covered), icon = Icons.Filled.Event)
+        StatItem(number = "5★", label = stringResource(R.string.home_stat_rated_service), icon = Icons.Filled.Star)
     }
 }
 
@@ -261,7 +262,7 @@ fun FeaturesSection() {
             modifier = Modifier.padding(20.dp)
         ) {
             Text(
-                text = "Why Choose Us?",
+                text = stringResource(R.string.home_features_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
@@ -270,22 +271,22 @@ fun FeaturesSection() {
             
             FeatureItem(
                 icon = Icons.Filled.HighQuality,
-                title = "Premium Quality",
-                description = "4K videography and high-resolution photography"
+                title = stringResource(R.string.home_feature_quality_title),
+                description = stringResource(R.string.home_feature_quality_description)
             )
             Spacer(modifier = Modifier.height(12.dp))
             
             FeatureItem(
                 icon = Icons.Filled.Speed,
-                title = "Fast Delivery",
-                description = "Quick turnaround time for your precious memories"
+                title = stringResource(R.string.home_feature_delivery_title),
+                description = stringResource(R.string.home_feature_delivery_description)
             )
             Spacer(modifier = Modifier.height(12.dp))
             
             FeatureItem(
                 icon = Icons.Filled.PriceCheck,
-                title = "Affordable Packages",
-                description = "Flexible pricing to suit every budget"
+                title = stringResource(R.string.home_feature_packages_title),
+                description = stringResource(R.string.home_feature_packages_description)
             )
         }
     }

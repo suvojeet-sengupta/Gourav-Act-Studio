@@ -17,15 +17,10 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.ContactMail
 import androidx.compose.material.icons.filled.Email
-
-
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Schedule
 import java.time.LocalTime
-import java.time.DayOfWeek
-import java.time.LocalDate
-
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,11 +32,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
@@ -108,7 +105,7 @@ fun ContactScreen(modifier: Modifier = Modifier) {
                     
                     AnimatedContent(isVisible, delay = 200) {
                         Text(
-                            text = "Get In Touch",
+                            text = stringResource(R.string.contact_get_in_touch),
                             style = MaterialTheme.typography.headlineLarge,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
@@ -119,7 +116,7 @@ fun ContactScreen(modifier: Modifier = Modifier) {
                     
                     AnimatedContent(isVisible, delay = 400) {
                         Text(
-                            text = "We'd love to hear from you! Reach out for bookings or inquiries",
+                            text = stringResource(R.string.contact_description),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center
@@ -135,10 +132,10 @@ fun ContactScreen(modifier: Modifier = Modifier) {
                 AnimatedContent(isVisible, delay = 600) {
                     ContactInfoCard(
                         icon = Icons.Filled.Call,
-                        title = "Call Us",
-                        subtitle = "Available 24/7 for your queries",
-                        info = "+91 93546 54066",
-                        secondaryInfo = "+91 70179 72737",
+                        title = stringResource(R.string.contact_call_us),
+                        subtitle = stringResource(R.string.contact_call_us_subtitle),
+                        info = stringResource(R.string.contact_phone_number_1),
+                        secondaryInfo = stringResource(R.string.contact_phone_number_2),
                         gradient = listOf(Color(0xFF10B981), Color(0xFF14B8A6)),
                         onClick = {
                             val intent = Intent(Intent.ACTION_DIAL).apply {
@@ -154,9 +151,9 @@ fun ContactScreen(modifier: Modifier = Modifier) {
                 AnimatedContent(isVisible, delay = 800) {
                     ContactInfoCard(
                         icon = Icons.Filled.Email,
-                        title = "Email Us",
-                        subtitle = "Get a response within 24 hours",
-                        info = "gauravkumarpjt @gmail.com",
+                        title = stringResource(R.string.contact_email_us),
+                        subtitle = stringResource(R.string.contact_email_us_subtitle),
+                        info = stringResource(R.string.contact_email_address),
                         gradient = listOf(Color(0xFF3B82F6), Color(0xFF06B6D4)),
                         onClick = {
                             val intent = Intent(Intent.ACTION_SENDTO).apply {
@@ -172,11 +169,11 @@ fun ContactScreen(modifier: Modifier = Modifier) {
                 AnimatedContent(isVisible, delay = 1000) {
                     ContactInfoCard(
                         icon = Icons.Filled.LocationOn,
-                        title = "Visit Our Studio",
-                        subtitle = "Come see our portfolio in person",
-                        info = "Village Nagla Dhimar, Etah Road",
-                        secondaryInfo = "Near Bhondela Polytechnic College",
-                        tertiaryInfo = "Tundla, Firozabad (UP) - 283204",
+                        title = stringResource(R.string.contact_visit_studio),
+                        subtitle = stringResource(R.string.contact_visit_studio_subtitle),
+                        info = stringResource(R.string.contact_address_line_1),
+                        secondaryInfo = stringResource(R.string.contact_address_line_2),
+                        tertiaryInfo = stringResource(R.string.contact_address_line_3),
                         gradient = listOf(Color(0xFFEC4899), Color(0xFFF97316)),
                         onClick = {
                             val intent = Intent(Intent.ACTION_VIEW).apply {
@@ -205,7 +202,10 @@ fun ContactScreen(modifier: Modifier = Modifier) {
 
                 // Map Placeholder with CTA
                 AnimatedContent(isVisible, delay = 1600) {
-                            data = Uri.parse("https://maps.app.goo.gl/Wg2P5A4AafHxZsJF6?g_st=aw")
+                    MapCard(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                data = Uri.parse("https://maps.app.goo.gl/Wg2P5A4AafHxZsJF6?g_st=aw")
                             }
                             context.startActivity(intent)
                         }
@@ -334,7 +334,7 @@ fun SocialMediaSection() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Follow Us On Social Media",
+                text = stringResource(R.string.contact_follow_us),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -356,13 +356,15 @@ fun SocialMediaSection() {
 fun SocialMediaButton(icon: ImageVector, label: String, gradient: List<Color>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { /* Handle social media click */ }
-    ) {
+        modifier = Modifier.clickable { /* Handle social media click */ })
+     {
         Box(
             modifier = Modifier
                 .size(56.dp)
                 .clip(CircleShape)
-                .background(brush = Brush.linearGradient(gradient)),
+                .background(
+                    brush = Brush.linearGradient(gradient)
+                ),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -390,7 +392,9 @@ fun BusinessHoursCard() {
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Column(modifier = Modifier.padding(20.dp)) {
+        Column(
+            modifier = Modifier.padding(20.dp))
+         {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
@@ -414,7 +418,7 @@ fun BusinessHoursCard() {
                 Spacer(modifier = Modifier.width(16.dp))
                 
                 Text(
-                    text = "Business Hours",
+                    text = stringResource(R.string.contact_business_hours),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -423,7 +427,7 @@ fun BusinessHoursCard() {
             
             Spacer(modifier = Modifier.height(16.dp))
             
-            BusinessHourRow("Monday - Sunday", "8:00 AM - 8:00 PM")
+            BusinessHourRow(stringResource(R.string.contact_business_hours_days), stringResource(R.string.contact_business_hours_time))
             Spacer(modifier = Modifier.height(12.dp))
             
             val currentTime = LocalTime.now()
@@ -431,7 +435,7 @@ fun BusinessHoursCard() {
                 currentTime.isAfter(LocalTime.of(8, 0)) && currentTime.isBefore(LocalTime.of(20, 0))
             }
 
-            val statusText = if (isOpen) "Currently Open" else "Closed"
+            val statusText = if (isOpen) stringResource(R.string.contact_status_open) else stringResource(R.string.contact_status_closed)
             val statusColor = if (isOpen) Color(0xFF10B981) else MaterialTheme.colorScheme.error
             val statusIcon = if (isOpen) Icons.Filled.CheckCircle else Icons.Filled.Close
 
@@ -527,14 +531,14 @@ fun MapCard(onClick: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "View on Google Maps",
+                    text = stringResource(R.string.contact_view_on_map),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Tap to get directions",
+                    text = stringResource(R.string.contact_tap_to_directions),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White.copy(alpha = 0.9f)
                 )

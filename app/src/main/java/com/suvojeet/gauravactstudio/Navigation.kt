@@ -1,5 +1,6 @@
 package com.suvojeet.gauravactstudio
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -11,12 +12,13 @@ import com.suvojeet.gauravactstudio.ui.screens.PortfolioScreen
 import com.suvojeet.gauravactstudio.ui.screens.PricingScreen
 import com.suvojeet.gauravactstudio.ui.screens.ServicesScreen
 
-sealed class Screen(val route: String, val title: String) {
-    object Home : Screen("home", "Home")
-    object Services : Screen("services", "Services")
-    object Pricing : Screen("pricing", "Pricing")
-    object Portfolio : Screen("portfolio", "Portfolio")
-    object Contact : Screen("contact", "Contact")
+sealed class Screen(val route: String, @StringRes val title: Int) {
+    object Home : Screen("home", R.string.home_screen)
+    object Services : Screen("services", R.string.services_screen)
+    object Pricing : Screen("pricing", R.string.pricing_screen)
+    object Portfolio : Screen("portfolio", R.string.portfolio_screen)
+    object Contact : Screen("contact", R.string.contact_screen)
+    object Settings : Screen("settings", R.string.settings_title)
 }
 
 @Composable
@@ -39,6 +41,9 @@ fun AppNavHost(
         }
         composable(Screen.Contact.route) {
             ContactScreen()
+        }
+        composable(Screen.Settings.route) {
+            SettingsScreen()
         }
     }
 }

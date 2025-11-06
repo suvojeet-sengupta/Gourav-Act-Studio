@@ -11,20 +11,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun AppLogo(modifier: Modifier = Modifier) {
     Column(modifier = modifier.padding(16.dp)) {
         Text(
-            text = "Gaurav",
+            text = stringResource(R.string.app_logo_gaurav),
             fontSize = 48.sp,
             fontWeight = FontWeight.ExtraBold,
             color = MaterialTheme.colorScheme.primary, // Use primary color from theme
             fontFamily = FontFamily.Cursive // Or a more elegant font
         )
         Text(
-            text = "Act Studio",
+            text = stringResource(R.string.app_logo_act_studio),
             fontSize = 32.sp,
             fontWeight = FontWeight.Light,
             color = MaterialTheme.colorScheme.onBackground,

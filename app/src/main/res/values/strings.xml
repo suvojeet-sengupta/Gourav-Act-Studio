@@ -1,3 +1,134 @@
 <resources>
     <string name="app_name">Gaurav Act Studio</string>
+    <string name="home_screen">Home</string>
+    <string name="services_screen">Services</string>
+    <string name="pricing_screen">Pricing</string>
+    <string name="portfolio_screen">Portfolio</string>
+    <string name="contact_screen">Contact</string>
+    <string name="app_logo_gaurav">Gaurav</string>
+    <string name="app_logo_act_studio">Act Studio</string>
+    <string name="home_hero_title">Your Vision, Our Art.</string>
+    <string name="home_hero_subtitle">Capturing Moments, Creating Memories.</string>
+    <string name="home_explore_services">Explore Our Services</string>
+    <string name="home_stat_happy_clients">Happy Clients</string>
+    <string name="home_stat_events_covered">Events Covered</string>
+    <string name="home_stat_rated_service">Rated Service</string>
+    <string name="home_features_title">Why Choose Us?</string>
+    <string name="home_feature_quality_title">Premium Quality</string>
+    <string name="home_feature_quality_description">4K videography and high-resolution photography</string>
+    <string name="home_feature_delivery_title">Fast Delivery</string>
+    <string name="home_feature_delivery_description">Quick turnaround time for your precious memories</string>
+    <string name="home_feature_packages_title">Affordable Packages</string>
+    <string name="home_feature_packages_description">Flexible pricing to suit every budget</string>
+    <string name="contact_get_in_touch">Get In Touch</string>
+    <string name="contact_description">We\'d love to hear from you! Reach out for bookings or inquiries</string>
+    <string name="contact_call_us">Call Us</string>
+    <string name="contact_call_us_subtitle">Available 24/7 for your queries</string>
+    <string name="contact_phone_number_1">+91 93546 54066</string>
+    <string name="contact_phone_number_2">+91 70179 72737</string>
+    <string name="contact_email_us">Email Us</string>
+    <string name="contact_email_us_subtitle">Get a response within 24 hours</string>
+    <string name="contact_email_address">gauravkumarpjt @gmail.com</string>
+    <string name="contact_visit_studio">Visit Our Studio</string>
+    <string name="contact_visit_studio_subtitle">Come see our portfolio in person</string>
+    <string name="contact_address_line_1">Village Nagla Dhimar, Etah Road</string>
+    <string name="contact_address_line_2">Near Bhondela Polytechnic College</string>
+    <string name="contact_address_line_3">Tundla, Firozabad (UP) - 283204</string>
+    <string name="contact_follow_us">Follow Us On Social Media</string>
+    <string name="contact_business_hours">Business Hours</string>
+    <string name="contact_business_hours_days">Monday - Sunday</string>
+    <string name="contact_business_hours_time">8:00 AM - 8:00 PM</string>
+    <string name="contact_status_open">Currently Open</string>
+    <string name="contact_status_closed">Closed</string>
+    <string name="contact_view_on_map">View on Google Maps</string>
+    <string name="contact_tap_to_directions">Tap to get directions</string>
+    <string name="portfolio_title">Our Portfolio</string>
+    <string-array name="portfolio_items">
+        <item>Wedding Album 1</item>
+        <item>Wedding Album 2</item>
+        <item>Birthday Album 1</item>
+        <item>Pre-Wedding Album 1</item>
+        <item>Maternity Album 1</item>
+        <item>Event Album 1</item>
+        <item>Fashion Portfolio 1</item>
+        <item>Product Showcase 1</item>
+    </string-array>
+    <string name="pricing_title">Our Pricing Plans</string>
+    <string name="pricing_subtitle">Choose the perfect package for your special moments</string>
+    <string name="pricing_package_standard_name">Standard Package</string>
+    <string-array name="pricing_package_standard_features">
+        <item>30-sheet album (200 photos)</item>
+        <item>32GB pen drive with all photos</item>
+        <item>2 cameras for photo and video</item>
+        <item>Basic editing included</item>
+        <item>Same-day highlights</item>
+    </string-array>
+    <string name="pricing_package_deluxe_name">Deluxe Package</string>
+    <string-array name="pricing_package_deluxe_features">
+        <item>2 professional cameras</item>
+        <item>1 drone for aerial shots</item>
+        <item>1-2 cinematic highlight videos</item>
+        <item>32GB USB with all content</item>
+        <item>Premium photo album</item>
+        <item>Advanced color grading</item>
+    </string-array>
+    <string name="pricing_package_premium_name">Premium Package</string>
+    <string-array name="pricing_package_premium_features">
+        <item>Cinematic + Traditional video &amp; photo</item>
+        <item>Multiple highlight videos</item>
+        <item>2 professional videographers</item>
+        <item>2 professional photographers</item>
+        <item>Drone coverage included</item>
+        <item>40-sheet album &amp; USB combo</item>
+        <item>Fast 7-day delivery</item>
+    </string-array>
+    <string name="pricing_package_elite_name">Elite Package</string>
+    <string-array name="pricing_package_elite_features">
+        <item>Pre-wedding shoot at location</item>
+        <item>Ring ceremony complete coverage</item>
+        <item>Full wedding shoot (Cinematic + Traditional)</item>
+        <item>2 professional videographers</item>
+        <item>2 professional photographers</item>
+        <item>Multiple drones for aerial shots</item>
+        <item>40-sheet premium album</item>
+        <item>Same-day photo delivery</item>
+    </string-array>
+    <string name="pricing_onwards">onwards</string>
+    <string name="pricing_perfect_for_needs">Perfect for your needs</string>
+    <string name="pricing_most_popular">MOST POPULAR</string>
+    <string name="pricing_choose_this_plan">Choose This Plan</string>
+    <string name="pricing_get_started">Get Started</string>
+    <string name="pricing_custom_package_title">Need a Custom Package?</string>
+    <string name="pricing_custom_package_description">Let us create a personalized package tailored to your specific requirements and budget</string>
+    <string name="pricing_contact_for_custom_quote">Contact Us for Custom Quote</string>
+    <string name="services_title">Our Services</string>
+    <string name="services_subtitle">Capturing life\'s most beautiful moments</string>
+    <string name="service_wedding_photography_title">Wedding Photography &amp; Videography</string>
+    <string name="service_wedding_photography_description">Cinematic and traditional styles to capture every precious moment with elegance.</string>
+    <string name="service_ring_ceremony_title">Ring Ceremony</string>
+    <string name="service_ring_ceremony_description">Beautifully documenting the start of your journey together.</string>
+    <string name="service_birthday_celebrations_title">Birthday Celebrations</string>
+    <string name="service_birthday_celebrations_description">Making your birthday memories last a lifetime with vibrant photos and videos.</string>
+    <string name="service_pre_wedding_shoots_title">Pre-Wedding Shoots</string>
+    <string name="service_pre_wedding_shoots_description">Creative and romantic shoots to tell your unique love story.</string>
+    <string name="service_maternity_shoots_title">Maternity Shoots</string>
+    <string name="service_maternity_shoots_description">Cherishing the beautiful journey of motherhood with tender photographs.</string>
+    <string name="service_baby_shoots_title">Baby Shoots</string>
+    <string name="service_baby_shoots_description">Adorable and heartwarming captures of your little one\'s early days.</string>
+    <string name="service_corporate_events_title">Corporate Events</string>
+    <string name="service_corporate_events_description">Professional coverage for business events, conferences, and parties.</string>
+    <string name="service_fashion_portfolio_title">Fashion &amp; Portfolio</string>
+    <string name="service_fashion_portfolio_description">Showcasing your style and personality with stunning visuals.</string>
+    <string name="service_product_photography_title">Product Photography</string>
+    <string name="service_product_photography_description">High-quality images to highlight your products professionally.</string>
+    <string name="service_wedding_card_design_title">Wedding Card Design</string>
+    <string name="service_wedding_card_design_description">Beautiful and unique wedding card designs to match your style.</string>
+    <string name="service_business_promotion_shoots_title">Business &amp; Promotion Shoots</string>
+    <string name="service_business_promotion_shoots_description">High-quality photography and videography for business promotion and e-commerce shops.</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_subtitle">Manage your app preferences</string>
+    <string name="settings_invite_app">Invite App</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_select_language">Select Language</string>
+    <string name="settings_cancel">Cancel</string>
 </resources>

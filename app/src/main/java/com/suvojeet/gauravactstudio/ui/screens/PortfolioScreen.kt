@@ -23,17 +23,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
+import com.suvojeet.gauravactstudio.R
 
-val portfolioItems = listOf(
-    "Wedding Album 1",
-    "Wedding Album 2",
-    "Birthday Album 1",
-    "Pre-Wedding Album 1",
-    "Maternity Album 1",
-    "Event Album 1",
-    "Fashion Portfolio 1",
-    "Product Showcase 1"
-)
+val portfolioItems: List<String>
+    @Composable
+    get() = stringArrayResource(id = R.array.portfolio_items).toList()
 
 @Composable
 fun PortfolioScreen(modifier: Modifier = Modifier) {
@@ -43,7 +39,7 @@ fun PortfolioScreen(modifier: Modifier = Modifier) {
             .padding(16.dp)
     ) {
         Text(
-            text = "Our Portfolio",
+            text = stringResource(R.string.portfolio_title),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,

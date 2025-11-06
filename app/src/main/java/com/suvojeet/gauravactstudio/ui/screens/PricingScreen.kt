@@ -28,6 +28,9 @@ import androidx.compose.ui.unit.sp
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
+import com.suvojeet.gauravactstudio.R
 
 data class PricePackage(
     val name: String,
@@ -40,62 +43,31 @@ data class PricePackage(
 
 val pricingList = listOf(
     PricePackage(
-        name = "Standard Package",
+        name = stringResource(R.string.pricing_package_standard_name),
         price = "₹12,000",
-        features = listOf(
-            "30-sheet album (200 photos)",
-            "32GB pen drive with all photos",
-            "2 cameras for photo and video",
-            "Basic editing included",
-            "Same-day highlights"
-        ),
+        features = stringArrayResource(id = R.array.pricing_package_standard_features).toList(),
         gradient = listOf(Color(0xFF10B981), Color(0xFF14B8A6)),
         icon = Icons.Filled.CameraAlt
     ),
     PricePackage(
-        name = "Deluxe Package",
+        name = stringResource(R.string.pricing_package_deluxe_name),
         price = "₹25,000",
-        features = listOf(
-            "2 professional cameras",
-            "1 drone for aerial shots",
-            "1-2 cinematic highlight videos",
-            "32GB USB with all content",
-            "Premium photo album",
-            "Advanced color grading"
-        ),
+        features = stringArrayResource(id = R.array.pricing_package_deluxe_features).toList(),
         isPopular = true,
         gradient = listOf(Color(0xFF3B82F6), Color(0xFF06B6D4)),
         icon = Icons.Filled.Videocam
     ),
     PricePackage(
-        name = "Premium Package",
+        name = stringResource(R.string.pricing_package_premium_name),
         price = "₹35,000",
-        features = listOf(
-            "Cinematic + Traditional video & photo",
-            "Multiple highlight videos",
-            "2 professional videographers",
-            "2 professional photographers",
-            "Drone coverage included",
-            "40-sheet album & USB combo",
-            "Fast 7-day delivery"
-        ),
+        features = stringArrayResource(id = R.array.pricing_package_premium_features).toList(),
         gradient = listOf(Color(0xFFEC4899), Color(0xFFF97316)),
         icon = Icons.Filled.Movie
     ),
     PricePackage(
-        name = "Elite Package",
+        name = stringResource(R.string.pricing_package_elite_name),
         price = "₹55,000",
-        features = listOf(
-            "Pre-wedding shoot at location",
-            "Ring ceremony complete coverage",
-            "Full wedding shoot (Cinematic + Traditional)",
-            "2 professional videographers",
-            "2 professional photographers",
-            "Multiple drones for aerial shots",
-            "40-sheet premium album",
-            "Same-day photo delivery",
-
-        ),
+        features = stringArrayResource(id = R.array.pricing_package_elite_features).toList(),
         gradient = listOf(Color(0xFF8B5CF6), Color(0xFFEC4899)),
         icon = Icons.Filled.Diamond
     )
@@ -147,7 +119,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                     
                     AnimatedContent(isVisible, delay = 200) {
                         Text(
-                            text = "Our Pricing Plans",
+                            text = stringResource(R.string.pricing_title),
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
@@ -158,7 +130,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                     
                     AnimatedContent(isVisible, delay = 400) {
                         Text(
-                            text = "Choose the perfect package for your special moments",
+                            text = stringResource(R.string.pricing_subtitle),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center
@@ -241,7 +213,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) 
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "MOST POPULAR",
+                            text = stringResource(R.string.pricing_most_popular),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
@@ -282,7 +254,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) 
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "Perfect for your needs",
+                        text = stringResource(R.string.pricing_perfect_for_needs),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -303,7 +275,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) 
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "onwards",
+                    text = stringResource(R.string.pricing_onwards),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 6.dp)
@@ -366,7 +338,7 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier) 
                 )
             ) {
                 Text(
-                    text = if (pricePackage.isPopular) "Choose This Plan" else "Get Started",
+                    text = if (pricePackage.isPopular) stringResource(R.string.pricing_choose_this_plan) else stringResource(R.string.pricing_get_started),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp
                 )
@@ -404,8 +376,8 @@ fun CustomPackageCard() {
                             colors = listOf(Color(0xFFF59E0B), Color(0xFFFBBF24))
                         )
                     ),
-                contentAlignment = Alignment.Center
-            ) {
+                    contentAlignment = Alignment.Center
+                ) {
                 Icon(
                     imageVector = Icons.Filled.AutoAwesome,
                     contentDescription = null,
@@ -417,7 +389,7 @@ fun CustomPackageCard() {
             Spacer(modifier = Modifier.height(16.dp))
             
             Text(
-                text = "Need a Custom Package?",
+                text = stringResource(R.string.pricing_custom_package_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
@@ -426,7 +398,7 @@ fun CustomPackageCard() {
             Spacer(modifier = Modifier.height(8.dp))
             
             Text(
-                text = "Let us create a personalized package tailored to your specific requirements and budget",
+                text = stringResource(R.string.pricing_custom_package_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -454,7 +426,7 @@ fun CustomPackageCard() {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Contact Us for Custom Quote",
+                    text = stringResource(R.string.pricing_contact_for_custom_quote),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp
                 )
