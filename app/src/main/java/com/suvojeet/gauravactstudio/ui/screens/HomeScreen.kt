@@ -358,7 +358,6 @@ fun ModernStatCard(
 ) {
     Card(
         modifier = modifier
-            .aspectRatio(0.85f)
             .shadow(
                 elevation = 12.dp,
                 shape = RoundedCornerShape(24.dp),
