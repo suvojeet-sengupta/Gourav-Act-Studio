@@ -1,12 +1,5 @@
 package com.suvojeet.gauravactstudio.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -14,19 +7,16 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,13 +25,12 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.suvojeet.gauravactstudio.Screen
-import com.suvojeet.gauravactstudio.R
 
 data class BottomNavItem(
     val screen: Screen,
-    val icon: ImageVector,
-    val label: String,
-    val gradient: List<Color>
+    val iconSelected: ImageVector,
+    val iconUnselected: ImageVector,
+    val label: String
 )
 
  @Composable
@@ -50,45 +39,44 @@ fun BottomNavigationBar(navController: NavHostController) {
         BottomNavItem(
             Screen.Home,
             Icons.Filled.Home,
-            "Home",
-            listOf(Color(0xFFEC4899), Color(0xFFF97316))
+            Icons.Outlined.Home,
+            "Home"
         ),
         BottomNavItem(
             Screen.Services,
-            Icons.Filled.PhotoCamera,
-            "Services",
-            listOf(Color(0xFF3B82F6), Color(0xFF06B6D4))
+            Icons.Filled.CameraAlt,
+            Icons.Outlined.CameraAlt,
+            "Services"
         ),
         BottomNavItem(
             Screen.Portfolio,
-            Icons.Filled.Collections,
-            "Portfolio",
-            listOf(Color(0xFF10B981), Color(0xFF14B8A6))
+            Icons.Filled.GridView,
+            Icons.Outlined.GridView,
+            "Portfolio"
         ),
         BottomNavItem(
             Screen.Contact,
-            Icons.Filled.ContactMail,
-            "Contact",
-            listOf(Color(0xFFF59E0B), Color(0xFFFBBF24))
+            Icons.Filled.Email,
+            Icons.Outlined.Email,
+            "Contact"
         ),
         BottomNavItem(
             Screen.Settings,
-            Icons.Filled.Settings,
-            "Settings",
-            listOf(Color(0xFF8B5CF6), Color(0xFFEC4899))
+            Icons.Filled.Person,
+            Icons.Outlined.Person,
+            "Profile"
         )
     )
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = Color.White,
-        tonalElevation = 12.dp,
-        shadowElevation = 16.dp
+        shadowElevation = 8.dp
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 12.dp),
+                .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -124,155 +112,95 @@ fun BottomNavItemView(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    // Animation for scale effect
-    val scale by animateFloatAsState(
-        targetValue = if (isSelected) 1.0f else 0.9f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        )
+    val iconColor by animateColorAsState(
+        targetValue = if (isSelected) Color(0xFF262626) else Color(0xFF737373),
+        animationSpec = tween(200)
     )
 
-    // Animation for icon size
-    val iconSize by animateDpAsState(
-        targetValue = if (isSelected) 28.dp else 24.dp,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessMedium
-        )
-    )
-
-    // Animation for container size
-    val containerSize by animateDpAsState(
-        targetValue = if (isSelected) 64.dp else 52.dp,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessMedium
-        )
+    val labelColor by animateColorAsState(
+        targetValue = if (isSelected) Color(0xFF262626) else Color(0xFF737373),
+        animationSpec = tween(200)
     )
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .scale(scale)
             .selectable(
                 selected = isSelected,
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             )
-            .padding(4.dp)
+            .padding(vertical = 8.dp, horizontal = 12.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(containerSize)
-                .clip(RoundedCornerShape(18.dp))
-                .background(
-                    if (isSelected) {
-                        Brush.linearGradient(item.gradient)
-                    } else {
-                        Brush.linearGradient(
-                            listOf(
-                                Color(0xFFF3F4F6),
-                                Color(0xFFE5E7EB)
-                            )
-                        )
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = item.icon,
-                contentDescription = item.label,
-                modifier = Modifier.size(iconSize),
-                tint = if (isSelected) Color.White else Color(0xFF6B7280)
-            )
-        }
-
-        // Label and indicator
-        AnimatedVisibility(
-            visible = isSelected,
-            enter = fadeIn(animationSpec = tween(300)) +
-                    expandVertically(animationSpec = tween(300)),
-            exit = fadeOut(animationSpec = tween(200)) +
-                   shrinkVertically(animationSpec = tween(200))
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 6.dp)
-            ) {
-                Text(
-                    text = item.label,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                Box(
-                    modifier = Modifier
-                        .size(4.dp)
-                        .clip(CircleShape)
-                        .background(
-                            brush = Brush.linearGradient(item.gradient)
-                        )
-                )
-            }
-        }
+        Icon(
+            imageVector = if (isSelected) item.iconSelected else item.iconUnselected,
+            contentDescription = item.label,
+            modifier = Modifier.size(26.dp),
+            tint = iconColor
+        )
+        
+        Spacer(modifier = Modifier.height(4.dp))
+        
+        Text(
+            text = item.label,
+            fontSize = 11.sp,
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+            color = labelColor
+        )
     }
 }
 
-// Alternative: Floating Style Bottom Navigation
+// Alternative: Instagram-style with indicator line
  @Composable
-fun FloatingBottomNavigationBar(navController: NavHostController) {
+fun InstagramStyleBottomNav(navController: NavHostController) {
     val items = listOf(
         BottomNavItem(
             Screen.Home,
             Icons.Filled.Home,
-            "Home",
-            listOf(Color(0xFFEC4899), Color(0xFFF97316))
+            Icons.Outlined.Home,
+            "Home"
         ),
         BottomNavItem(
             Screen.Services,
-            Icons.Filled.PhotoCamera,
-            "Services",
-            listOf(Color(0xFF3B82F6), Color(0xFF06B6D4))
+            Icons.Filled.CameraAlt,
+            Icons.Outlined.CameraAlt,
+            "Services"
         ),
         BottomNavItem(
             Screen.Portfolio,
-            Icons.Filled.Collections,
-            "Portfolio",
-            listOf(Color(0xFF10B981), Color(0xFF14B8A6))
+            Icons.Filled.GridView,
+            Icons.Outlined.GridView,
+            "Portfolio"
         ),
         BottomNavItem(
             Screen.Contact,
-            Icons.Filled.ContactMail,
-            "Contact",
-            listOf(Color(0xFFF59E0B), Color(0xFFFBBF24))
+            Icons.Filled.Email,
+            Icons.Outlined.Email,
+            "Contact"
         ),
         BottomNavItem(
             Screen.Settings,
-            Icons.Filled.Settings,
-            "Settings",
-            listOf(Color(0xFF8B5CF6), Color(0xFFEC4899))
+            Icons.Filled.Person,
+            Icons.Outlined.Person,
+            "Profile"
         )
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 16.dp)
-    ) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        HorizontalDivider(
+            thickness = 0.5.dp,
+            color = Color(0xFFDBDBDB)
+        )
+        
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(28.dp),
-            color = Color.White,
-            tonalElevation = 8.dp,
-            shadowElevation = 20.dp
+            color = Color.White
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 16.dp),
+                    .padding(vertical = 4.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -284,7 +212,7 @@ fun FloatingBottomNavigationBar(navController: NavHostController) {
                         it.route == item.screen.route
                     } == true
 
-                    FloatingNavItemView(
+                    InstagramNavItem(
                         item = item,
                         isSelected = isSelected,
                         onClick = {
@@ -304,116 +232,78 @@ fun FloatingBottomNavigationBar(navController: NavHostController) {
 }
 
  @Composable
-fun FloatingNavItemView(
+fun InstagramNavItem(
     item: BottomNavItem,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    // Pulsing animation for selected item
-    val infiniteTransition = rememberInfiniteTransition()
-    val pulse by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.08f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1200, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
+    val iconColor = if (isSelected) Color(0xFF000000) else Color(0xFF8E8E8E)
 
-    val scale = if (isSelected) pulse else 1f
-
-    Surface(
-        onClick = onClick,
-        modifier = Modifier.scale(scale),
-        shape = RoundedCornerShape(22.dp),
-        color = Color.Transparent
+    Box(
+        modifier = Modifier
+            .selectable(
+                selected = isSelected,
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            )
+            .padding(vertical = 12.dp, horizontal = 16.dp),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .size(if (isSelected) 68.dp else 56.dp)
-                .clip(RoundedCornerShape(22.dp))
-                .background(
-                    if (isSelected) {
-                        Brush.linearGradient(item.gradient)
-                    } else {
-                        Brush.linearGradient(
-                            listOf(Color(0xFFF9FAFB), Color(0xFFF3F4F6))
-                        )
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Icon(
-                    imageVector = item.icon,
-                    contentDescription = item.label,
-                    modifier = Modifier.size(if (isSelected) 32.dp else 26.dp),
-                    tint = if (isSelected) Color.White else Color(0xFF6B7280)
-                )
-                
-                if (isSelected) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = item.label,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-            }
-        }
+        Icon(
+            imageVector = if (isSelected) item.iconSelected else item.iconUnselected,
+            contentDescription = item.label,
+            modifier = Modifier.size(28.dp),
+            tint = iconColor
+        )
     }
 }
 
-// Alternative: Minimal Pill Style
+// YouTube-style with red accent
  @Composable
-fun PillBottomNavigationBar(navController: NavHostController) {
+fun YouTubeStyleBottomNav(navController: NavHostController) {
     val items = listOf(
         BottomNavItem(
             Screen.Home,
             Icons.Filled.Home,
-            "Home",
-            listOf(Color(0xFFEC4899), Color(0xFFF97316))
+            Icons.Outlined.Home,
+            "Home"
         ),
         BottomNavItem(
             Screen.Services,
-            Icons.Filled.PhotoCamera,
-            "Services",
-            listOf(Color(0xFF3B82F6), Color(0xFF06B6D4))
+            Icons.Filled.Subscriptions,
+            Icons.Outlined.Subscriptions,
+            "Services"
         ),
         BottomNavItem(
             Screen.Portfolio,
-            Icons.Filled.Collections,
-            "Portfolio",
-            listOf(Color(0xFF10B981), Color(0xFF14B8A6))
+            Icons.Filled.VideoLibrary,
+            Icons.Outlined.VideoLibrary,
+            "Portfolio"
         ),
         BottomNavItem(
             Screen.Contact,
-            Icons.Filled.ContactMail,
-            "Contact",
-            listOf(Color(0xFFF59E0B), Color(0xFFFBBF24))
+            Icons.Filled.Email,
+            Icons.Outlined.Email,
+            "Contact"
         ),
         BottomNavItem(
             Screen.Settings,
-            Icons.Filled.Settings,
-            "Settings",
-            listOf(Color(0xFF8B5CF6), Color(0xFFEC4899))
+            Icons.Filled.Person,
+            Icons.Outlined.Person,
+            "You"
         )
     )
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = Color.White,
-        tonalElevation = 8.dp,
-        shadowElevation = 12.dp
+        shadowElevation = 4.dp
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp),
+                .padding(vertical = 2.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -425,7 +315,7 @@ fun PillBottomNavigationBar(navController: NavHostController) {
                     it.route == item.screen.route
                 } == true
 
-                PillNavItemView(
+                YouTubeNavItem(
                     item = item,
                     isSelected = isSelected,
                     onClick = {
@@ -444,69 +334,188 @@ fun PillBottomNavigationBar(navController: NavHostController) {
 }
 
  @Composable
-fun PillNavItemView(
+fun YouTubeNavItem(
     item: BottomNavItem,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val width by animateDpAsState(
-        targetValue = if (isSelected) 80.dp else 52.dp,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessMedium
+    val iconColor by animateColorAsState(
+        targetValue = if (isSelected) Color(0xFF000000) else Color(0xFF606060),
+        animationSpec = tween(150)
+    )
+
+    val labelColor by animateColorAsState(
+        targetValue = if (isSelected) Color(0xFF000000) else Color(0xFF606060),
+        animationSpec = tween(150)
+    )
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .selectable(
+                selected = isSelected,
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            )
+            .padding(vertical = 10.dp, horizontal = 8.dp)
+    ) {
+        Icon(
+            imageVector = if (isSelected) item.iconSelected else item.iconUnselected,
+            contentDescription = item.label,
+            modifier = Modifier.size(24.dp),
+            tint = iconColor
+        )
+        
+        Spacer(modifier = Modifier.height(4.dp))
+        
+        Text(
+            text = item.label,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Medium,
+            color = labelColor
+        )
+    }
+}
+
+// Professional minimal style (Recommended)
+ @Composable
+fun MinimalBottomNav(navController: NavHostController) {
+    val items = listOf(
+        BottomNavItem(
+            Screen.Home,
+            Icons.Filled.Home,
+            Icons.Outlined.Home,
+            "Home"
+        ),
+        BottomNavItem(
+            Screen.Services,
+            Icons.Filled.CameraAlt,
+            Icons.Outlined.CameraAlt,
+            "Services"
+        ),
+        BottomNavItem(
+            Screen.Portfolio,
+            Icons.Filled.Collections,
+            Icons.Outlined.Collections,
+            "Portfolio"
+        ),
+        BottomNavItem(
+            Screen.Contact,
+            Icons.Filled.ContactPhone,
+            Icons.Outlined.ContactPhone,
+            "Contact"
+        ),
+        BottomNavItem(
+            Screen.Settings,
+            Icons.Filled.AccountCircle,
+            Icons.Outlined.AccountCircle,
+            "Account"
         )
     )
 
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(26.dp),
-        color = Color.Transparent
-    ) {
-        Box(
-            modifier = Modifier
-                .width(width)
-                .height(52.dp)
-                .clip(RoundedCornerShape(26.dp))
-                .background(
-                    if (isSelected) {
-                        Brush.horizontalGradient(item.gradient)
-                    } else {
-                        Brush.linearGradient(
-                            listOf(Color(0xFFF9FAFB), Color(0xFFF3F4F6))
-                        )
-                    }
-                ),
-            contentAlignment = Alignment.Center
+    Column(modifier = Modifier.fillMaxWidth()) {
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = Color(0xFFE5E7EB)
+        )
+        
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = Color.White
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(horizontal = 12.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = item.icon,
-                    contentDescription = item.label,
-                    modifier = Modifier.size(24.dp),
-                    tint = if (isSelected) Color.White else Color(0xFF6B7280)
-                )
-                
-                AnimatedVisibility(
-                    visible = isSelected,
-                    enter = fadeIn() + expandHorizontally(),
-                    exit = fadeOut() + shrinkHorizontally()
-                ) {
-                    Row {
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = item.label,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            maxLines = 1
-                        )
-                    }
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+
+                items.forEach { item ->
+                    val isSelected = currentDestination?.hierarchy?.any {
+                        it.route == item.screen.route
+                    } == true
+
+                    MinimalNavItem(
+                        item = item,
+                        isSelected = isSelected,
+                        onClick = {
+                            navController.navigate(item.screen.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    )
                 }
             }
         }
+    }
+}
+
+ @Composable
+fun MinimalNavItem(
+    item: BottomNavItem,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    val iconColor by animateColorAsState(
+        targetValue = if (isSelected) Color(0xFF1F2937) else Color(0xFF9CA3AF),
+        animationSpec = tween(200)
+    )
+
+    val labelColor by animateColorAsState(
+        targetValue = if (isSelected) Color(0xFF1F2937) else Color(0xFF9CA3AF),
+        animationSpec = tween(200)
+    )
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .selectable(
+                selected = isSelected,
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            )
+            .padding(vertical = 8.dp, horizontal = 10.dp)
+    ) {
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = if (isSelected) item.iconSelected else item.iconUnselected,
+                contentDescription = item.label,
+                modifier = Modifier.size(26.dp),
+                tint = iconColor
+            )
+            
+            // Bottom indicator line
+            if (isSelected) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .offset(y = 20.dp)
+                        .width(32.dp)
+                        .height(2.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF1F2937))
+                )
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(6.dp))
+        
+        Text(
+            text = item.label,
+            fontSize = 11.sp,
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+            color = labelColor
+        )
     }
 }
