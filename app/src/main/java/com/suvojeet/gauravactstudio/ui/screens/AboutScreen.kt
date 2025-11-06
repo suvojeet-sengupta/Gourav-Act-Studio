@@ -164,7 +164,7 @@ fun AboutScreen(navController: NavController) {
                             .height(200.dp)
                             .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
                             .clickable { showFullScreenImage = true },
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Fit
                     )
 
                     if (showFullScreenImage) {
