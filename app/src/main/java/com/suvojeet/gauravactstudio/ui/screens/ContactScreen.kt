@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.ContactMail
 import androidx.compose.material.icons.filled.Email
@@ -21,6 +22,9 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Schedule
+import java.time.LocalTime
+import java.time.DayOfWeek
+import java.time.LocalDate
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -428,28 +432,44 @@ fun BusinessHoursCard() {
             
             Spacer(modifier = Modifier.height(12.dp))
             
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                color = Color(0xFFF0FDF4)
-            ) {
-                Row(
-                    modifier = Modifier.padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
+            val currentTime = LocalTime.now()
+            val currentDay = DayOfWeek.values()[java.time.LocalDate.now().dayOfWeek.value - 1] // Adjust for 0-indexed DayOfWeek
+
+            val isOpen = remember(currentTime, currentDay) {
+                when (currentDay) {
+                    DayOfWeek.SUNDAY -> currentTime.isAfter(LocalTime.of(10, 0)) && currentTime.isBefore(LocalTime.of(18, 0))
+                    else -> currentTime.isAfter(LocalTime.of(8, 0)) && currentTime.isBefore(LocalTime.of(20, 0))
+                }
+            }
+
+            val statusText = if (isOpen) "Currently Open" else "Closed"
+            val statusColor = if (isOpen) Color(0xFF10B981) else MaterialTheme.colorScheme.error
+            val statusIcon = if (isOpen) Icons.Filled.CheckCircle else Icons.Filled.Close
+
+            AnimatedContent(targetState = statusText, label = "BusinessStatusAnimation") { targetStatus ->
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    color = if (isOpen) Color(0xFFF0FDF4) else statusColor.copy(alpha = 0.1f)
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.CheckCircle,
-                        contentDescription = null,
-                        tint = Color(0xFF10B981),
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Currently Open",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF10B981)
-                    )
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = statusIcon,
+                            contentDescription = null,
+                            tint = statusColor,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = targetStatus,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = statusColor
+                        )
+                    }
                 }
             }
         }
