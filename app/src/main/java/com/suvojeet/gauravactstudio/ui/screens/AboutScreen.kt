@@ -1,5 +1,8 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
+import coil.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
+
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.material.icons.materialIcon
 
@@ -151,32 +154,19 @@ fun AboutScreen(navController: NavController) {
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    AnimatedContent(isVisible) {
-                        Box(
-                            modifier = Modifier
-                                .size(100.dp)
-                                .clip(CircleShape)
-                                .background(
-                                    brush = Brush.linearGradient(
-                                        colors = listOf(Color(0xFFEC4899), Color(0xFF8B5CF6))
-                                    )
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.CameraAlt,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(50.dp)
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
+                    AsyncImage(
+                        model = "https://lh3.googleusercontent.com/pw/AP1GczM7cermp0wVG-gn5GUM_fFVqUx6ZL64ckbrJO8UA0mP8W6v4Y860-7EFFhXiwvsUZkV7TAOKiQ6IFd1xYSQfgb3_LbVifTeAyBi-PVELrr0zQmlE9kK1mNfDHbuqn3HEFjQeyK4o00yOBuU_iPbC4qwyw=w1081-h250-s-no-gm?authuser=0",
+                        contentDescription = "Gaurav Act Studio Banner",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)),
+                        contentScale = ContentScale.Crop
+                    )
 
                     AnimatedContent(isVisible, delay = 200) {
                         Text(
-                            text = "Gourav Act Studio",
+                            text = "Gaurav Act Studio",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
