@@ -287,7 +287,7 @@ fun InquiryDialog(
                                         onValueChange = { otherEventType = it },
                                         placeholder = { Text("Please specify") },
                                         modifier = Modifier.fillMaxWidth(),
-                                        enabled =.isSubmitting,
+                                        enabled = !isSubmitting,
                                         shape = RoundedCornerShape(16.dp),
                                         colors = OutlinedTextFieldDefaults.colors(
                                             focusedBorderColor = MaterialTheme.colorScheme.primary,
