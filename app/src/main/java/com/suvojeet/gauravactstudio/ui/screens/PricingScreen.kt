@@ -31,7 +31,8 @@ import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import com.suvojeet.gauravactstudio.ui.components.InquiryDialog
-import com.suvojeet.gauravactstudio.R
+import com.suvojeet.gauravactstudio.util.EmailService
+import kotlinx.coroutines.launch
 
 data class PricePackage(
     val name: String,
@@ -41,42 +42,6 @@ data class PricePackage(
     val gradient: List<Color> = listOf(Color(0xFF6366F1), Color(0xFF8B5CF6)),
     val icon: ImageVector = Icons.Filled.PhotoCamera
 )
-
-@Composable
-fun PricingScreen(modifier: Modifier = Modifier) {
-    val pricingList = listOf(
-        PricePackage(
-            name = stringResource(R.string.pricing_package_standard_name),
-            price = "₹12,000",
-            features = stringArrayResource(id = R.array.pricing_package_standard_features).toList(),
-            gradient = listOf(Color(0xFF10B981), Color(0xFF14B8A6)),
-            icon = Icons.Filled.CameraAlt
-        ),
-        PricePackage(
-            name = stringResource(R.string.pricing_package_deluxe_name),
-            price = "₹25,000",
-            features = stringArrayResource(id = R.array.pricing_package_deluxe_features).toList(),
-            isPopular = true,
-            gradient = listOf(Color(0xFF3B82F6), Color(0xFF06B6D4)),
-            icon = Icons.Filled.Videocam
-        ),
-        PricePackage(
-            name = stringResource(R.string.pricing_package_premium_name),
-            price = "₹35,000",
-            features = stringArrayResource(id = R.array.pricing_package_premium_features).toList(),
-            gradient = listOf(Color(0xFFEC4899), Color(0xFFF97316)),
-            icon = Icons.Filled.Movie
-        ),
-        PricePackage(
-            name = stringResource(R.string.pricing_package_elite_name),
-            price = "₹55,000",
-            features = stringArrayResource(id = R.array.pricing_package_elite_features).toList(),
-            gradient = listOf(Color(0xFF8B5CF6), Color(0xFFEC4899)),
-            icon = Icons.Filled.Diamond
-        )
-    )
-import com.suvojeet.gauravactstudio.util.EmailService
-import kotlinx.coroutines.launch
 
 @Composable
 fun PricingScreen(modifier: Modifier = Modifier) {
@@ -222,10 +187,10 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                 item {
                     AnimatedContent(isVisible, delay = 1200L) {
                         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                            CustomPackageCard {
+                            CustomPackageCard(onContact = {
                                 selectedPackage = it
                                 showInquiryDialog = true
-                            }
+                            })
                         }
                     }
                 }
