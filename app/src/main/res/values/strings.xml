@@ -4,7 +4,10 @@
     <string name="services_screen">Services</string>
     <string name="pricing_screen">Pricing</string>
     <string name="portfolio_screen">Portfolio</string>
-    <string name="contact_screen">Contact</string>
+    <string name="about_screen">About</string>
+    <string name="about_studio_title">About the Studio</string>
+    <string name="about_studio_description">The studio offers all types of shoots including wedding shoots, birthday shoots, video photoshoots, cinematic videos, and traditional videos. They also design wedding cards.</string>
+    <string name="contact_us_title">Contact Us</string>
     <string name="app_logo_gaurav">Gaurav</string>
     <string name="app_logo_act_studio">Act Studio</string>
     <string name="home_hero_title">Your Vision, Our Art.</string>

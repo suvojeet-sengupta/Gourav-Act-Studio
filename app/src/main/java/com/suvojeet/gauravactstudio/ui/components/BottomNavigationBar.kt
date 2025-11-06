@@ -61,13 +61,7 @@ data class BottomNavItem(
             "Pricing"
         ),
         BottomNavItem(
-            Screen.Contact,
-            Icons.Filled.Email,
-            Icons.Outlined.Email,
-            "Contact"
-        ),
-        BottomNavItem(
-            Screen.Settings,
+            Screen.About,
             Icons.Filled.Info,
             Icons.Outlined.Info,
             "About"
@@ -185,13 +179,7 @@ fun InstagramStyleBottomNav(navController: NavHostController) {
             "Pricing"
         ),
         BottomNavItem(
-            Screen.Contact,
-            Icons.Filled.Email,
-            Icons.Outlined.Email,
-            "Contact"
-        ),
-        BottomNavItem(
-            Screen.Settings,
+            Screen.About,
             Icons.Filled.Info,
             Icons.Outlined.Info,
             "About"
@@ -299,13 +287,7 @@ fun YouTubeStyleBottomNav(navController: NavHostController) {
             "Pricing"
         ),
         BottomNavItem(
-            Screen.Contact,
-            Icons.Filled.Email,
-            Icons.Outlined.Email,
-            "Contact"
-        ),
-        BottomNavItem(
-            Screen.Settings,
+            Screen.About,
             Icons.Filled.Info,
             Icons.Outlined.Info,
             "About"
@@ -424,13 +406,7 @@ fun MinimalBottomNav(navController: NavHostController) {
             "Pricing"
         ),
         BottomNavItem(
-            Screen.Contact,
-            Icons.Filled.ContactPhone,
-            Icons.Outlined.ContactPhone,
-            "Contact"
-        ),
-        BottomNavItem(
-            Screen.Settings,
+            Screen.About,
             Icons.Filled.Info,
             Icons.Outlined.Info,
             "About"

@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.suvojeet.gauravactstudio.ui.screens.AboutScreen
 import com.suvojeet.gauravactstudio.ui.screens.ContactScreen
 import com.suvojeet.gauravactstudio.ui.screens.HomeScreen
 import com.suvojeet.gauravactstudio.ui.screens.PortfolioScreen
@@ -18,7 +19,7 @@ sealed class Screen(val route: String, @StringRes val title: Int) {
     object Services : Screen("services", R.string.services_screen)
     object Pricing : Screen("pricing", R.string.pricing_screen)
     object Portfolio : Screen("portfolio", R.string.portfolio_screen)
-    object Contact : Screen("contact", R.string.contact_screen)
+    object About : Screen("about", R.string.about_screen)
     object Settings : Screen("settings", R.string.settings_title)
 }
 
@@ -40,8 +41,8 @@ fun AppNavHost(
         composable(Screen.Portfolio.route) {
             PortfolioScreen()
         }
-        composable(Screen.Contact.route) {
-            ContactScreen()
+        composable(Screen.About.route) {
+            AboutScreen(navController = navController)
         }
         composable(Screen.Settings.route) {
             SettingsScreen()
