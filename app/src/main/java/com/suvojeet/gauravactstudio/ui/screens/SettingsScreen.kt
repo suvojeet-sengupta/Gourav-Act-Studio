@@ -58,7 +58,6 @@ fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) 
 
 
             Column(modifier = Modifier.padding(16.dp)) {
-                Spacer(modifier = Modifier.height(16.dp))
 
                 SettingsItem(
                     icon = Icons.Filled.Share,
