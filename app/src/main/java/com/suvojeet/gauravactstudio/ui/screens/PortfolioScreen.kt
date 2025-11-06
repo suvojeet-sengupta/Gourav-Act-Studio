@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio.ui.screens
+package com.suvojeet.gauravactstudio.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
+import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 
 val portfolioItems = listOf(
     "Wedding Album 1",
@@ -90,7 +90,7 @@ fun PortfolioItemCard(title: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun PortfolioScreenPreview() {
-    GouravActStudioTheme {
+    GauravActStudioTheme {
         PortfolioScreen()
     }
 }

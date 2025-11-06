@@ -1,15 +1,15 @@
-package com.suvojeet.gouravactstudio
+package com.suvojeet.gauravactstudio
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.suvojeet.gouravactstudio.ui.screens.ContactScreen
-import com.suvojeet.gouravactstudio.ui.screens.HomeScreen
-import com.suvojeet.gouravactstudio.ui.screens.PortfolioScreen
-import com.suvojeet.gouravactstudio.ui.screens.PricingScreen
-import com.suvojeet.gouravactstudio.ui.screens.ServicesScreen
+import com.suvojeet.gauravactstudio.ui.screens.ContactScreen
+import com.suvojeet.gauravactstudio.ui.screens.HomeScreen
+import com.suvojeet.gauravactstudio.ui.screens.PortfolioScreen
+import com.suvojeet.gauravactstudio.ui.screens.PricingScreen
+import com.suvojeet.gauravactstudio.ui.screens.ServicesScreen
 
 sealed class Screen(val route: String, val title: String) {
     object Home : Screen("home", "Home")

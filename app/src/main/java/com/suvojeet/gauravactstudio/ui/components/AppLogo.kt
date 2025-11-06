@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio.ui.components
+package com.suvojeet.gauravactstudio.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -11,13 +11,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
+import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 
 @Composable
 fun AppLogo(modifier: Modifier = Modifier) {
     Column(modifier = modifier.padding(16.dp)) {
         Text(
-            text = "Gourav",
+            text = "Gaurav",
             fontSize = 48.sp,
             fontWeight = FontWeight.ExtraBold,
             color = MaterialTheme.colorScheme.primary, // Use primary color from theme
@@ -36,7 +36,7 @@ fun AppLogo(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun AppLogoPreview() {
-    GouravActStudioTheme {
+    GauravActStudioTheme {
         AppLogo()
     }
 }

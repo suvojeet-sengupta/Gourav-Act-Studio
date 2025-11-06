@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio.ui.screens
+package com.suvojeet.gauravactstudio.ui.screens
 
 import android.content.Intent
 import android.net.Uri
@@ -38,9 +38,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
+import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
-import com.suvojeet.gouravactstudio.ui.components.AnimatedContent
+import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 
  @Composable
 fun ContactScreen(modifier: Modifier = Modifier) {
@@ -527,7 +527,7 @@ fun MapCard(onClick: () -> Unit) {
  @Preview(showBackground = true)
  @Composable
 fun ContactScreenPreview() {
-    GouravActStudioTheme {
+    GauravActStudioTheme {
         ContactScreen()
     }
 }

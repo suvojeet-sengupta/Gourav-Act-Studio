@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio.ui.theme
+package com.suvojeet.gauravactstudio.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.suvojeet.gouravactstudio"
+    namespace = "com.suvojeet.gauravactstudio"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.suvojeet.gouravactstudio"
+        applicationId = "com.suvojeet.gauravactstudio"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

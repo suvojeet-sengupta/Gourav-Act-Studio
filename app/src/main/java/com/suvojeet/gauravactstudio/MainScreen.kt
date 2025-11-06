@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio
+package com.suvojeet.gauravactstudio
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons

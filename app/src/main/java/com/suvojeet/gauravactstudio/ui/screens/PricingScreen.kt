@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio.ui.screens
+package com.suvojeet.gauravactstudio.ui.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -25,9 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
+import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
-import com.suvojeet.gouravactstudio.ui.components.AnimatedContent
+import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 
 data class PricePackage(
     val name: String,
@@ -89,7 +89,8 @@ val pricingList = listOf(
             "Pre-wedding shoot at location",
             "Ring ceremony complete coverage",
             "Full wedding shoot (Cinematic + Traditional)",
-            "3 videographers + 3 photographers",
+            "2 professional videographers",
+            "2 professional photographers",
             "Multiple drones for aerial shots",
             "Premium albums (3 copies)",
             "Same-day photo delivery",
@@ -465,7 +466,7 @@ fun CustomPackageCard() {
  @Preview(showBackground = true)
  @Composable
 fun PricingScreenPreview() {
-    GouravActStudioTheme {
+    GauravActStudioTheme {
         PricingScreen()
     }
 }

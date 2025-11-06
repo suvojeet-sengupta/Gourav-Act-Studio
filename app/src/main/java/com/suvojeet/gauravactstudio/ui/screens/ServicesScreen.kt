@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio.ui.screens
+package com.suvojeet.gauravactstudio.ui.screens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
+import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 
 data class Service(
     val title: String,
@@ -217,7 +217,7 @@ fun ServiceCard(service: Service) {
  @Preview(showBackground = true)
  @Composable
 fun ServicesScreenPreview() {
-    GouravActStudioTheme {
+    GauravActStudioTheme {
         ServicesScreen()
     }
 }

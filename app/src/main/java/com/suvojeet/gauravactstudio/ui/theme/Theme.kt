@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio.ui.theme
+package com.suvojeet.gauravactstudio.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -39,7 +39,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun GouravActStudioTheme(
+fun GauravActStudioTheme(
     darkTheme: Boolean = false, // Always use light theme
     content: @Composable () -> Unit
 ) {

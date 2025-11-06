@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio.ui.screens
+package com.suvojeet.gauravactstudio.ui.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -24,10 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.suvojeet.gouravactstudio.Screen
-import com.suvojeet.gouravactstudio.ui.components.AppLogo
-import com.suvojeet.gouravactstudio.ui.components.AnimatedContent
-import com.suvojeet.gouravactstudio.ui.theme.GouravActStudioTheme
+import com.suvojeet.gauravactstudio.Screen
+import com.suvojeet.gauravactstudio.ui.components.AppLogo
+import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
 
  @Composable
@@ -339,7 +339,7 @@ fun FeatureItem(icon: ImageVector, title: String, description: String) {
  @Preview(showBackground = true)
  @Composable
 fun HomeScreenPreview() {
-    GouravActStudioTheme {
+    GauravActStudioTheme {
         HomeScreen(navController = rememberNavController())
     }
 }

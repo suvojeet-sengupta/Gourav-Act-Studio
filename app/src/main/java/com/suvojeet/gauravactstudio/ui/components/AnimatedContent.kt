@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio.ui.components
+package com.suvojeet.gauravactstudio.ui.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.Box

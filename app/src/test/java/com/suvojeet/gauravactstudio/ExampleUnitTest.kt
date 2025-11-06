@@ -1,4 +1,4 @@
-package com.suvojeet.gouravactstudio
+package com.suvojeet.gauravactstudio
 
 import org.junit.Test
 
