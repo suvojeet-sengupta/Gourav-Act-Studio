@@ -30,6 +30,7 @@ import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
 import androidx.compose.ui.res.stringResource
 import com.suvojeet.gauravactstudio.R
+import com.suvojeet.gauravactstudio.ui.components.FeatureItem
 
  @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {

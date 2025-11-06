@@ -31,7 +31,81 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.Screen
+import com.suvojeet.gauravactstudio.ui.components.FeatureItem
 import kotlinx.coroutines.delay
+
+val Icons.Filled.Instagram: ImageVector
+    get() {
+        if (_instagram != null) {
+            return _instagram!!
+        }
+        _instagram = materialIcon(name = "Filled.Instagram") {
+            materialPath {
+                moveTo(7.8f, 2.0f)
+                horizontalLineToRelative(8.4f)
+                curveToRelative(2.9f, 0.0f, 5.2f, 2.3f, 5.2f, 5.2f)
+                verticalLineToRelative(8.4f)
+                curveToRelative(0.0f, 2.9f, -2.3f, 5.2f, -5.2f, 5.2f)
+                horizontalLineTo(7.8f)
+                curveTo(4.9f, 22.0f, 2.6f, 19.7f, 2.6f, 16.8f)
+                verticalLineTo(7.2f)
+                curveTo(2.6f, 4.3f, 4.9f, 2.0f, 7.8f, 2.0f)
+                close()
+                moveTo(12.0f, 7.0f)
+                curveToRelative(-2.8f, 0.0f, -5.0f, 2.2f, -5.0f, 5.0f)
+                reflectiveCurveToRelative(2.2f, 5.0f, 5.0f, 5.0f)
+                reflectiveCurveToRelative(5.0f, -2.2f, 5.0f, -5.0f)
+                reflectiveCurveToRelative(-2.2f, -5.0f, -5.0f, -5.0f)
+                close()
+                moveTo(12.0f, 15.0f)
+                curveToRelative(-1.7f, 0.0f, -3.0f, -1.3f, -3.0f, -3.0f)
+                reflectiveCurveToRelative(1.3f, -3.0f, 3.0f, -3.0f)
+                reflectiveCurveToRelative(3.0f, 1.3f, 3.0f, 3.0f)
+                reflectiveCurveToRelative(-1.3f, 3.0f, -3.0f, 3.0f)
+                close()
+                moveTo(16.8f, 6.2f)
+                curveToRelative(-0.6f, 0.0f, -1.0f, 0.4f, -1.0f, 1.0f)
+                reflectiveCurveToRelative(0.4f, 1.0f, 1.0f, 1.0f)
+                reflectiveCurveToRelative(1.0f, -0.4f, 1.0f, -1.0f)
+                reflectiveCurveToRelative(-0.4f, -1.0f, -1.0f, -1.0f)
+                close()
+            }
+        }
+        return _instagram!!
+    }
+private var _instagram: ImageVector? = null
+
+val Icons.Filled.YouTube: ImageVector
+    get() {
+        if (_youTube != null) {
+            return _youTube!!
+        }
+        _youTube = materialIcon(name = "Filled.YouTube") {
+            materialPath {
+                moveTo(21.58f, 7.19f)
+                curveTo(21.35f, 6.4f, 20.8f, 5.85f, 20.01f, 5.62f)
+                curveTo(18.2f, 5.0f, 12.0f, 5.0f, 12.0f, 5.0f)
+                reflectiveCurveTo(5.8f, 5.0f, 3.99f, 5.62f)
+                curveTo(3.2f, 5.85f, 2.65f, 6.4f, 2.42f, 7.19f)
+                curveTo(1.8f, 9.0f, 1.8f, 12.0f, 1.8f, 12.0f)
+                reflectiveCurveToRelative(0.0f, 3.0f, 0.62f, 4.81f)
+                curveToRelative(0.23f, 0.79f, 0.78f, 1.34f, 1.57f, 1.57f)
+                curveTo(5.8f, 19.0f, 12.0f, 19.0f, 12.0f, 19.0f)
+                reflectiveCurveToRelative(6.2f, 0.0f, 8.01f, -0.62f)
+                curveToRelative(0.79f, -0.23f, 1.34f, -0.78f, 1.57f, -1.57f)
+                curveTo(22.2f, 15.0f, 22.2f, 12.0f, 22.2f, 12.0f)
+                reflectiveCurveToRelative(0.0f, -3.0f, -0.62f, -4.81f)
+                close()
+                moveTo(10.0f, 15.0f)
+                verticalLineTo(9.0f)
+                lineToRelative(5.2f, 3.0f)
+                lineTo(10.0f, 15.0f)
+                close()
+            }
+        }
+        return _youTube!!
+    }
+private var _youTube: ImageVector? = null
 
 @Composable
 fun AboutScreen(navController: NavController) {
@@ -503,41 +577,7 @@ fun FeaturesCard() {
     }
 }
 
-@Composable
-fun FeatureItem(icon: ImageVector, title: String, description: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(Color(0xFFF3F4F6)),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(20.dp)
-            )
-        }
 
-        Spacer(modifier = Modifier.width(16.dp))
-
-        Column {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
 
 @Composable
 fun SocialMediaCard() {
