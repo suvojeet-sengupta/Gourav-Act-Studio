@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import com.suvojeet.gauravactstudio.R
 
 @Composable
-fun PortfolioScreen(modifier: Modifier = Modifier) {
+fun GalleryScreen(modifier: Modifier = Modifier) {
     val portfolioItems = stringArrayResource(id = R.array.portfolio_items).toList()
     Column(
         modifier = modifier
@@ -36,7 +36,7 @@ fun PortfolioScreen(modifier: Modifier = Modifier) {
             .padding(16.dp)
     ) {
         Text(
-            text = stringResource(R.string.portfolio_title),
+            text = stringResource(R.string.gallery_title),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,

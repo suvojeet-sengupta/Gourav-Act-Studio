@@ -3,7 +3,7 @@
     <string name="home_screen">Home</string>
     <string name="services_screen">Services</string>
     <string name="pricing_screen">Pricing</string>
-    <string name="portfolio_screen">Portfolio</string>
+    <string name="gallery_screen">Gallery</string>
     <string name="about_screen">About</string>
     <string name="about_studio_title">About the Studio</string>
     <string name="about_studio_description">The studio offers all types of shoots including wedding shoots, birthday shoots, video photoshoots, cinematic videos, and traditional videos. They also design wedding cards.</string>
@@ -45,7 +45,7 @@
     <string name="contact_status_closed">Closed</string>
     <string name="contact_view_on_map">View on Google Maps</string>
     <string name="contact_tap_to_directions">Tap to get directions</string>
-    <string name="portfolio_title">Our Portfolio</string>
+    <string name="gallery_title">Our Gallery</string>
     <string-array name="portfolio_items">
         <item>Wedding Album 1</item>
         <item>Wedding Album 2</item>

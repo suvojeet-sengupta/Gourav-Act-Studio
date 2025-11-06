@@ -49,10 +49,10 @@ data class BottomNavItem(
             "Services"
         ),
         BottomNavItem(
-            Screen.Portfolio,
+            Screen.Gallery,
             Icons.Filled.PhotoLibrary,
             Icons.Outlined.PhotoLibrary,
-            "Portfolio"
+            "Gallery"
         ),
         BottomNavItem(
             Screen.Pricing,
@@ -167,10 +167,10 @@ fun InstagramStyleBottomNav(navController: NavHostController) {
             "Services"
         ),
         BottomNavItem(
-            Screen.Portfolio,
+            Screen.Gallery,
             Icons.Filled.PhotoLibrary,
             Icons.Outlined.PhotoLibrary,
-            "Portfolio"
+            "Gallery"
         ),
         BottomNavItem(
             Screen.Pricing,
@@ -275,10 +275,10 @@ fun YouTubeStyleBottomNav(navController: NavHostController) {
             "Services"
         ),
         BottomNavItem(
-            Screen.Portfolio,
+            Screen.Gallery,
             Icons.Filled.PhotoLibrary,
             Icons.Outlined.PhotoLibrary,
-            "Portfolio"
+            "Gallery"
         ),
         BottomNavItem(
             Screen.Pricing,
@@ -394,10 +394,10 @@ fun MinimalBottomNav(navController: NavHostController) {
             "Services"
         ),
         BottomNavItem(
-            Screen.Portfolio,
+            Screen.Gallery,
             Icons.Filled.PhotoLibrary,
             Icons.Outlined.PhotoLibrary,
-            "Portfolio"
+            "Gallery"
         ),
         BottomNavItem(
             Screen.Pricing,
