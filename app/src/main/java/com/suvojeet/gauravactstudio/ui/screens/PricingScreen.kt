@@ -123,7 +123,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                         // OOPS! Error aa gaya
                         Log.e("PricingScreen", "Failed to send email", e) // Error ko log karo
                         snackbarHostState.showSnackbar(
-                            message = "Error: Could not send inquiry. Please check your connection.",
+                            message = e.message ?: "An unknown error occurred.",
                             duration = SnackbarDuration.Long
                         )
                     } finally {

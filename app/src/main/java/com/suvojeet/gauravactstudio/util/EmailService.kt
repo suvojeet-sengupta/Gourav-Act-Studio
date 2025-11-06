@@ -78,17 +78,14 @@ class EmailService {
         )
 
         try {
-            val jsonPayload = Json.encodeToString(EmailRequest.serializer(), request)
-            Log.d("EmailService", "Sending R8-Proof payload: $jsonPayload") // Log check kar sakte ho
-        } catch (e: SerializationException) {
-            Log.e("EmailService", "Failed to serialize request", e)
+            val response = client.post("https://api.emailjs.com/api/v1.0/email/send") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            Log.d("EmailService", "Got response: ${response.status} ${response.bodyAsText()}")
+        } catch (e: Exception) {
+            Log.e("EmailService", "Failed to send email", e)
+            throw Exception("Failed to send inquiry. Please try again later.")
         }
-
-        val response = client.post("https://api.emailjs.com/api/v1.0/email/send") {
-            contentType(ContentType.Application.Json)
-            setBody(request)
-        }
-
-        Log.d("EmailService", "Got response: ${response.status} ${response.bodyAsText()}")
     }
 }
