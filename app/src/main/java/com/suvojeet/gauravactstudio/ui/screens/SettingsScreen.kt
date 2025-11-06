@@ -1,5 +1,8 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -181,8 +184,7 @@ fun SettingsItem(icon: ImageVector, title: String, onClick: () -> Unit) {
     }
 }
 
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+
 
 @Preview(showBackground = true)
 @Composable
