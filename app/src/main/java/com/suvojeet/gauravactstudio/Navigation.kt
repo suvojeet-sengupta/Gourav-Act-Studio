@@ -28,6 +28,7 @@ sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     object Detail : Screen("detail/{imageUrl}") {
         fun createRoute(imageUrl: String) = "detail/${imageUrl.encodeURL()}"
     }
+    object CustomPackageBuilder : Screen("custom_package_builder", R.string.custom_package_builder_title)
 }
 
 @Composable
@@ -62,6 +63,9 @@ fun AppNavHost(
             if (imageUrl != null) {
                 DetailScreen(navController = navController, imageUrl = imageUrl.decodeURL())
             }
+        }
+        composable(Screen.CustomPackageBuilder.route) {
+            CustomPackageBuilderScreen(navController = navController)
         }
     }
 }

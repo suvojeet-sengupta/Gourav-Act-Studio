@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 data class PricingScreenState(
     val showInquiryDialog: Boolean = false,
     val selectedPackage: String = "",
+    val customPackageDetails: String? = null,
     val isSubmittingInquiry: Boolean = false,
     val snackbarMessage: String? = null
 )
@@ -20,13 +21,13 @@ class PricingViewModel(private val emailService: EmailService = EmailService()) 
     private val _uiState = MutableStateFlow(PricingScreenState())
     val uiState = _uiState.asStateFlow()
 
-    fun onChoosePlan(packageName: String) {
-        _uiState.update { it.copy(showInquiryDialog = true, selectedPackage = packageName) }
+    fun onChoosePlan(packageName: String, customPackageDetails: String? = null) {
+        _uiState.update { it.copy(showInquiryDialog = true, selectedPackage = packageName, customPackageDetails = customPackageDetails) }
     }
 
     fun onDismissInquiryDialog() {
         if (!_uiState.value.isSubmittingInquiry) {
-            _uiState.update { it.copy(showInquiryDialog = false) }
+            _uiState.update { it.copy(showInquiryDialog = false, customPackageDetails = null) }
         }
     }
 
@@ -52,12 +53,14 @@ class PricingViewModel(private val emailService: EmailService = EmailService()) 
                     otherEventType = otherEventType,
                     date = date,
                     notes = notes,
-                    packageName = _uiState.value.selectedPackage
+                    packageName = _uiState.value.selectedPackage,
+                    customPackageDetails = _uiState.value.customPackageDetails
                 )
                 _uiState.update {
                     it.copy(
                         showInquiryDialog = false,
-                        snackbarMessage = "Inquiry sent successfully! We will contact you soon."
+                        snackbarMessage = "Inquiry sent successfully! We will contact you soon.",
+                        customPackageDetails = null
                     )
                 }
             } catch (e: Exception) {
