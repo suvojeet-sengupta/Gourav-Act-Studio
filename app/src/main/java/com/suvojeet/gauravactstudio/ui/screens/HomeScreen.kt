@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.ui.components.AppLogo
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
@@ -55,6 +56,16 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
         isVisible = true
     }
 
+    val scrollState = rememberScrollState()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    LaunchedEffect(currentRoute) {
+        if (currentRoute == Screen.Home.route) {
+            scrollState.scrollTo(0)
+        }
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -68,7 +79,6 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 )
             )
     ) {
-        val scrollState = rememberScrollState()
         // Enhanced decorative background
         LightDecorativeBackground(scrollState.value)
 
