@@ -35,9 +35,9 @@ import com.suvojeet.gauravactstudio.R
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.draw.blur
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 
  @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -118,6 +118,30 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                     )
             ) {
                 AppLogo()
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Main Photographer Image and Studio Name
+        AnimatedContent(isVisible, delay = 50) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    painter = painterResource(id = R.drawable.gourav_photographer),
+                    contentDescription = "Gaurav, Main Photographer",
+                    modifier = Modifier
+                        .size(120.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Gaurav Act Digital Studio",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center
+                )
             }
         }
         
