@@ -67,11 +67,21 @@ fun InquiryDialog(
     val context = LocalContext.current
 
     // Validation states
-    val isFormValid = name.isNotBlank() && 
-                      phone.isNotBlank() && 
-                      eventType.isNotBlank() && 
-                      date.isNotBlank() &&
-                      (eventType != "Other" || otherEventType.isNotBlank())
+    var nameError by remember { mutableStateOf(false) }
+    var phoneError by remember { mutableStateOf(false) }
+    var eventTypeError by remember { mutableStateOf(false) }
+    var otherEventTypeRequiredError by remember { mutableStateOf(false) }
+    var dateError by remember { mutableStateOf(false) }
+
+    val validateForm: () -> Boolean = {
+        nameError = name.isBlank()
+        phoneError = phone.isBlank()
+        eventTypeError = eventType.isBlank()
+        otherEventTypeRequiredError = eventType == "Other" && otherEventType.isBlank()
+        dateError = date.isBlank()
+
+        !nameError && !phoneError && !eventTypeError && !otherEventTypeRequiredError && !dateError
+    }
 
     // Animation
     var visible by remember { mutableStateOf(false) }
@@ -188,7 +198,7 @@ fun InquiryDialog(
                         ) {
                             OutlinedTextField(
                                 value = name,
-                                onValueChange = { name = it },
+                                onValueChange = { name = it; nameError = false },
                                 placeholder = { Text("Enter your full name") },
                                 modifier = Modifier.fillMaxWidth(),
                                 enabled = !isSubmitting,
@@ -197,7 +207,13 @@ fun InquiryDialog(
                                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                                     unfocusedBorderColor = Color(0xFFE0E0E0)
                                 ),
-                                singleLine = true
+                                singleLine = true,
+                                isError = nameError,
+                                supportingText = {
+                                    if (nameError) {
+                                        Text("Name cannot be empty", color = MaterialTheme.colorScheme.error)
+                                    }
+                                }
                             )
                         }
 
@@ -210,7 +226,7 @@ fun InquiryDialog(
                         ) {
                             OutlinedTextField(
                                 value = phone,
-                                onValueChange = { phone = it },
+                                onValueChange = { phone = it; phoneError = false },
                                 placeholder = { Text("Enter your phone number") },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                                 modifier = Modifier.fillMaxWidth(),
@@ -220,7 +236,13 @@ fun InquiryDialog(
                                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                                     unfocusedBorderColor = Color(0xFFE0E0E0)
                                 ),
-                                singleLine = true
+                                singleLine = true,
+                                isError = phoneError,
+                                supportingText = {
+                                    if (phoneError) {
+                                        Text("Phone number cannot be empty", color = MaterialTheme.colorScheme.error)
+                                    }
+                                }
                             )
                         }
 
@@ -251,7 +273,13 @@ fun InquiryDialog(
                                     colors = OutlinedTextFieldDefaults.colors(
                                         focusedBorderColor = MaterialTheme.colorScheme.primary,
                                         unfocusedBorderColor = Color(0xFFE0E0E0)
-                                    )
+                                    ),
+                                    isError = eventTypeError,
+                                    supportingText = {
+                                        if (eventTypeError) {
+                                            Text("Please select an event type", color = MaterialTheme.colorScheme.error)
+                                        }
+                                    }
                                 )
                                 ExposedDropdownMenu(
                                     expanded = expanded,
@@ -284,7 +312,7 @@ fun InquiryDialog(
                                 ) {
                                     OutlinedTextField(
                                         value = otherEventType,
-                                        onValueChange = { otherEventType = it },
+                                        onValueChange = { otherEventType = it; otherEventTypeRequiredError = false },
                                         placeholder = { Text("Please specify") },
                                         modifier = Modifier.fillMaxWidth(),
                                         enabled = !isSubmitting,
@@ -293,7 +321,13 @@ fun InquiryDialog(
                                             focusedBorderColor = MaterialTheme.colorScheme.primary,
                                             unfocusedBorderColor = Color(0xFFE0E0E0)
                                         ),
-                                        singleLine = true
+                                        singleLine = true,
+                                        isError = otherEventTypeRequiredError,
+                                        supportingText = {
+                                            if (otherEventTypeRequiredError) {
+                                                Text("Please specify the event type", color = MaterialTheme.colorScheme.error)
+                                            }
+                                        }
                                     )
                                 }
                             }
@@ -308,12 +342,12 @@ fun InquiryDialog(
                         ) {
                             OutlinedTextField(
                                 value = date,
-                                onValueChange = { date = it },
+                                onValueChange = { date = it; dateError = false },
                                 readOnly = true,
                                 placeholder = { Text("Select date") },
                                 trailingIcon = {
                                     IconButton(
-                                        onClick = { showDatePicker(context) { date = it } },
+                                        onClick = { showDatePicker(context) { date = it; dateError = false } },
                                         enabled = !isSubmitting
                                     ) {
                                         Icon(
@@ -329,7 +363,13 @@ fun InquiryDialog(
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                                     unfocusedBorderColor = Color(0xFFE0E0E0)
-                                )
+                                ),
+                                isError = dateError,
+                                supportingText = {
+                                    if (dateError) {
+                                        Text("Please select a date", color = MaterialTheme.colorScheme.error)
+                                    }
+                                }
                             )
                         }
 
@@ -392,11 +432,11 @@ fun InquiryDialog(
                             // Submit Button
                             Button(
                                 onClick = {
-                                    if (isFormValid) {
+                                    if (validateForm()) {
                                         onSubmit(name, phone, eventType, otherEventType, date, notes)
                                     }
                                 },
-                                enabled = !isSubmitting && isFormValid,
+                                enabled = !isSubmitting,
                                 modifier = Modifier
                                     .weight(1f)
                                     .height(56.dp),
