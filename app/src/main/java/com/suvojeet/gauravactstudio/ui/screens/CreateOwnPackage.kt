@@ -169,21 +169,22 @@ fun CreateOwnPackage(onContact: (String, String) -> Unit) {
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 VideoType.entries.forEach { type ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { selectedVideoType = type }
+                            .padding(vertical = 2.dp)
+                    ) {
                         RadioButton(
                             selected = (type == selectedVideoType),
                             onClick = { selectedVideoType = type }
                         )
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = type.name.replace("_", " ").lowercase().capitalize(Locale.ROOT),
-                            softWrap = true,
-                            maxLines = 2
+                            text = type.name.replace("_", " ").lowercase().capitalize(Locale.ROOT)
                         )
                     }
                 }
@@ -197,21 +198,22 @@ fun CreateOwnPackage(onContact: (String, String) -> Unit) {
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 AlbumSheets.entries.forEach { sheets ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { selectedAlbumSheets = sheets }
+                            .padding(vertical = 2.dp)
+                    ) {
                         RadioButton(
                             selected = (sheets == selectedAlbumSheets),
                             onClick = { selectedAlbumSheets = sheets }
                         )
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "${sheets.sheets} Sheets",
-                            softWrap = true,
-                            maxLines = 2
+                            text = "${sheets.sheets} Sheets"
                         )
                     }
                 }
