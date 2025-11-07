@@ -578,7 +578,11 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
                              selected = (type == selectedVideoType),
                              onClick = { selectedVideoType = type }
                          )
-                         Text(text = type.name.replace("_", " ").lowercase().capitalize(Locale.ROOT))
+                         Text(
+                            text = type.name.replace("_", " ").lowercase().capitalize(Locale.ROOT),
+                            softWrap = true,
+                            maxLines = 2
+                        )
                      }
                  }
              }
@@ -602,7 +606,11 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
                              selected = (sheets == selectedAlbumSheets),
                              onClick = { selectedAlbumSheets = sheets }
                          )
-                         Text(text = "${sheets.sheets} Sheets")
+                         Text(
+                            text = "${sheets.sheets} Sheets",
+                            softWrap = true,
+                            maxLines = 2
+                        )
                      }
                  }
              }
