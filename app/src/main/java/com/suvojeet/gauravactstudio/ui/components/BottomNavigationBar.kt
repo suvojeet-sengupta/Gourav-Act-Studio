@@ -4,14 +4,25 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,87 +78,56 @@ data class BottomNavItem(
             "About"
         )
     )
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = Color.White,
-        shadowElevation = 8.dp
+    
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    NavigationBar(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)), // Rounded corners
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        tonalElevation = 8.dp
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
+        items.forEach { item ->
+            val isSelected = currentDestination?.hierarchy?.any {
+                it.route == item.screen.route
+            } == true
 
-            items.forEach { item ->
-                val isSelected = currentDestination?.hierarchy?.any {
-                    it.route == item.screen.route
-                } == true
-
-                BottomNavItemView(
-                    item = item,
-                    isSelected = isSelected,
-                    onClick = {
-                        navController.navigate(item.screen.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+            NavigationBarItem(
+                selected = isSelected,
+                onClick = {
+                    navController.navigate(item.screen.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
                         }
+                        launchSingleTop = true
+                        restoreState = true
                     }
+                },
+                icon = {
+                    Icon(
+                        imageVector = if (isSelected) item.iconSelected else item.iconUnselected,
+                        contentDescription = item.label
+                    )
+                },
+                label = {
+                    Text(item.label)
+                },
+                alwaysShowLabel = true,
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    indicatorColor = MaterialTheme.colorScheme.secondaryContainer
                 )
-            }
+            )
         }
     }
 }
 
- @Composable
-fun BottomNavItemView(
-    item: BottomNavItem,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    val iconColor by animateColorAsState(
-        targetValue = if (isSelected) Color(0xFF262626) else Color(0xFF737373),
-        animationSpec = tween(200)
-    )
 
-    val labelColor by animateColorAsState(
-        targetValue = if (isSelected) Color(0xFF262626) else Color(0xFF737373),
-        animationSpec = tween(200)
-    )
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .selectable(
-                selected = isSelected,
-                onClick = onClick,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            )
-            .padding(vertical = 8.dp, horizontal = 12.dp)
-    ) {
-        Icon(
-            imageVector = if (isSelected) item.iconSelected else item.iconUnselected,
-            contentDescription = item.label,
-            modifier = Modifier.size(26.dp),
-            tint = iconColor
-        )
-        
-        Spacer(modifier = Modifier.height(4.dp))
-        
-        Text(
-            text = item.label,
-            fontSize = 11.sp,
-            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-            color = labelColor
-        )
-    }
-}
 
 // Alternative: Instagram-style with indicator line
  @Composable
