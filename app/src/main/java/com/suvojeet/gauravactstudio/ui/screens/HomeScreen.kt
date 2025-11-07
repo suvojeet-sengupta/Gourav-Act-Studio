@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
+
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -46,10 +46,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 
- @Composable
+@Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
     var isVisible by remember { mutableStateOf(false) }
-    
+
     LaunchedEffect(Unit) {
         delay(50)
         isVisible = true
@@ -68,10 +68,10 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 )
             )
     ) {
-        // Enhanced decorative background
-        LightDecorativeBackground()
-
         val scrollState = rememberScrollState()
+        // Enhanced decorative background
+        LightDecorativeBackground(scrollState.value)
+
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
@@ -79,35 +79,27 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Hero Section with modern design
-            Box(modifier = Modifier.graphicsLayer(translationY = scrollState.value * 0.5f)) {
-                HeroSection(isVisible, navController)
-            }
+            HeroSection(isVisible, navController)
 
             Spacer(modifier = Modifier.height(48.dp))
 
             // Quick Stats with Modern Cards
-            Box(modifier = Modifier.graphicsLayer(translationY = scrollState.value * 0.3f)) {
-                AnimatedContent(isVisible, delay = 400) {
-                    ModernQuickStatsSection()
-                }
+            AnimatedContent(isVisible, delay = 400) {
+                ModernQuickStatsSection()
             }
 
             Spacer(modifier = Modifier.height(40.dp))
 
             // Features with modern design
-            Box(modifier = Modifier.graphicsLayer(translationY = scrollState.value * 0.2f)) {
-                AnimatedContent(isVisible, delay = 500) {
-                    ModernFeaturesSection()
-                }
+            AnimatedContent(isVisible, delay = 500) {
+                ModernFeaturesSection(isVisible)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Address with Modern Design
-            Box(modifier = Modifier.graphicsLayer(translationY = scrollState.value * 0.1f)) {
-                AnimatedContent(isVisible, delay = 600) {
-                    ModernAddressSection()
-                }
+            AnimatedContent(isVisible, delay = 600) {
+                ModernAddressSection()
             }
 
             Spacer(modifier = Modifier.height(48.dp))
@@ -115,7 +107,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
     }
 }
 
- @Composable
+@Composable
 fun HeroSection(isVisible: Boolean, navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -159,9 +151,9 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                 )
             }
         }
-        
+
         Spacer(modifier = Modifier.height(32.dp))
-        
+
         AnimatedContent(isVisible, delay = 100) {
             Text(
                 text = stringResource(R.string.home_hero_title),
@@ -172,20 +164,20 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                 fontWeight = FontWeight.Bold, // Changed to FontWeight.Bold
                 color = Color(0xFF1A1A1A),
                 textAlign = TextAlign.Center,
-                
+
                 // --- THE FIX ---
                 // Force the Text to take the full width, allowing wrap
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp), // Added horizontal padding
-                
+
                 maxLines = 2, // Allow wrapping to 2 lines
                 softWrap = true // Enable soft wrapping
             )
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         AnimatedContent(isVisible, delay = 200) {
             Text(
                 text = stringResource(R.string.home_hero_subtitle),
@@ -197,9 +189,9 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                 textAlign = TextAlign.Center
             )
         }
-        
+
         Spacer(modifier = Modifier.height(48.dp))
-        
+
         AnimatedContent(isVisible, delay = 300) {
             val interactionSource = remember { MutableInteractionSource() }
             val isPressed by interactionSource.collectIsPressedAsState()
@@ -221,9 +213,9 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                 animationSpec = tween(durationMillis = 200),
                 label = "Color2 Animation"
             )
-            
+
             Button(
-                onClick = { 
+                onClick = {
                     navController.navigate(Screen.Services.route)
                 },
                 interactionSource = interactionSource,
@@ -278,10 +270,10 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
     }
 }
 
- @Composable
-fun LightDecorativeBackground() {
+@Composable
+fun LightDecorativeBackground(scrollOffset: Int = 0) {
     val infiniteTransition = rememberInfiniteTransition(label = "Background Animation")
-    
+
     val offsetX1 by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 50f,
@@ -291,7 +283,7 @@ fun LightDecorativeBackground() {
         ),
         label = "Orb1 Offset X"
     )
-    
+
     val offsetY1 by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 30f,
@@ -307,7 +299,7 @@ fun LightDecorativeBackground() {
         Box(
             modifier = Modifier
                 .size(350.dp)
-                .offset(x = (120 + offsetX1).dp, y = (-80 + offsetY1).dp)
+                .offset(x = (120 + offsetX1).dp, y = (-80 + offsetY1 + scrollOffset * 0.1f).dp)
                 .blur(100.dp)
                 .clip(CircleShape)
                 .background(
@@ -319,12 +311,12 @@ fun LightDecorativeBackground() {
                     )
                 )
         )
-        
+
         // Gradient orb 2 - Purple
         Box(
             modifier = Modifier
                 .size(400.dp)
-                .offset(x = (-150 - offsetX1).dp, y = (350 - offsetY1).dp)
+                .offset(x = (-150 - offsetX1).dp, y = (350 - offsetY1 - scrollOffset * 0.05f).dp)
                 .blur(120.dp)
                 .clip(CircleShape)
                 .background(
@@ -336,12 +328,12 @@ fun LightDecorativeBackground() {
                     )
                 )
         )
-        
+
         // Gradient orb 3 - Cyan
         Box(
             modifier = Modifier
                 .size(320.dp)
-                .offset(x = 80.dp, y = (650 + offsetY1).dp)
+                .offset(x = 80.dp, y = (650 + offsetY1 - scrollOffset * 0.08f).dp)
                 .blur(110.dp)
                 .clip(CircleShape)
                 .background(
@@ -353,12 +345,12 @@ fun LightDecorativeBackground() {
                     )
                 )
         )
-        
+
         // Gradient orb 4 - Orange
         Box(
             modifier = Modifier
                 .size(280.dp)
-                .offset(x = 200.dp, y = (450 + offsetX1).dp)
+                .offset(x = 200.dp, y = (450 + offsetX1 + scrollOffset * 0.03f).dp)
                 .blur(90.dp)
                 .clip(CircleShape)
                 .background(
@@ -373,7 +365,7 @@ fun LightDecorativeBackground() {
     }
 }
 
- @Composable
+@Composable
 fun ModernQuickStatsSection() {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -403,7 +395,7 @@ fun ModernQuickStatsSection() {
     }
 }
 
- @Composable
+@Composable
 fun ModernStatCard(
     modifier: Modifier = Modifier,
     number: String,
@@ -477,8 +469,8 @@ fun ModernStatCard(
     }
 }
 
- @Composable
-fun ModernFeaturesSection() {
+@Composable
+fun ModernFeaturesSection(isVisible: Boolean) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -539,37 +531,43 @@ fun ModernFeaturesSection() {
                         color = Color(0xFF1A1A1A)
                     )
                 }
-                
+
                 Spacer(modifier = Modifier.height(24.dp))
-                
-                ModernFeatureItem(
-                    icon = Icons.Filled.HighQuality,
-                    title = stringResource(R.string.home_feature_quality_title),
-                    description = stringResource(R.string.home_feature_quality_description),
-                    accentColor = Color(0xFFEC4899)
-                )
+
+                AnimatedContent(isVisible, delay = 600) {
+                    ModernFeatureItem(
+                        icon = Icons.Filled.HighQuality,
+                        title = stringResource(R.string.home_feature_quality_title),
+                        description = stringResource(R.string.home_feature_quality_description),
+                        accentColor = Color(0xFFEC4899)
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
-                
-                ModernFeatureItem(
-                    icon = Icons.Filled.Speed,
-                    title = stringResource(R.string.home_feature_delivery_title),
-                    description = stringResource(R.string.home_feature_delivery_description),
-                    accentColor = Color(0xFF8B5CF6)
-                )
+
+                AnimatedContent(isVisible, delay = 700) {
+                    ModernFeatureItem(
+                        icon = Icons.Filled.Speed,
+                        title = stringResource(R.string.home_feature_delivery_title),
+                        description = stringResource(R.string.home_feature_delivery_description),
+                        accentColor = Color(0xFF8B5CF6)
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
-                
-                ModernFeatureItem(
-                    icon = Icons.Filled.PriceCheck,
-                    title = stringResource(R.string.home_feature_packages_title),
-                    description = stringResource(R.string.home_feature_packages_description),
-                    accentColor = Color(0xFF06B6D4)
-                )
+
+                AnimatedContent(isVisible, delay = 800) {
+                    ModernFeatureItem(
+                        icon = Icons.Filled.PriceCheck,
+                        title = stringResource(R.string.home_feature_packages_title),
+                        description = stringResource(R.string.home_feature_packages_description),
+                        accentColor = Color(0xFF06B6D4)
+                    )
+                }
             }
         }
     }
 }
 
- @Composable
+@Composable
 fun ModernFeatureItem(
     icon: ImageVector,
     title: String,
@@ -597,9 +595,9 @@ fun ModernFeatureItem(
                 modifier = Modifier.size(24.dp)
             )
         }
-        
+
         Spacer(modifier = Modifier.width(16.dp))
-        
+
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
@@ -619,7 +617,7 @@ fun ModernFeatureItem(
     }
 }
 
- @Composable
+@Composable
 fun ModernAddressSection() {
     val context = LocalContext.current
     val mapUrl = "https://maps.app.goo.gl/Wg2P5A4AafHxZsJF6"
@@ -674,18 +672,18 @@ fun ModernAddressSection() {
                         modifier = Modifier.size(28.dp)
                     )
                 }
-                
+
                 Spacer(modifier = Modifier.height(16.dp))
-                
+
                 Text(
                     text = "Our Studio Location",
                     style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp),
                     fontWeight = FontWeight.ExtraBold,
                     color = Color(0xFF1A1A1A)
                 )
-                
+
                 Spacer(modifier = Modifier.height(12.dp))
-                
+
                 Text(
                     text = "Village nagla dhimar, Etah road near bhondela politecnic college, tundla firozabad (up), Pin code 283204",
                     style = MaterialTheme.typography.bodyMedium.copy(
@@ -694,9 +692,9 @@ fun ModernAddressSection() {
                     textAlign = TextAlign.Center,
                     color = Color(0xFF666666)
                 )
-                
+
                 Spacer(modifier = Modifier.height(24.dp))
-                
+
                 Button(
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
@@ -752,8 +750,8 @@ fun ModernAddressSection() {
     }
 }
 
- @Preview(showBackground = true)
- @Composable
+@Preview(showBackground = true)
+@Composable
 fun HomeScreenPreview() {
     GauravActStudioTheme {
         HomeScreen(navController = rememberNavController())
