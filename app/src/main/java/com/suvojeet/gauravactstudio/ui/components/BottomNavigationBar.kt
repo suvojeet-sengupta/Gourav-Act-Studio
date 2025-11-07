@@ -67,8 +67,8 @@ data class BottomNavItem(
         ),
         BottomNavItem(
             Screen.Pricing,
-            Icons.Filled.MonetizationOn,
-            Icons.Outlined.MonetizationOn,
+            Icons.Filled.CurrencyRupee,
+            Icons.Outlined.CurrencyRupee,
             "Pricing"
         ),
         BottomNavItem(
@@ -153,8 +153,8 @@ fun InstagramStyleBottomNav(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Pricing,
-            Icons.Filled.MonetizationOn,
-            Icons.Outlined.MonetizationOn,
+            Icons.Filled.CurrencyRupee,
+            Icons.Outlined.CurrencyRupee,
             "Pricing"
         ),
         BottomNavItem(
@@ -261,8 +261,8 @@ fun YouTubeStyleBottomNav(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Pricing,
-            Icons.Filled.MonetizationOn,
-            Icons.Outlined.MonetizationOn,
+            Icons.Filled.CurrencyRupee,
+            Icons.Outlined.CurrencyRupee,
             "Pricing"
         ),
         BottomNavItem(
@@ -380,8 +380,8 @@ fun MinimalBottomNav(navController: NavHostController) {
         ),
         BottomNavItem(
             Screen.Pricing,
-            Icons.Filled.MonetizationOn,
-            Icons.Outlined.MonetizationOn,
+            Icons.Filled.CurrencyRupee,
+            Icons.Outlined.CurrencyRupee,
             "Pricing"
         ),
         BottomNavItem(
