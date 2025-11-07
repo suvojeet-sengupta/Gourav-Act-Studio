@@ -35,9 +35,9 @@ import com.suvojeet.gauravactstudio.R
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.foundation.Image
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.blur
 
  @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
