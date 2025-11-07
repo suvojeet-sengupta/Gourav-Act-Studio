@@ -1,7 +1,10 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +19,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -75,27 +79,35 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Hero Section with modern design
-            HeroSection(isVisible, navController)
+            Box(modifier = Modifier.graphicsLayer(translationY = scrollState.value * 0.5f)) {
+                HeroSection(isVisible, navController)
+            }
 
             Spacer(modifier = Modifier.height(48.dp))
 
             // Quick Stats with Modern Cards
-            AnimatedContent(isVisible, delay = 400) {
-                ModernQuickStatsSection()
+            Box(modifier = Modifier.graphicsLayer(translationY = scrollState.value * 0.3f)) {
+                AnimatedContent(isVisible, delay = 400) {
+                    ModernQuickStatsSection()
+                }
             }
 
             Spacer(modifier = Modifier.height(40.dp))
 
             // Features with modern design
-            AnimatedContent(isVisible, delay = 500) {
-                ModernFeaturesSection()
+            Box(modifier = Modifier.graphicsLayer(translationY = scrollState.value * 0.2f)) {
+                AnimatedContent(isVisible, delay = 500) {
+                    ModernFeaturesSection()
+                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Address with Modern Design
-            AnimatedContent(isVisible, delay = 600) {
-                ModernAddressSection()
+            Box(modifier = Modifier.graphicsLayer(translationY = scrollState.value * 0.1f)) {
+                AnimatedContent(isVisible, delay = 600) {
+                    ModernAddressSection()
+                }
             }
 
             Spacer(modifier = Modifier.height(48.dp))
@@ -189,7 +201,8 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
         Spacer(modifier = Modifier.height(48.dp))
         
         AnimatedContent(isVisible, delay = 300) {
-            var isPressed by remember { mutableStateOf(false) }
+            val interactionSource = remember { MutableInteractionSource() }
+            val isPressed by interactionSource.collectIsPressedAsState()
             val scale by animateFloatAsState(
                 targetValue = if (isPressed) 0.95f else 1f,
                 animationSpec = spring(
@@ -198,12 +211,22 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                 ),
                 label = "Button Scale"
             )
+            val animatedColor1 by animateColorAsState(
+                targetValue = if (isPressed) Color(0xFF8B5CF6) else Color(0xFFEC4899),
+                animationSpec = tween(durationMillis = 200),
+                label = "Color1 Animation"
+            )
+            val animatedColor2 by animateColorAsState(
+                targetValue = if (isPressed) Color(0xFFEC4899) else Color(0xFF8B5CF6),
+                animationSpec = tween(durationMillis = 200),
+                label = "Color2 Animation"
+            )
             
             Button(
                 onClick = { 
-                    isPressed = true
                     navController.navigate(Screen.Services.route)
                 },
+                interactionSource = interactionSource,
                 modifier = Modifier
                     .height(64.dp)
                     .fillMaxWidth(0.85f)
@@ -225,10 +248,7 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                         .fillMaxSize()
                         .background(
                             brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color(0xFFEC4899),
-                                    Color(0xFF8B5CF6)
-                                )
+                                colors = listOf(animatedColor1, animatedColor2)
                             )
                         ),
                     contentAlignment = Alignment.Center

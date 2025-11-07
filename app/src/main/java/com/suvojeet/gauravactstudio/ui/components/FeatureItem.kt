@@ -1,5 +1,7 @@
 package com.suvojeet.gauravactstudio.ui.components
 
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -7,6 +9,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,6 +21,26 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun FeatureItem(icon: ImageVector, title: String, description: String) {
+    val infiniteTransition = rememberInfiniteTransition(label = "FeatureItem Gradient")
+    val color1 by infiniteTransition.animateColor(
+        initialValue = Color(0xFFEC4899),
+        targetValue = Color(0xFF8B5CF6),
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "Feature Color 1"
+    )
+    val color2 by infiniteTransition.animateColor(
+        initialValue = Color(0xFF8B5CF6),
+        targetValue = Color(0xFFEC4899),
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "Feature Color 2"
+    )
+
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -27,10 +50,7 @@ fun FeatureItem(icon: ImageVector, title: String, description: String) {
                 .clip(CircleShape)
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFFEC4899),
-                            Color(0xFF8B5CF6)
-                        )
+                        colors = listOf(color1, color2)
                     )
                 ),
             contentAlignment = Alignment.Center
@@ -42,9 +62,9 @@ fun FeatureItem(icon: ImageVector, title: String, description: String) {
                 modifier = Modifier.size(20.dp)
             )
         }
-        
+
         Spacer(modifier = Modifier.width(16.dp))
-        
+
         Column {
             Text(
                 text = title,
