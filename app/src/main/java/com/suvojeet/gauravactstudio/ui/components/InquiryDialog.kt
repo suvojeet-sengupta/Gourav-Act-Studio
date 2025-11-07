@@ -1,12 +1,10 @@
 package com.suvojeet.gauravactstudio.ui.components
 
 import android.Manifest
-import android.app.DatePickerDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
-import android.widget.DatePicker
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -47,6 +45,9 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import com.suvojeet.gauravactstudio.R
 import java.io.IOException
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
 
  @OptIn(ExperimentalMaterial3Api::class)
@@ -73,10 +74,13 @@ fun InquiryDialog(
     var notes by remember { mutableStateOf("") }
     var location by remember { mutableStateOf("Unknown location") }
 
-
     val eventTypes = stringArrayResource(R.array.event_types)
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
+    // Date Picker State
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
 
     // Location
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
@@ -123,7 +127,6 @@ fun InquiryDialog(
         }
     }
 
-
     // Validation states
     var nameError by remember { mutableStateOf(false) }
     var phoneError by remember { mutableStateOf(false) }
@@ -145,6 +148,36 @@ fun InquiryDialog(
     var visible by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         visible = true
+    }
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDatePicker = false
+                        datePickerState.selectedDateMillis?.let { millis ->
+                            val localDate = Instant.ofEpochMilli(millis).atZone(ZoneId.of("UTC")).toLocalDate()
+                            date = "${localDate.dayOfMonth}/${localDate.monthValue}/${localDate.year}"
+                            dateError = false
+                        }
+                    }
+                ) { Text("OK") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
+            }
+        ) {
+            DatePicker(
+                state = datePickerState,
+                dateValidator = { utcMillis ->
+                    val selectedDate = Instant.ofEpochMilli(utcMillis).atZone(ZoneId.systemDefault()).toLocalDate()
+                    val today = LocalDate.now(ZoneId.systemDefault())
+                    selectedDate >= today
+                }
+            )
+        }
     }
 
     Dialog(
@@ -405,7 +438,7 @@ fun InquiryDialog(
                                 placeholder = { Text("Select date") },
                                 trailingIcon = {
                                     IconButton(
-                                        onClick = { showDatePicker(context) { date = it; dateError = false } },
+                                        onClick = { showDatePicker = true },
                                         enabled = !isSubmitting
                                     ) {
                                         Icon(
@@ -586,24 +619,4 @@ private fun FormField(
         
         content()
     }
-}
-
-private fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
-    val calendar = Calendar.getInstance()
-    val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
-    val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-    DatePickerDialog(
-        context,
-        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
-            onDateSelected("$selectedDay/${selectedMonth + 1}/$selectedYear")
-        },
-        year,
-        month,
-        day
-    ).apply {
-        // Minimum date set to today
-        datePicker.minDate = calendar.timeInMillis
-    }.show()
 }
