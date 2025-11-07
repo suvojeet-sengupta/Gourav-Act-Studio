@@ -51,7 +51,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay(50)
+        delay(20)
         isVisible = true
     }
 
@@ -84,21 +84,20 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(48.dp))
 
             // Quick Stats with Modern Cards
-            AnimatedContent(isVisible, delay = 400) {
+            AnimatedContent(isVisible, delay = 160) {
                 ModernQuickStatsSection()
             }
 
             Spacer(modifier = Modifier.height(40.dp))
 
             // Features with modern design
-            AnimatedContent(isVisible, delay = 500) {
+AnimatedContent(isVisible, delay = 80) {
                 ModernFeaturesSection(isVisible)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Address with Modern Design
-            AnimatedContent(isVisible, delay = 600) {
+AnimatedContent(isVisible, delay = 240) {
                 ModernAddressSection()
             }
 
@@ -131,7 +130,7 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
         Spacer(modifier = Modifier.height(24.dp))
 
         // Main Photographer Image and Studio Name
-        AnimatedContent(isVisible, delay = 50) {
+        AnimatedContent(isVisible, delay = 20) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
                     painter = painterResource(id = R.drawable.gourav_photographer),
@@ -154,7 +153,7 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        AnimatedContent(isVisible, delay = 100) {
+        AnimatedContent(isVisible, delay = 40) {
             Text(
                 text = stringResource(R.string.home_hero_title),
                 style = MaterialTheme.typography.headlineLarge.copy(
@@ -192,7 +191,7 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        AnimatedContent(isVisible, delay = 300) {
+        AnimatedContent(isVisible, delay = 120) {
             val interactionSource = remember { MutableInteractionSource() }
             val isPressed by interactionSource.collectIsPressedAsState()
             val scale by animateFloatAsState(
@@ -544,7 +543,7 @@ fun ModernFeaturesSection(isVisible: Boolean) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
-                AnimatedContent(isVisible, delay = 700) {
+                AnimatedContent(isVisible, delay = 280) {
                     ModernFeatureItem(
                         icon = Icons.Filled.Speed,
                         title = stringResource(R.string.home_feature_delivery_title),
@@ -554,7 +553,7 @@ fun ModernFeaturesSection(isVisible: Boolean) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
-                AnimatedContent(isVisible, delay = 800) {
+                AnimatedContent(isVisible, delay = 320) {
                     ModernFeatureItem(
                         icon = Icons.Filled.PriceCheck,
                         title = stringResource(R.string.home_feature_packages_title),

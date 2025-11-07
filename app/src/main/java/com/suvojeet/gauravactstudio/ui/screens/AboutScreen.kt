@@ -122,7 +122,7 @@ fun AboutScreen(navController: NavController) {
     var isVisible by remember { mutableStateOf(false) }
     
     LaunchedEffect(Unit) {
-        delay(100)
+        delay(40)
         isVisible = true
     }
 
@@ -174,7 +174,7 @@ fun AboutScreen(navController: NavController) {
                         )
                     }
 
-                    AnimatedContent(isVisible, delay = 100) {
+                    AnimatedContent(isVisible, delay = 40) {
                         Text(
                             text = "Gaurav Act Studio",
                             style = MaterialTheme.typography.headlineMedium,
@@ -185,7 +185,7 @@ fun AboutScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    AnimatedContent(isVisible, delay = 200) {
+                    AnimatedContent(isVisible, delay = 80) {
                         Text(
                             text = "Professional Photography & Videography",
                             style = MaterialTheme.typography.bodyMedium,
@@ -200,21 +200,21 @@ fun AboutScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // About Section
-                AnimatedContent(isVisible, delay = 300) {
+                AnimatedContent(isVisible, delay = 120) {
                     AboutCard()
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Quick Stats
-                AnimatedContent(isVisible, delay = 400) {
+                AnimatedContent(isVisible, delay = 160) {
                     QuickStatsCard()
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Contact Information
-                AnimatedContent(isVisible, delay = 500) {
+                AnimatedContent(isVisible, delay = 200) {
                     ContactCard(
                         context = context,
                         onEmailClick = {
@@ -230,21 +230,21 @@ fun AboutScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Features Section
-                AnimatedContent(isVisible, delay = 600) {
+                AnimatedContent(isVisible, delay = 240) {
                     FeaturesCard()
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Social Media
-                AnimatedContent(isVisible, delay = 700) {
+                AnimatedContent(isVisible, delay = 280) {
                     SocialMediaCard()
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Settings Button
-                AnimatedContent(isVisible, delay = 800) {
+                AnimatedContent(isVisible, delay = 320) {
                     SettingsButton(navController)
                 }
 
