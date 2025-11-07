@@ -20,7 +20,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
 import com.suvojeet.gauravactstudio.R
+import com.suvojeet.gauravactstudio.Screen
 
 data class PortfolioItem(
     val title: String,
@@ -28,7 +30,7 @@ data class PortfolioItem(
 )
 
 @Composable
-fun GalleryScreen(modifier: Modifier = Modifier) {
+fun GalleryScreen(navController: NavController, modifier: Modifier = Modifier) {
     val portfolioItems = listOf(
         PortfolioItem("Wedding Shoots", R.drawable.sample1),
         PortfolioItem("Pre-Wedding", R.drawable.sample2),
@@ -56,20 +58,20 @@ fun GalleryScreen(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(portfolioItems) { item ->
-                PortfolioCard(item)
+                PortfolioCard(item = item, navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun PortfolioCard(item: PortfolioItem) {
+fun PortfolioCard(item: PortfolioItem, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
             .clip(RoundedCornerShape(16.dp))
-            .clickable { /* future: navigate to full-screen view */ },
+            .clickable { navController.navigate(Screen.Detail.createRoute(item.imageRes)) },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Box {

@@ -5,21 +5,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.suvojeet.gauravactstudio.ui.screens.AboutScreen
+import com.suvojeet.gauravactstudio.ui.screens.DetailScreen
 import com.suvojeet.gauravactstudio.ui.screens.HomeScreen
 import com.suvojeet.gauravactstudio.ui.screens.GalleryScreen
 import com.suvojeet.gauravactstudio.ui.screens.PricingScreen
 import com.suvojeet.gauravactstudio.ui.screens.ServicesScreen
 import com.suvojeet.gauravactstudio.ui.screens.SettingsScreen
 
-sealed class Screen(val route: String, @StringRes val title: Int) {
+sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     object Home : Screen("home", R.string.home_screen)
     object Services : Screen("services", R.string.services_screen)
     object Pricing : Screen("pricing", R.string.pricing_screen)
     object Gallery : Screen("gallery", R.string.gallery_screen)
     object About : Screen("about", R.string.about_screen)
     object Settings : Screen("settings", R.string.settings_title)
+    object Detail : Screen("detail/{imageResId}") {
+        fun createRoute(imageResId: Int) = "detail/$imageResId"
+    }
 }
 
 @Composable
@@ -38,13 +44,22 @@ fun AppNavHost(
             PricingScreen()
         }
         composable(Screen.Gallery.route) {
-            GalleryScreen()
+            GalleryScreen(navController = navController)
         }
         composable(Screen.About.route) {
             AboutScreen(navController = navController)
         }
         composable(Screen.Settings.route) {
             SettingsScreen(navController = navController)
+        }
+        composable(
+            route = Screen.Detail.route,
+            arguments = listOf(navArgument("imageResId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val imageResId = backStackEntry.arguments?.getInt("imageResId")
+            if (imageResId != null) {
+                DetailScreen(navController = navController, imageResId = imageResId)
+            }
         }
     }
 }
