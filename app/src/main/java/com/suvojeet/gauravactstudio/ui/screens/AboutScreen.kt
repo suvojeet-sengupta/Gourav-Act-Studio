@@ -584,17 +584,20 @@ fun SocialMediaCard() {
                 SocialButton(
                     icon = Icons.Filled.Facebook,
                     label = "Facebook",
-                    gradient = listOf(Color(0xFF1877F2), Color(0xFF42B0FF))
+                    gradient = listOf(Color(0xFF1877F2), Color(0xFF42B0FF)),
+                    url = "https://www.facebook.com/share/17e6BCSVKr/"
                 )
                 SocialButton(
                     icon = Icons.Filled.Instagram,
                     label = "Instagram",
-                    gradient = listOf(Color(0xFFE4405F), Color(0xFFFCAF45))
+                    gradient = listOf(Color(0xFFE4405F), Color(0xFFFCAF45)),
+                    url = "https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=xz8exwz"
                 )
                 SocialButton(
                     icon = Icons.Filled.YouTube,
                     label = "YouTube",
-                    gradient = listOf(Color(0xFFFF0000), Color(0xFFFF6B6B))
+                    gradient = listOf(Color(0xFFFF0000), Color(0xFFFF6B6B)),
+                    url = "https://youtube.com/@gauravact?si=_RPRL0fM5-UZr5YN"
                 )
             }
         }
@@ -602,10 +605,14 @@ fun SocialMediaCard() {
 }
 
 @Composable
-fun SocialButton(icon: ImageVector, label: String, gradient: List<Color>) {
+fun SocialButton(icon: ImageVector, label: String, gradient: List<Color>, url: String) {
+    val context = LocalContext.current
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { /* Handle click */ }
+        modifier = Modifier.clickable {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            context.startActivity(intent)
+        }
     ) {
         Box(
             modifier = Modifier
