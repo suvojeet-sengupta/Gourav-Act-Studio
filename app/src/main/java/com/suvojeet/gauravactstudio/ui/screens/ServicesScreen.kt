@@ -175,7 +175,7 @@ fun ServiceCard(service: Service) {
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White.copy(alpha = 0.5f)
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
         Column(
