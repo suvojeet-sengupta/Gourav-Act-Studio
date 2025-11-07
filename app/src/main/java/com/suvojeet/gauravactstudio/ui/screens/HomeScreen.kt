@@ -44,7 +44,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
     var isVisible by remember { mutableStateOf(false) }
     
     LaunchedEffect(Unit) {
-        delay(100)
+        delay(50)
         isVisible = true
     }
 
@@ -77,21 +77,21 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(48.dp))
 
             // Quick Stats with Modern Cards
-            AnimatedContent(isVisible, delay = 800) {
+            AnimatedContent(isVisible, delay = 400) {
                 ModernQuickStatsSection()
             }
 
             Spacer(modifier = Modifier.height(40.dp))
 
             // Features with modern design
-            AnimatedContent(isVisible, delay = 1000) {
+            AnimatedContent(isVisible, delay = 500) {
                 ModernFeaturesSection()
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Address with Modern Design
-            AnimatedContent(isVisible, delay = 1200) {
+            AnimatedContent(isVisible, delay = 600) {
                 ModernAddressSection()
             }
 
@@ -123,7 +123,7 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
         
         Spacer(modifier = Modifier.height(32.dp))
         
-        AnimatedContent(isVisible, delay = 200) {
+        AnimatedContent(isVisible, delay = 100) {
             Text(
                 text = stringResource(R.string.home_hero_title),
                 style = MaterialTheme.typography.headlineLarge.copy(
@@ -147,7 +147,7 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
         
         Spacer(modifier = Modifier.height(16.dp))
         
-        AnimatedContent(isVisible, delay = 400) {
+        AnimatedContent(isVisible, delay = 200) {
             Text(
                 text = stringResource(R.string.home_hero_subtitle),
                 style = MaterialTheme.typography.titleMedium.copy(
@@ -161,7 +161,7 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
         
         Spacer(modifier = Modifier.height(48.dp))
         
-        AnimatedContent(isVisible, delay = 600) {
+        AnimatedContent(isVisible, delay = 300) {
             var isPressed by remember { mutableStateOf(false) }
             val scale by animateFloatAsState(
                 targetValue = if (isPressed) 0.95f else 1f,
