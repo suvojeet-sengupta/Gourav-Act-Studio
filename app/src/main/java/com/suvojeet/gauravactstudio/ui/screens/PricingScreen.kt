@@ -1,6 +1,5 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
-import android.util.Log // Error logging ke liye import
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,9 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -26,15 +23,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.suvojeet.gauravactstudio.R
+import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+import com.suvojeet.gauravactstudio.ui.components.InquiryDialog
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
-import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import com.suvojeet.gauravactstudio.R
-import com.suvojeet.gauravactstudio.ui.components.InquiryDialog
-import com.suvojeet.gauravactstudio.util.EmailService
-import kotlinx.coroutines.launch
 
 data class PricePackage(
     val name: String,
@@ -46,7 +42,10 @@ data class PricePackage(
 )
 
  @Composable
-fun PricingScreen(modifier: Modifier = Modifier) {
+fun PricingScreen(
+    modifier: Modifier = Modifier,
+    viewModel: PricingViewModel = viewModel()
+) {
     val pricingList = listOf(
         PricePackage(
             name = stringResource(R.string.pricing_package_standard_name),
@@ -79,52 +78,26 @@ fun PricingScreen(modifier: Modifier = Modifier) {
         )
     )
     var isVisible by remember { mutableStateOf(false) }
-    var showInquiryDialog by remember { mutableStateOf(false) }
-    var selectedPackage by remember { mutableStateOf("") }
-    var isSubmittingInquiry by remember { mutableStateOf(false) }
-
-    val coroutineScope = rememberCoroutineScope()
-    val emailService = remember { EmailService() }
+    val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    if (showInquiryDialog) {
-        InquiryDialog(
-            packageName = selectedPackage,
-            isSubmitting = isSubmittingInquiry,
-            onDismiss = {
-                if (!isSubmittingInquiry) {
-                    showInquiryDialog = false
-                }
-            },
-            onSubmit = { name, phone, eventType, otherEventType, date, notes ->
-                coroutineScope.launch {
-                    isSubmittingInquiry = true
-                    try {
-                        emailService.sendEmail(
-                            name = name,
-                            phone = phone,
-                            eventType = eventType,
-                            otherEventType = otherEventType,
-                            date = date,
-                            notes = notes,
-                            packageName = selectedPackage
-                        )
-                        snackbarHostState.showSnackbar(
-                            message = "Inquiry sent successfully! We will contact you soon.",
-                            duration = SnackbarDuration.Short
-                        )
-                        showInquiryDialog = false // Dialog ko success par band karein
+    LaunchedEffect(uiState.snackbarMessage) {
+        uiState.snackbarMessage?.let {
+            snackbarHostState.showSnackbar(
+                message = it,
+                duration = SnackbarDuration.Short
+            )
+            viewModel.onSnackbarShown()
+        }
+    }
 
-                    } catch (e: Exception) {
-                        Log.e("PricingScreen", "Failed to send email", e)
-                        snackbarHostState.showSnackbar(
-                            message = e.message ?: "An unknown error occurred.",
-                            duration = SnackbarDuration.Long
-                        )
-                    } finally {
-                        isSubmittingInquiry = false
-                    }
-                }
+    if (uiState.showInquiryDialog) {
+        InquiryDialog(
+            packageName = uiState.selectedPackage,
+            isSubmitting = uiState.isSubmittingInquiry,
+            onDismiss = { viewModel.onDismissInquiryDialog() },
+            onSubmit = { name, phone, eventType, otherEventType, date, notes ->
+                viewModel.onSubmitInquiry(name, phone, eventType, otherEventType, date, notes)
             }
         )
     }
@@ -207,8 +180,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                     itemsIndexed(pricingList) { index, pricePackage ->
                         AnimatedContent(isVisible, delay = 300L + (index * 75L)) {
                             PricePackageCard(pricePackage = pricePackage, onChoosePlan = {
-                                selectedPackage = it
-                                showInquiryDialog = true
+                                viewModel.onChoosePlan(it)
                             })
                         }
                     }
@@ -217,8 +189,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                     item {
                         AnimatedContent(isVisible, delay = 600L) {
                             CustomPackageCard(onContact = {
-                                selectedPackage = it
-                                showInquiryDialog = true
+                                viewModel.onChoosePlan(it)
                             })
                         }
                     }
