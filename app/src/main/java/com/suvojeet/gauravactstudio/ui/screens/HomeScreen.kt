@@ -128,15 +128,17 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
             Text(
                 text = stringResource(R.string.home_hero_title),
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    fontSize = 34.sp,
+                    fontSize = 30.sp, // <-- FIX: Reduced font size
                     letterSpacing = (-0.5).sp
                 ),
                 fontWeight = FontWeight.ExtraBold,
                 color = Color(0xFF1A1A1A),
                 textAlign = TextAlign.Center,
-                maxLines = 1,
-                softWrap = false,
-                overflow = TextOverflow.Ellipsis
+                // --- FIX ---
+                // Allow text to wrap to a second line if it's too long
+                maxLines = 2,
+                softWrap = true
+                // --- End Fix ---
             )
         }
         
@@ -164,7 +166,8 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                 animationSpec = spring(
                     dampingRatio = Spring.DampingRatioMediumBouncy,
                     stiffness = Spring.StiffnessLow
-                )
+                ),
+                label = "Button Scale"
             )
             
             Button(
@@ -228,7 +231,7 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
 
  @Composable
 fun LightDecorativeBackground() {
-    val infiniteTransition = rememberInfiniteTransition()
+    val infiniteTransition = rememberInfiniteTransition(label = "Background Animation")
     
     val offsetX1 by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -236,7 +239,8 @@ fun LightDecorativeBackground() {
         animationSpec = infiniteRepeatable(
             animation = tween(6000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
-        )
+        ),
+        label = "Orb1 Offset X"
     )
     
     val offsetY1 by infiniteTransition.animateFloat(
@@ -245,7 +249,8 @@ fun LightDecorativeBackground() {
         animationSpec = infiniteRepeatable(
             animation = tween(4000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
-        )
+        ),
+        label = "Orb1 Offset Y"
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
