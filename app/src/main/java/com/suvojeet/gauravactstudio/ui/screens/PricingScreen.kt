@@ -130,7 +130,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
     }
 
     LaunchedEffect(Unit) {
-        delay(100)
+        delay(50)
         isVisible = true
     }
 
@@ -175,7 +175,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                         }
                         Spacer(modifier = Modifier.height(6.dp))
 
-                        AnimatedContent(isVisible, delay = 200) {
+                        AnimatedContent(isVisible, delay = 100) {
                             Text(
                                 text = stringResource(R.string.pricing_title),
                                 style = MaterialTheme.typography.headlineSmall,
@@ -186,7 +186,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        AnimatedContent(isVisible, delay = 400) {
+                        AnimatedContent(isVisible, delay = 200) {
                             Text(
                                 text = stringResource(R.string.pricing_subtitle),
                                 style = MaterialTheme.typography.bodyMedium,
@@ -204,7 +204,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     itemsIndexed(pricingList) { index, pricePackage ->
-                        AnimatedContent(isVisible, delay = 600L + (index * 150L)) {
+                        AnimatedContent(isVisible, delay = 300L + (index * 75L)) {
                             PricePackageCard(pricePackage = pricePackage, onChoosePlan = {
                                 selectedPackage = it
                                 showInquiryDialog = true
@@ -214,7 +214,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
 
                     // Custom Package Card at the end
                     item {
-                        AnimatedContent(isVisible, delay = 1200L) {
+                        AnimatedContent(isVisible, delay = 600L) {
                             CustomPackageCard(onContact = {
                                 selectedPackage = it
                                 showInquiryDialog = true
