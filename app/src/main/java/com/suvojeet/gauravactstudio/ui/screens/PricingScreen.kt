@@ -141,7 +141,6 @@ fun PricingScreen(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         Box(
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
@@ -153,7 +152,9 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                 )
         ) {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .padding(innerPadding) // Padding yahaan apply ki taaki status bar ke neeche se start ho
+                    .fillMaxSize()
             ) {
                 // Header Section
                 Surface(
@@ -169,22 +170,22 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                             Icon(
                                 imageVector = Icons.Filled.Payments,
                                 contentDescription = null,
-                                modifier = Modifier.size(40.dp),
+                                modifier = Modifier.size(32.dp), // <-- CHHOTA KIYA
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(4.dp)) // <-- KAM KIYA
 
                         AnimatedContent(isVisible, delay = 100) {
                             Text(
                                 text = stringResource(R.string.pricing_title),
-                                style = MaterialTheme.typography.headlineSmall,
+                                style = MaterialTheme.typography.titleLarge, // <-- STYLE BADLA
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(2.dp)) // <-- KAM KIYA
 
                         AnimatedContent(isVisible, delay = 200) {
                             Text(
@@ -199,7 +200,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
 
                 // Pricing Cards
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.weight(1f), // Baaki jagah yeh le lega
                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
