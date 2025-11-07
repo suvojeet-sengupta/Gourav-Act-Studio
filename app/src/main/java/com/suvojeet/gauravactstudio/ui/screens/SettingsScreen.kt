@@ -61,7 +61,6 @@ fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) 
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(it)
                 .background(MaterialTheme.colorScheme.background)
         ) {
             AnimatedContent(isVisible) {
