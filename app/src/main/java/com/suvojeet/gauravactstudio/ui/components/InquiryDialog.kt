@@ -133,6 +133,7 @@ fun InquiryDialog(
     var eventTypeError by remember { mutableStateOf(false) }
     var otherEventTypeRequiredError by remember { mutableStateOf(false) }
     var dateError by remember { mutableStateOf(false) }
+    var invalidDateError by remember { mutableStateOf(false) }
 
     val validateForm: () -> Boolean = {
         nameError = name.isBlank()
@@ -141,7 +142,7 @@ fun InquiryDialog(
         otherEventTypeRequiredError = eventType == "Other" && otherEventType.isBlank()
         dateError = date.isBlank()
 
-        !nameError && !phoneError && !eventTypeError && !otherEventTypeRequiredError && !dateError
+        !nameError && !phoneError && !eventTypeError && !otherEventTypeRequiredError && !dateError && !invalidDateError
     }
 
     // Animation
@@ -159,8 +160,15 @@ fun InquiryDialog(
                         showDatePicker = false
                         datePickerState.selectedDateMillis?.let { millis ->
                             val localDate = Instant.ofEpochMilli(millis).atZone(ZoneId.of("UTC")).toLocalDate()
-                            date = "${localDate.dayOfMonth}/${localDate.monthValue}/${localDate.year}"
-                            dateError = false
+                            val today = LocalDate.now(ZoneId.systemDefault())
+                            if (localDate < today) {
+                                invalidDateError = true
+                                date = ""
+                            } else {
+                                invalidDateError = false
+                                date = "${localDate.dayOfMonth}/${localDate.monthValue}/${localDate.year}"
+                                dateError = false
+                            }
                         }
                     }
                 ) { Text("OK") }
@@ -169,14 +177,7 @@ fun InquiryDialog(
                 TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
             }
         ) {
-            DatePicker(
-                state = datePickerState,
-                dateValidator = { utcMillis ->
-                    val selectedDate = Instant.ofEpochMilli(utcMillis).atZone(ZoneId.systemDefault()).toLocalDate()
-                    val today = LocalDate.now(ZoneId.systemDefault())
-                    selectedDate >= today
-                }
-            )
+            DatePicker(state = datePickerState)
         }
     }
 
@@ -455,10 +456,12 @@ fun InquiryDialog(
                                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                                     unfocusedBorderColor = Color(0xFFE0E0E0)
                                 ),
-                                isError = dateError,
+                                isError = dateError || invalidDateError,
                                 supportingText = {
                                     if (dateError) {
                                         Text("Please select a date", color = MaterialTheme.colorScheme.error)
+                                    } else if (invalidDateError) {
+                                        Text("Past dates are not allowed", color = MaterialTheme.colorScheme.error)
                                     }
                                 }
                             )
