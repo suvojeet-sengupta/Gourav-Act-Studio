@@ -43,9 +43,6 @@ import com.suvojeet.gauravactstudio.ui.components.FeatureItem
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import kotlinx.coroutines.delay
 
-
-
-
 val Icons.Filled.Instagram: ImageVector
     get() {
         if (_instagram != null) {
@@ -135,9 +132,8 @@ fun AboutScreen(navController: NavController) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF0f0c29),
-                        Color(0xFF302b63),
-                        Color(0xFF24243e)
+                        Color(0xFFE0F7FA),
+                        Color(0xFFFFF9C4)
                     )
                 )
             )
@@ -150,7 +146,7 @@ fun AboutScreen(navController: NavController) {
             // Hero Header Section
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                color = Color.Transparent,
+                color = Color.White.copy(alpha = 0.5f),
                 tonalElevation = 0.dp
             ) {
                 Column(
@@ -182,7 +178,7 @@ fun AboutScreen(navController: NavController) {
                             text = "Gaurav Act Studio",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFFEAEAEA)
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
 
@@ -192,7 +188,7 @@ fun AboutScreen(navController: NavController) {
                         Text(
                             text = "Professional Photography & Videography",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFFEAEAEA).copy(alpha = 0.8f),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -257,15 +253,13 @@ fun AboutScreen(navController: NavController) {
     }
 }
 
-
-
 @Composable
 fun AboutCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.2f))
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.5f))
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -294,7 +288,7 @@ fun AboutCard() {
                     text = "About Us",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFEAEAEA)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -303,7 +297,7 @@ fun AboutCard() {
             Text(
                 text = "We are a passionate team of photographers and videographers dedicated to capturing life's most precious moments. With years of experience and state-of-the-art equipment, we transform your special occasions into timeless memories.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFFEAEAEA).copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = 22.sp
             )
 
@@ -312,7 +306,7 @@ fun AboutCard() {
             Text(
                 text = "Our mission is to deliver exceptional quality and creative artistry that exceeds expectations. Every project is unique, and we approach each one with fresh eyes and innovative ideas.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFFEAEAEA).copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = 22.sp
             )
         }
@@ -325,14 +319,14 @@ fun QuickStatsCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.2f))
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.5f))
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Text(
                 text = "Our Achievements",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFEAEAEA),
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
@@ -390,13 +384,13 @@ fun StatItem(icon: ImageVector, number: String, label: String, gradient: List<Co
             text = number,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFFEAEAEA)
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
             text = label,
             style = MaterialTheme.typography.bodySmall,
-            color = Color(0xFFEAEAEA).copy(alpha = 0.7f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
     }
@@ -408,14 +402,14 @@ fun ContactCard(context: Context, onEmailClick: () -> Unit, phoneNumbers: List<S
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.2f))
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.5f))
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
             Text(
                 text = "Get In Touch",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFEAEAEA),
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
@@ -461,7 +455,7 @@ fun ContactItem(
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
-        color = Color.Black.copy(alpha = 0.1f)
+        color = Color.White.copy(alpha = 0.3f)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -488,14 +482,14 @@ fun ContactItem(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFFEAEAEA).copy(alpha = 0.7f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = info,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFFEAEAEA),
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -503,7 +497,7 @@ fun ContactItem(
             Icon(
                 imageVector = Icons.Filled.ChevronRight,
                 contentDescription = null,
-                tint = Color(0xFFEAEAEA).copy(alpha = 0.7f),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(20.dp)
             )
         }
@@ -516,14 +510,14 @@ fun FeaturesCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.2f))
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.5f))
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
             Text(
                 text = "Why Choose Us",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFEAEAEA),
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
@@ -560,15 +554,13 @@ fun FeaturesCard() {
     }
 }
 
-
-
 @Composable
 fun SocialMediaCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.2f))
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.5f))
     ) {
         Column(
             modifier = Modifier.padding(24.dp),
@@ -578,7 +570,7 @@ fun SocialMediaCard() {
                 text = "Follow Us",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFEAEAEA)
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -632,7 +624,7 @@ fun SocialButton(icon: ImageVector, label: String, gradient: List<Color>) {
             text = label,
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Medium,
-            color = Color(0xFFEAEAEA)
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -653,15 +645,13 @@ fun SettingsButton(navController: NavController) {
         Icon(
             imageVector = Icons.Filled.Settings,
             contentDescription = null,
-            modifier = Modifier.size(24.dp),
-            tint = Color(0xFFEAEAEA)
+            modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = "Settings & Preferences",
             fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color(0xFFEAEAEA)
+            fontWeight = FontWeight.SemiBold
         )
     }
 }

@@ -112,9 +112,8 @@ fun ServicesScreen() {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF0f0c29),
-                        Color(0xFF302b63),
-                        Color(0xFF24243e)
+                        Color(0xFFE0F7FA),
+                        Color(0xFFFFF9C4)
                     )
                 )
             )
@@ -133,13 +132,13 @@ fun ServicesScreen() {
                     text = stringResource(R.string.services_title),
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFEAEAEA)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(R.string.services_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color(0xFFEAEAEA).copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
             }
@@ -176,7 +175,7 @@ fun ServiceCard(service: Service) {
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.Black.copy(alpha = 0.2f)
+            containerColor = Color.White.copy(alpha = 0.5f)
         )
     ) {
         Column(
@@ -210,7 +209,7 @@ fun ServiceCard(service: Service) {
                 text = service.title,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFEAEAEA),
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 lineHeight = 20.sp
             )
@@ -221,7 +220,7 @@ fun ServiceCard(service: Service) {
             Text(
                 text = service.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFFEAEAEA).copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 lineHeight = 18.sp
             )

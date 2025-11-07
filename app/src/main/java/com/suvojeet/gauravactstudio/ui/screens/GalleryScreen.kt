@@ -54,9 +54,8 @@ fun GalleryScreen(navController: NavController, modifier: Modifier = Modifier) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF0f0c29),
-                        Color(0xFF302b63),
-                        Color(0xFF24243e)
+                        Color(0xFFE0F7FA),
+                        Color(0xFFFFF9C4)
                     )
                 )
             )
@@ -65,7 +64,7 @@ fun GalleryScreen(navController: NavController, modifier: Modifier = Modifier) {
         Text(
             text = stringResource(R.string.gallery_title),
             style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
-            color = Color(0xFFEAEAEA),
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
@@ -106,7 +105,7 @@ fun PortfolioCard(item: PortfolioItem, navController: NavController) {
                     .fillMaxWidth()
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f))
+                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.6f))
                         )
                     )
                     .padding(10.dp)
