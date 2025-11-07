@@ -1,8 +1,14 @@
 package com.suvojeet.gauravactstudio.ui.components
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
 import android.widget.DatePicker
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
@@ -37,7 +43,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
 import com.suvojeet.gauravactstudio.R
+import java.io.IOException
 import java.util.*
 
  @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +61,8 @@ fun InquiryDialog(
         eventType: String,
         otherEventType: String,
         date: String,
-        notes: String
+        notes: String,
+        location: String
     ) -> Unit
 ) {
     var name by remember { mutableStateOf("") }
@@ -61,10 +71,58 @@ fun InquiryDialog(
     var otherEventType by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
     var notes by remember { mutableStateOf("") }
+    var location by remember { mutableStateOf("Unknown location") }
+
 
     val eventTypes = stringArrayResource(R.array.event_types)
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
+    // Location
+    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+    var hasLocationPermission by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+    }
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            hasLocationPermission = isGranted
+        }
+    )
+
+    LaunchedEffect(hasLocationPermission) {
+        if (hasLocationPermission) {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { loc: Location? ->
+                    if (loc != null) {
+                        val geocoder = Geocoder(context, Locale.getDefault())
+                        try {
+                            val addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1)
+                            if (addresses != null && addresses.isNotEmpty()) {
+                                val address = addresses[0]
+                                val city = address.locality
+                                val state = address.adminArea
+                                if(city != null && state != null){
+                                    location = "$city, $state"
+                                } else {
+                                    location = "Location not found"
+                                }
+                            }
+                        } catch (e: IOException) {
+                            location = "Could not get location"
+                        }
+                    }
+                }
+        } else {
+            locationPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+        }
+    }
+
 
     // Validation states
     var nameError by remember { mutableStateOf(false) }
@@ -433,7 +491,7 @@ fun InquiryDialog(
                             Button(
                                 onClick = {
                                     if (validateForm()) {
-                                        onSubmit(name, phone, eventType, otherEventType, date, notes)
+                                        onSubmit(name, phone, eventType, otherEventType, date, notes, location)
                                     }
                                 },
                                 enabled = !isSubmitting,

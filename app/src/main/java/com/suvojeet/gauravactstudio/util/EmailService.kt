@@ -33,7 +33,8 @@ data class TemplateParams(
     @SerialName("package_name") val package_name: String,
     @SerialName("notes") val notes: String,
     @SerialName("user_email") val user_email: String,
-    @SerialName("custom_package_details") val custom_package_details: String? = null
+    @SerialName("custom_package_details") val custom_package_details: String? = null,
+    @SerialName("location") val location: String
 )
 
 class EmailService {
@@ -58,7 +59,8 @@ class EmailService {
         date: String,
         notes: String,
         packageName: String,
-        customPackageDetails: String? = null
+        customPackageDetails: String? = null,
+        location: String
     ) {
         val finalEventType = if (eventType == "Other") otherEventType else eventType
 
@@ -76,7 +78,8 @@ class EmailService {
                 package_name = packageName,
                 notes = notes,
                 user_email = "gauravkumarpjt@gmail.com",
-                custom_package_details = customPackageDetails
+                custom_package_details = customPackageDetails,
+                location = location
             )
         )
 

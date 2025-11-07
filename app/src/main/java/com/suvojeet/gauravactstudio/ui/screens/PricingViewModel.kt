@@ -41,7 +41,8 @@ class PricingViewModel(private val emailService: EmailService = EmailService()) 
         eventType: String,
         otherEventType: String,
         date: String,
-        notes: String
+        notes: String,
+        location: String
     ) {
         viewModelScope.launch {
             _uiState.update { it.copy(isSubmittingInquiry = true) }
@@ -54,7 +55,8 @@ class PricingViewModel(private val emailService: EmailService = EmailService()) 
                     date = date,
                     notes = notes,
                     packageName = _uiState.value.selectedPackage,
-                    customPackageDetails = _uiState.value.customPackageDetails
+                    customPackageDetails = _uiState.value.customPackageDetails,
+                    location = location
                 )
                 _uiState.update {
                     it.copy(

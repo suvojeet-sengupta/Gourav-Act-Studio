@@ -105,8 +105,8 @@ fun PricingScreen(
             packageName = uiState.selectedPackage,
             isSubmitting = uiState.isSubmittingInquiry,
             onDismiss = { viewModel.onDismissInquiryDialog() },
-            onSubmit = { name, phone, eventType, otherEventType, date, notes ->
-                viewModel.onSubmitInquiry(name, phone, eventType, otherEventType, date, notes)
+            onSubmit = { name, phone, eventType, otherEventType, date, notes, location ->
+                viewModel.onSubmitInquiry(name, phone, eventType, otherEventType, date, notes, location)
             }
         )
     }
