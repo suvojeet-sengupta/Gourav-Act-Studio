@@ -162,7 +162,7 @@ fun PricingScreen(modifier: Modifier = Modifier) {
                     tonalElevation = 2.dp
                 ) {
                     Column(
-                        modifier = Modifier.padding(15.dp),
+                        modifier = Modifier.padding(vertical = 5.dp, horizontal = 15.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         AnimatedContent(isVisible) {
