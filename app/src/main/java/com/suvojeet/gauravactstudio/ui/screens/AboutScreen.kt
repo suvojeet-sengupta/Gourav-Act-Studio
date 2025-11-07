@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.material.icons.materialIcon
 
 import android.content.Intent
+import android.content.Context
 import android.net.Uri
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -217,18 +218,14 @@ fun AboutScreen(navController: NavController) {
                 // Contact Information
                 AnimatedContent(isVisible, delay = 1000) {
                     ContactCard(
+                        context = context,
                         onEmailClick = {
                             val intent = Intent(Intent.ACTION_SENDTO).apply {
                                 data = Uri.parse("mailto:gauravkumarpjt@gmail.com")
                             }
                             context.startActivity(intent)
                         },
-                        onPhoneClick = {
-                            val intent = Intent(Intent.ACTION_DIAL).apply {
-                                data = Uri.parse("tel:+919354654066")
-                            }
-                            context.startActivity(intent)
-                        }
+                        phoneNumbers = listOf("+91 93546 54066", "+91 70179 72737")
                     )
                 }
 
@@ -405,7 +402,7 @@ fun StatItem(icon: ImageVector, number: String, label: String, gradient: List<Co
 }
 
 @Composable
-fun ContactCard(onEmailClick: () -> Unit, onPhoneClick: () -> Unit) {
+fun ContactCard(context: Context, onEmailClick: () -> Unit, phoneNumbers: List<String>) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -431,13 +428,21 @@ fun ContactCard(onEmailClick: () -> Unit, onPhoneClick: () -> Unit) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            ContactItem(
-                icon = Icons.Filled.Phone,
-                title = "Phone",
-                info = "+91 93546 54066",
-                gradient = listOf(Color(0xFF10B981), Color(0xFF14B8A6)),
-                onClick = onPhoneClick
-            )
+            phoneNumbers.forEach { phoneNumber ->
+                ContactItem(
+                    icon = Icons.Filled.Phone,
+                    title = "Phone",
+                    info = phoneNumber,
+                    gradient = listOf(Color(0xFF10B981), Color(0xFF14B8A6)),
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_DIAL).apply {
+                            data = Uri.parse("tel:${phoneNumber.replace(" ", "")}")
+                        }
+                        context.startActivity(intent)
+                    }
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
     }
 }
