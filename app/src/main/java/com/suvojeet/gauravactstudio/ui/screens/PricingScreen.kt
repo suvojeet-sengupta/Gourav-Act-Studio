@@ -31,6 +31,8 @@ import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import java.util.Locale
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -135,6 +137,8 @@ fun PricingScreen(
                     .padding(innerPadding) // Padding yahaan apply ki taaki status bar ke neeche se start ho
                     .fillMaxSize()
             ) {
+                var showCustomBuilder by remember { mutableStateOf(false) }
+
                 // Header Section
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
@@ -149,22 +153,22 @@ fun PricingScreen(
                             Icon(
                                 imageVector = Icons.Filled.Payments,
                                 contentDescription = null,
-                                modifier = Modifier.size(32.dp), // <-- CHHOTA KIYA
+                                modifier = Modifier.size(32.dp),
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
-                        Spacer(modifier = Modifier.height(4.dp)) // <-- KAM KIYA
+                        Spacer(modifier = Modifier.height(4.dp))
 
                         AnimatedContent(isVisible, delay = 100) {
                             Text(
                                 text = stringResource(R.string.pricing_title),
-                                style = MaterialTheme.typography.titleLarge, // <-- STYLE BADLA
+                                style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(2.dp)) // <-- KAM KIYA
+                        Spacer(modifier = Modifier.height(2.dp))
 
                         AnimatedContent(isVisible, delay = 200) {
                             Text(
@@ -174,29 +178,55 @@ fun PricingScreen(
                                 textAlign = TextAlign.Center
                             )
                         }
+                        Spacer(modifier = Modifier.height(16.dp)) // Added spacer
+                        // Toggle Button
+                        Button(
+                            onClick = { showCustomBuilder = !showCustomBuilder },
+                            modifier = Modifier.fillMaxWidth(0.8f),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        ) {
+                            Icon(
+                                imageVector = if (showCustomBuilder) Icons.Filled.List else Icons.Filled.Build,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = if (showCustomBuilder) "View Predefined Packages" else "Build Your Own Package",
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     }
                 }
 
-                // Pricing Cards
-                LazyColumn(
-                    modifier = Modifier.weight(1f), // Baaki jagah yeh le lega
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    itemsIndexed(pricingList) { index, pricePackage ->
-                        AnimatedContent(isVisible, delay = 300L + (index * 75L)) {
-                            PricePackageCard(pricePackage = pricePackage, onChoosePlan = {
-                                viewModel.onChoosePlan(it)
-                            })
-                        }
+                // Content based on toggle
+                if (showCustomBuilder) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState()) // Use verticalScroll for custom builder
+                            .padding(horizontal = 20.dp, vertical = 16.dp)
+                    ) {
+                        CustomPackageBuilderSection(onContact = { title, details ->
+                            viewModel.onChoosePlan(title, details)
+                        })
                     }
-
-                    // Custom Package Card at the end
-                    item {
-                        AnimatedContent(isVisible, delay = 600L) {
-                            CustomPackageBuilderSection(onContact = { title, details ->
-                                viewModel.onChoosePlan(title, details)
-                            })
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.weight(1f),
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                    ) {
+                        itemsIndexed(pricingList) { index, pricePackage ->
+                            AnimatedContent(isVisible, delay = 300L + (index * 75L)) {
+                                PricePackageCard(pricePackage = pricePackage, onChoosePlan = {
+                                    viewModel.onChoosePlan(it)
+                                })
+                            }
                         }
                     }
                 }

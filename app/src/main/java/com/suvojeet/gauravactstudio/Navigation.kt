@@ -15,7 +15,6 @@ import com.suvojeet.gauravactstudio.ui.screens.GalleryScreen
 import com.suvojeet.gauravactstudio.ui.screens.PricingScreen
 import com.suvojeet.gauravactstudio.ui.screens.ServicesScreen
 import com.suvojeet.gauravactstudio.ui.screens.SettingsScreen
-import com.suvojeet.gauravactstudio.ui.screens.PricingScreen.CustomPackageBuilderSection
 import com.suvojeet.gauravactstudio.util.decodeURL
 import com.suvojeet.gauravactstudio.util.encodeURL
 
@@ -29,7 +28,6 @@ sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     object Detail : Screen("detail/{imageUrl}") {
         fun createRoute(imageUrl: String) = "detail/${imageUrl.encodeURL()}"
     }
-    object CustomPackageBuilder : Screen("custom_package_builder", R.string.custom_package_builder_title)
 }
 
 @Composable
@@ -65,8 +63,6 @@ fun AppNavHost(
                 DetailScreen(navController = navController, imageUrl = imageUrl.decodeURL())
             }
         }
-        composable(Screen.CustomPackageBuilder.route) {
-            CustomPackageBuilderSection(navController = navController)
-        }
+
     }
 }

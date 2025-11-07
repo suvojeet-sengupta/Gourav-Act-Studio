@@ -134,7 +134,6 @@
     <string name="settings_language">Language</string>
     <string name="settings_select_language">Select Language</string>
     <string name="settings_cancel">Cancel</string>
-    <string name="custom_package_builder_title">Build Your Custom Package</string>
     <string-array name="event_types">
         <item>Wedding</item>
         <item>Pre-wedding</item>
