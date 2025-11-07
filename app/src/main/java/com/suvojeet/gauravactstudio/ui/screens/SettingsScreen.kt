@@ -14,7 +14,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,6 +28,10 @@ import androidx.compose.ui.unit.dp
 import com.suvojeet.gauravactstudio.MainActivity
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.draw.shadow
+import kotlinx.coroutines.delay
+import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +39,12 @@ fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) 
     val context = LocalContext.current
     val activity = (LocalContext.current as? MainActivity)
     var showLanguageDialog by remember { mutableStateOf(false) }
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(50)
+        isVisible = true
+    }
 
     Scaffold(
         topBar = {
@@ -55,53 +64,64 @@ fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) 
                 .padding(it)
                 .background(MaterialTheme.colorScheme.background)
         ) {
+            AnimatedContent(isVisible) {
+                Column(modifier = Modifier.padding(16.dp)) {
 
-
-            Column(modifier = Modifier.padding(16.dp)) {
-
-                SettingsItem(
-                    icon = Icons.Filled.Share,
-                    title = stringResource(R.string.settings_invite_app),
-                    onClick = {
-                        val sendIntent: Intent = Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, "Check out Gaurav Act Studio app: [App Play Store Link Here]")
-                            type = "text/plain"
+                    SettingsItem(
+                        icon = Icons.Filled.Share,
+                        title = stringResource(R.string.settings_invite_app),
+                        onClick = {
+                            val sendIntent: Intent = Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(Intent.EXTRA_TEXT, "Check out Gaurav Act Studio app: [App Play Store Link Here]")
+                                type = "text/plain"
+                            }
+                            val shareIntent = Intent.createChooser(sendIntent, null)
+                            context.startActivity(shareIntent)
                         }
-                        val shareIntent = Intent.createChooser(sendIntent, null)
-                        context.startActivity(shareIntent)
-                    }
-                )
+                    )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                SettingsItem(
-                    icon = Icons.Filled.Language,
-                    title = stringResource(R.string.settings_language),
-                    onClick = { showLanguageDialog = true }
-                )
+                    SettingsItem(
+                        icon = Icons.Filled.Language,
+                        title = stringResource(R.string.settings_language),
+                        onClick = { showLanguageDialog = true }
+                    )
+                }
             }
         }
     }
 
     if (showLanguageDialog) {
         AlertDialog(
-            onDismissRequest = { showLanguageDialog = false },
-            title = { Text(stringResource(R.string.settings_select_language)) },
+            onDismissRequest = { if (!activity?.isFinishing!!) showLanguageDialog = false },
+            title = { Text(stringResource(R.string.settings_select_language), fontWeight = FontWeight.Bold) },
             text = {
-                Column {
-                    TextButton(onClick = { 
-                        activity?.setLocale("en")
-                        showLanguageDialog = false
-                    }) {
-                        Text("English")
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = { 
+                            activity?.setLocale("en")
+                            showLanguageDialog = false
+                        },
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                    ) {
+                        Text("English", fontSize = 16.sp)
                     }
-                    TextButton(onClick = { 
-                        activity?.setLocale("hi")
-                        showLanguageDialog = false
-                    }) {
-                        Text("हिंदी")
+                    Button(
+                        onClick = { 
+                            activity?.setLocale("hi")
+                            showLanguageDialog = false
+                        },
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                    ) {
+                        Text("हिंदी", fontSize = 16.sp)
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             },
             confirmButton = {},
@@ -119,7 +139,12 @@ fun SettingsItem(icon: ImageVector, title: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(12.dp),
+                ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+            ),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
