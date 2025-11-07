@@ -15,6 +15,7 @@ import com.suvojeet.gauravactstudio.ui.screens.GalleryScreen
 import com.suvojeet.gauravactstudio.ui.screens.PricingScreen
 import com.suvojeet.gauravactstudio.ui.screens.ServicesScreen
 import com.suvojeet.gauravactstudio.ui.screens.SettingsScreen
+import com.suvojeet.gauravactstudio.ui.screens.PricingScreen.CustomPackageBuilderSection
 import com.suvojeet.gauravactstudio.util.decodeURL
 import com.suvojeet.gauravactstudio.util.encodeURL
 
@@ -65,7 +66,7 @@ fun AppNavHost(
             }
         }
         composable(Screen.CustomPackageBuilder.route) {
-            CustomPackageBuilderScreen(navController = navController)
+            CustomPackageBuilderSection(navController = navController)
         }
     }
 }
