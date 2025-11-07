@@ -128,16 +128,18 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
             Text(
                 text = stringResource(R.string.home_hero_title),
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    fontSize = 30.sp, // <-- FIX: Reduced font size
-                    letterSpacing = (-0.5).sp
+                    fontSize = 26.sp, // Changed font size to 26.sp
+                    letterSpacing = 0.sp // Changed letter spacing to 0.sp
                 ),
-                fontWeight = FontWeight.ExtraBold,
+                fontWeight = FontWeight.Bold, // Changed to FontWeight.Bold
                 color = Color(0xFF1A1A1A),
                 textAlign = TextAlign.Center,
                 
                 // --- THE FIX ---
                 // Force the Text to take the full width, allowing wrap
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp), // Added horizontal padding
                 
                 maxLines = 2, // Allow wrapping to 2 lines
                 softWrap = true // Enable soft wrapping
