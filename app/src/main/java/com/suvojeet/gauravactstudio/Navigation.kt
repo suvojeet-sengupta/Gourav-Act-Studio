@@ -15,6 +15,8 @@ import com.suvojeet.gauravactstudio.ui.screens.GalleryScreen
 import com.suvojeet.gauravactstudio.ui.screens.PricingScreen
 import com.suvojeet.gauravactstudio.ui.screens.ServicesScreen
 import com.suvojeet.gauravactstudio.ui.screens.SettingsScreen
+import com.suvojeet.gauravactstudio.util.decodeURL
+import com.suvojeet.gauravactstudio.util.encodeURL
 
 sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     object Home : Screen("home", R.string.home_screen)
@@ -23,8 +25,8 @@ sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     object Gallery : Screen("gallery", R.string.gallery_screen)
     object About : Screen("about", R.string.about_screen)
     object Settings : Screen("settings", R.string.settings_title)
-    object Detail : Screen("detail/{imageResId}") {
-        fun createRoute(imageResId: Int) = "detail/$imageResId"
+    object Detail : Screen("detail/{imageUrl}") {
+        fun createRoute(imageUrl: String) = "detail/${imageUrl.encodeURL()}"
     }
 }
 
@@ -54,11 +56,11 @@ fun AppNavHost(
         }
         composable(
             route = Screen.Detail.route,
-            arguments = listOf(navArgument("imageResId") { type = NavType.IntType })
+            arguments = listOf(navArgument("imageUrl") { type = NavType.StringType })
         ) { backStackEntry ->
-            val imageResId = backStackEntry.arguments?.getInt("imageResId")
-            if (imageResId != null) {
-                DetailScreen(navController = navController, imageResId = imageResId)
+            val imageUrl = backStackEntry.arguments?.getString("imageUrl")
+            if (imageUrl != null) {
+                DetailScreen(navController = navController, imageUrl = imageUrl.decodeURL())
             }
         }
     }
