@@ -695,14 +695,37 @@ fun ModernAddressSection() {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
+                val interactionSource = remember { MutableInteractionSource() }
+                val isPressed by interactionSource.collectIsPressedAsState()
+                val scale by animateFloatAsState(
+                    targetValue = if (isPressed) 0.95f else 1f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    ),
+                    label = "Button Scale"
+                )
+                val animatedColor1 by animateColorAsState(
+                    targetValue = if (isPressed) Color(0xFFF97316) else Color(0xFFEC4899),
+                    animationSpec = tween(durationMillis = 200),
+                    label = "Color1 Animation"
+                )
+                val animatedColor2 by animateColorAsState(
+                    targetValue = if (isPressed) Color(0xFFEC4899) else Color(0xFFF97316),
+                    animationSpec = tween(durationMillis = 200),
+                    label = "Color2 Animation"
+                )
+
                 Button(
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
                         context.startActivity(intent)
                     },
+                    interactionSource = interactionSource,
                     modifier = Modifier
                         .height(56.dp)
                         .fillMaxWidth()
+                        .scale(scale)
                         .shadow(
                             elevation = 12.dp,
                             shape = RoundedCornerShape(28.dp),
@@ -719,10 +742,7 @@ fun ModernAddressSection() {
                             .fillMaxSize()
                             .background(
                                 brush = Brush.horizontalGradient(
-                                    colors = listOf(
-                                        Color(0xFFEC4899),
-                                        Color(0xFFF97316)
-                                    )
+                                    colors = listOf(animatedColor1, animatedColor2)
                                 )
                             ),
                         contentAlignment = Alignment.Center
