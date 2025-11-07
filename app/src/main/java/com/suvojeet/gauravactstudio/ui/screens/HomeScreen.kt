@@ -134,11 +134,13 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                 fontWeight = FontWeight.ExtraBold,
                 color = Color(0xFF1A1A1A),
                 textAlign = TextAlign.Center,
-                // --- FIX ---
-                // Allow text to wrap to a second line if it's too long
-                maxLines = 2,
-                softWrap = true
-                // --- End Fix ---
+                
+                // --- THE FIX ---
+                // Force the Text to take the full width, allowing wrap
+                modifier = Modifier.fillMaxWidth(),
+                
+                maxLines = 2, // Allow wrapping to 2 lines
+                softWrap = true // Enable soft wrapping
             )
         }
         
@@ -152,8 +154,7 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                     lineHeight = 24.sp
                 ),
                 color = Color(0xFF666666),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 24.dp)
+                textAlign = TextAlign.Center
             )
         }
         
