@@ -110,7 +110,6 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
         AnimatedContent(isVisible) {
             Box(
                 modifier = Modifier
-                    .size(120.dp)
                     .shadow(
                         elevation = 24.dp,
                         shape = CircleShape,
