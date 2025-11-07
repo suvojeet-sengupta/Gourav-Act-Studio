@@ -113,6 +113,7 @@ fun ServicesScreen() {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color(0xFFE0F7FA),
+                        Color(0xFFFADADD),
                         Color(0xFFFFF9C4)
                     )
                 )
