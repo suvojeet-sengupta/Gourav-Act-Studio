@@ -109,13 +109,21 @@ fun ServicesScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF0f0c29),
+                        Color(0xFF302b63),
+                        Color(0xFF24243e)
+                    )
+                )
+            )
     ) {
         // Header Section
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 2.dp
+            color = Color.Transparent,
+            tonalElevation = 0.dp
         ) {
             Column(
                 modifier = Modifier.padding(24.dp),
@@ -125,13 +133,13 @@ fun ServicesScreen() {
                     text = stringResource(R.string.services_title),
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Color(0xFFEAEAEA)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(R.string.services_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = Color(0xFFEAEAEA).copy(alpha = 0.8f),
                     textAlign = TextAlign.Center
                 )
             }
@@ -168,7 +176,7 @@ fun ServiceCard(service: Service) {
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = Color.Black.copy(alpha = 0.2f)
         )
     ) {
         Column(
@@ -202,7 +210,7 @@ fun ServiceCard(service: Service) {
                 text = service.title,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = Color(0xFFEAEAEA),
                 textAlign = TextAlign.Center,
                 lineHeight = 20.sp
             )
@@ -213,7 +221,7 @@ fun ServiceCard(service: Service) {
             Text(
                 text = service.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = Color(0xFFEAEAEA).copy(alpha = 0.8f),
                 textAlign = TextAlign.Center,
                 lineHeight = 18.sp
             )

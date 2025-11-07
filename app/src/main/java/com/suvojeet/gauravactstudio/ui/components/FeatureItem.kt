@@ -50,12 +50,12 @@ fun FeatureItem(icon: ImageVector, title: String, description: String) {
                 text = title,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onBackground
+                color = Color(0xFFEAEAEA)
             )
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                color = Color(0xFFEAEAEA).copy(alpha = 0.7f)
             )
         }
     }
