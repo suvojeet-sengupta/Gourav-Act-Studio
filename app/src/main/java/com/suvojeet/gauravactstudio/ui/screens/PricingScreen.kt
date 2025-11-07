@@ -135,7 +135,6 @@ fun PricingScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(innerPadding) // Padding yahaan apply ki taaki status bar ke neeche se start ho
                     .fillMaxSize()
             ) {
                 var showCustomBuilder by remember { mutableStateOf(false) }
