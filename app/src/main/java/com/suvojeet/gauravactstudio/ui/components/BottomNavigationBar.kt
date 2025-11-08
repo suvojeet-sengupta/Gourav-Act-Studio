@@ -97,12 +97,14 @@ data class BottomNavItem(
             NavigationBarItem(
                 selected = isSelected,
                 onClick = {
-                    navController.navigate(item.screen.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            // saveState = true // Removed to prevent state restoration
+                    if (!isSelected) {
+                        navController.navigate(item.screen.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        // restoreState = true // Removed to prevent state restoration
                     }
                 },
                 icon = {
