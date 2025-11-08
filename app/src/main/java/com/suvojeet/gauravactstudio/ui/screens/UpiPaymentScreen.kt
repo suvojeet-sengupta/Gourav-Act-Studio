@@ -101,6 +101,10 @@ fun UpiPaymentScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+import androidx.compose.material3.OutlinedTextFieldDefaults // Added import
+
+// ... existing code ...
+
             OutlinedTextField(
                 value = amount,
                 onValueChange = { newValue ->
@@ -112,7 +116,7 @@ fun UpiPaymentScreen(navController: NavController) {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(0.8f),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
+                colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -220,10 +224,15 @@ fun UpiPaymentScreen(navController: NavController) {
 
 data class UpiApp(val name: String, val packageName: String)
 
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController // Needed for preview
+
+// ... existing code ...
+
 @Preview(showBackground = true)
 @Composable
 fun UpiPaymentScreenPreview() {
     GauravActStudioTheme {
-        UpiPaymentScreen(navController = NavController(LocalContext.current))
+        UpiPaymentScreen(navController = rememberNavController())
     }
 }

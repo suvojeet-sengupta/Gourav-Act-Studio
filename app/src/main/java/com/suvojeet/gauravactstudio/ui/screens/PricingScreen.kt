@@ -44,6 +44,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.suvojeet.gauravactstudio.Screen // Import Screen for navigation
 
 data class PricePackage(
     val name: String,
@@ -212,10 +215,7 @@ fun PricingScreen(
                                 textAlign = TextAlign.Center
                             )
                         }
-import androidx.navigation.NavController
-import com.suvojeet.gauravactstudio.Screen // Import Screen for navigation
 
-// ... existing code ...
 
                         Spacer(modifier = Modifier.height(16.dp)) // Added spacer
                         // Toggle Button
@@ -497,6 +497,6 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
   @Composable
  fun PricingScreenPreview() {
      GauravActStudioTheme {
-         PricingScreen()
+         PricingScreen(navController = rememberNavController())
      }
  }
