@@ -576,7 +576,8 @@ fun UpiPaymentScreen(navController: NavController) {
 
                                                                 // URI mein sab kuch add kiya
 
-                                                                val uri = Uri.parse("upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR&tr=$encodedTr&tn=$encodedTn")
+                                                                // SAFER URI (bina Payee Name ke)
+                                    val uri = Uri.parse("upi://pay?pa=$encodedUpiId&am=$encodedAmount&cu=INR&tr=$encodedTr&tn=$encodedTn")
 
                                                                 
 
