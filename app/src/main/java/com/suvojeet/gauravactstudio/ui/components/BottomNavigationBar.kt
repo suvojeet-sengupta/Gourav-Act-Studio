@@ -85,9 +85,10 @@ data class BottomNavItem(
     NavigationBar(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)), // Rounded corners
-        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-        tonalElevation = 8.dp
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+            .background(Color.White.copy(alpha = 0.15f)), // Translucent white background
+        containerColor = Color.Transparent, // Make the container transparent
+        tonalElevation = 0.dp // Remove elevation
     ) {
         items.forEach { item ->
             val isSelected = currentDestination?.hierarchy?.any {
