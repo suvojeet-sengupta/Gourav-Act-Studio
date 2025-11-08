@@ -1,3 +1,12 @@
+package com.suvojeet.gauravactstudio.ui.screens
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.suvojeet.gauravactstudio.util.EmailService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.UUID // Import UUID
 import com.suvojeet.gauravactstudio.R // Import R for string resources
 import androidx.compose.ui.res.stringResource // Import stringResource

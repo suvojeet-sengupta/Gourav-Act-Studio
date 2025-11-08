@@ -40,6 +40,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.runtime.collectAsState
 
 data class PricePackage(
     val name: String,
