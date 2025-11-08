@@ -237,9 +237,20 @@ fun PricingScreen(
 
  @Composable
 fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, onChoosePlan: (String) -> Unit) {
+    val infiniteTransition = rememberInfiniteTransition(label = "popular_animation")
+    val animatedBorderWidth by infiniteTransition.animateFloat(
+        initialValue = 3f,
+        targetValue = if (pricePackage.isPopular) 5f else 3f, // Animate border width
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "popular_border_width"
+    )
+
     val borderModifier = if (pricePackage.isPopular) {
         Modifier.border(
-            width = 3.dp,
+            width = animatedBorderWidth.dp, // Use animated width
             brush = Brush.linearGradient(pricePackage.gradient),
             shape = RoundedCornerShape(24.dp)
         )
