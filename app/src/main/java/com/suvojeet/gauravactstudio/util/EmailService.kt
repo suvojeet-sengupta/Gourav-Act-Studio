@@ -34,7 +34,8 @@ data class TemplateParams(
     @SerialName("notes") val notes: String,
     @SerialName("user_email") val user_email: String,
     @SerialName("custom_package_details") val custom_package_details: String? = null,
-    @SerialName("location") val location: String
+    @SerialName("location") val location: String,
+    @SerialName("booking_request_number") val booking_request_number: String? = null // New field
 )
 
 class EmailService {
@@ -60,7 +61,8 @@ class EmailService {
         notes: String,
         packageName: String,
         customPackageDetails: String? = null,
-        location: String
+        location: String,
+        bookingRequestNumber: String? = null // New parameter
     ) {
         val finalEventType = if (eventType == "Other") otherEventType else eventType
 
@@ -79,7 +81,8 @@ class EmailService {
                 notes = notes,
                 user_email = "gauravkumarpjt@gmail.com",
                 custom_package_details = customPackageDetails,
-                location = location
+                location = location,
+                booking_request_number = bookingRequestNumber // Pass booking number
             )
         )
 
@@ -91,7 +94,7 @@ class EmailService {
             Log.d("EmailService", "Got response: ${response.status} ${response.bodyAsText()}")
         } catch (e: Exception) {
             Log.e("EmailService", "Failed to send email", e)
-            throw Exception("Failed to send inquiry. Please try again later.")
+            throw Exception("Failed to send booking request. Please try again later.") // Updated error message
         }
     }
 }

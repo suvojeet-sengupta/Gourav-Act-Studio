@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
-import com.suvojeet.gauravactstudio.ui.components.InquiryDialog
+import com.suvojeet.gauravactstudio.ui.components.BookingDialog
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
 import androidx.compose.ui.res.stringArrayResource
@@ -100,13 +100,42 @@ fun PricingScreen(
         }
     }
 
-    if (uiState.showInquiryDialog) {
-        InquiryDialog(
+    if (uiState.showBookingDialog) { // Changed from showInquiryDialog
+        BookingDialog( // Changed from InquiryDialog
             packageName = uiState.selectedPackage,
             isSubmitting = uiState.isSubmittingInquiry,
-            onDismiss = { viewModel.onDismissInquiryDialog() },
+            onDismiss = { viewModel.onDismissBookingDialog() }, // Changed function call
             onSubmit = { name, phone, eventType, otherEventType, date, notes, location ->
                 viewModel.onSubmitInquiry(name, phone, eventType, otherEventType, date, notes, location)
+            }
+        )
+    }
+
+    // New: Booking Confirmation Dialog
+    AnimatedVisibility(
+        visible = uiState.showBookingConfirmation,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        AlertDialog(
+            onDismissRequest = { viewModel.onDismissBookingDialog() },
+            title = { Text(stringResource(R.string.booking_inquiry_sent_success)) },
+            text = {
+                Column {
+                    Text(stringResource(R.string.booking_confirmation_message))
+                    uiState.bookingRequestNumber?.let {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "${stringResource(R.string.booking_request_number_label)} $it",
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { viewModel.onDismissBookingDialog() }) {
+                    Text("OK")
+                }
             }
         )
     }

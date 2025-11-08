@@ -52,7 +52,7 @@ import java.util.*
 
  @OptIn(ExperimentalMaterial3Api::class)
  @Composable
-fun InquiryDialog(
+fun BookingDialog(
     packageName: String,
     isSubmitting: Boolean,
     onDismiss: () -> Unit,
@@ -250,7 +250,7 @@ fun InquiryDialog(
                             Spacer(modifier = Modifier.height(12.dp))
                             
                             Text(
-                                text = "Send Inquiry",
+                                text = stringResource(R.string.booking_send_request),
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White
@@ -274,7 +274,7 @@ fun InquiryDialog(
                             .padding(24.dp)
                     ) {
                         Text(
-                            text = "Fill in your details and we'''ll get back to you soon!",
+                            text = stringResource(R.string.booking_fill_details),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
@@ -286,12 +286,12 @@ fun InquiryDialog(
                         // Name Field
                         FormField(
                             icon = Icons.Filled.Person,
-                            label = "Full Name"
+                            label = stringResource(R.string.booking_full_name_label)
                         ) {
                             OutlinedTextField(
                                 value = name,
                                 onValueChange = { name = it; nameError = false },
-                                placeholder = { Text("Enter your full name") },
+                                placeholder = { Text(stringResource(R.string.booking_enter_full_name_placeholder)) },
                                 modifier = Modifier.fillMaxWidth(),
                                 enabled = !isSubmitting,
                                 shape = RoundedCornerShape(16.dp),
@@ -303,7 +303,7 @@ fun InquiryDialog(
                                 isError = nameError,
                                 supportingText = {
                                     if (nameError) {
-                                        Text("Name cannot be empty", color = MaterialTheme.colorScheme.error)
+                                        Text(stringResource(R.string.booking_name_empty_error), color = MaterialTheme.colorScheme.error)
                                     }
                                 }
                             )
@@ -314,12 +314,12 @@ fun InquiryDialog(
                         // Phone Field
                         FormField(
                             icon = Icons.Filled.Phone,
-                            label = "Phone Number"
+                            label = stringResource(R.string.booking_phone_number_label)
                         ) {
                             OutlinedTextField(
                                 value = phone,
                                 onValueChange = { phone = it; phoneError = false },
-                                placeholder = { Text("Enter your phone number") },
+                                placeholder = { Text(stringResource(R.string.booking_enter_phone_placeholder)) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                                 modifier = Modifier.fillMaxWidth(),
                                 enabled = !isSubmitting,
@@ -332,7 +332,7 @@ fun InquiryDialog(
                                 isError = phoneError,
                                 supportingText = {
                                     if (phoneError) {
-                                        Text("Phone number cannot be empty", color = MaterialTheme.colorScheme.error)
+                                        Text(stringResource(R.string.booking_phone_empty_error), color = MaterialTheme.colorScheme.error)
                                     }
                                 }
                             )
@@ -343,7 +343,7 @@ fun InquiryDialog(
                         // Event Type Field
                         FormField(
                             icon = Icons.Filled.Event,
-                            label = "Event Type"
+                            label = stringResource(R.string.booking_event_type_label)
                         ) {
                             ExposedDropdownMenuBox(
                                 expanded = expanded,
@@ -353,7 +353,7 @@ fun InquiryDialog(
                                     value = eventType,
                                     onValueChange = {},
                                     readOnly = true,
-                                    placeholder = { Text("Select event type") },
+                                    placeholder = { Text(stringResource(R.string.booking_select_event_type_placeholder)) },
                                     trailingIcon = {
                                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                                     },
@@ -369,7 +369,7 @@ fun InquiryDialog(
                                     isError = eventTypeError,
                                     supportingText = {
                                         if (eventTypeError) {
-                                            Text("Please select an event type", color = MaterialTheme.colorScheme.error)
+                                            Text(stringResource(R.string.booking_event_type_empty_error), color = MaterialTheme.colorScheme.error)
                                         }
                                     }
                                 )
@@ -400,12 +400,12 @@ fun InquiryDialog(
                                 Spacer(modifier = Modifier.height(16.dp))
                                 FormField(
                                     icon = Icons.Filled.Edit,
-                                    label = "Specify Event Type"
+                                    label = stringResource(R.string.booking_specify_event_type_label)
                                 ) {
                                     OutlinedTextField(
                                         value = otherEventType,
                                         onValueChange = { otherEventType = it; otherEventTypeRequiredError = false },
-                                        placeholder = { Text("Please specify") },
+                                        placeholder = { Text(stringResource(R.string.booking_specify_placeholder)) },
                                         modifier = Modifier.fillMaxWidth(),
                                         enabled = !isSubmitting,
                                         shape = RoundedCornerShape(16.dp),
@@ -417,7 +417,7 @@ fun InquiryDialog(
                                         isError = otherEventTypeRequiredError,
                                         supportingText = {
                                             if (otherEventTypeRequiredError) {
-                                                Text("Please specify the event type", color = MaterialTheme.colorScheme.error)
+                                                Text(stringResource(R.string.booking_specify_event_type_error), color = MaterialTheme.colorScheme.error)
                                             }
                                         }
                                     )
@@ -430,13 +430,13 @@ fun InquiryDialog(
                         // Date Field
                         FormField(
                             icon = Icons.Filled.DateRange,
-                            label = "Event Date"
+                            label = stringResource(R.string.booking_event_date_label)
                         ) {
                             OutlinedTextField(
                                 value = date,
                                 onValueChange = { date = it; dateError = false },
                                 readOnly = true,
-                                placeholder = { Text("Select date") },
+                                placeholder = { Text(stringResource(R.string.booking_select_date_placeholder)) },
                                 trailingIcon = {
                                     IconButton(
                                         onClick = { showDatePicker = true },
@@ -459,9 +459,9 @@ fun InquiryDialog(
                                 isError = dateError || invalidDateError,
                                 supportingText = {
                                     if (dateError) {
-                                        Text("Please select a date", color = MaterialTheme.colorScheme.error)
+                                        Text(stringResource(R.string.booking_date_empty_error), color = MaterialTheme.colorScheme.error)
                                     } else if (invalidDateError) {
-                                        Text("Past dates are not allowed", color = MaterialTheme.colorScheme.error)
+                                        Text(stringResource(R.string.booking_past_date_error), color = MaterialTheme.colorScheme.error)
                                     }
                                 }
                             )
@@ -472,12 +472,12 @@ fun InquiryDialog(
                         // Notes Field
                         FormField(
                             icon = Icons.Filled.Notes,
-                            label = "Additional Requirements"
+                            label = stringResource(R.string.booking_additional_requirements_label)
                         ) {
                             OutlinedTextField(
                                 value = notes,
                                 onValueChange = { notes = it },
-                                placeholder = { Text("Any special requests or requirements...") },
+                                placeholder = { Text(stringResource(R.string.booking_notes_placeholder)) },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(120.dp),
@@ -517,7 +517,7 @@ fun InquiryDialog(
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
-                                    text = "Cancel",
+                                    text = stringResource(R.string.booking_cancel),
                                     fontWeight = FontWeight.SemiBold,
                                     fontSize = 16.sp
                                 )
@@ -551,7 +551,7 @@ fun InquiryDialog(
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
-                                        text = "Sending...",
+                                        text = stringResource(R.string.booking_sending),
                                         fontWeight = FontWeight.SemiBold,
                                         fontSize = 16.sp
                                     )
@@ -563,7 +563,7 @@ fun InquiryDialog(
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
-                                        text = "Submit",
+                                        text = stringResource(R.string.booking_submit),
                                         fontWeight = FontWeight.SemiBold,
                                         fontSize = 16.sp
                                     )

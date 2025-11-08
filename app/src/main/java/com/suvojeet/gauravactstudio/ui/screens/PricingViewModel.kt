@@ -1,19 +1,15 @@
-package com.suvojeet.gauravactstudio.ui.screens
-
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.suvojeet.gauravactstudio.util.EmailService
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import java.util.UUID // Import UUID
+import com.suvojeet.gauravactstudio.R // Import R for string resources
+import androidx.compose.ui.res.stringResource // Import stringResource
 
 data class PricingScreenState(
-    val showInquiryDialog: Boolean = false,
+    val showBookingDialog: Boolean = false,
     val selectedPackage: String = "",
     val customPackageDetails: String? = null,
     val isSubmittingInquiry: Boolean = false,
-    val snackbarMessage: String? = null
+    val snackbarMessage: String? = null,
+    val bookingRequestNumber: String? = null, // New: Booking request number
+    val showBookingConfirmation: Boolean = false // New: Flag to show confirmation
 )
 
 class PricingViewModel(private val emailService: EmailService = EmailService()) : ViewModel() {
@@ -22,12 +18,12 @@ class PricingViewModel(private val emailService: EmailService = EmailService()) 
     val uiState = _uiState.asStateFlow()
 
     fun onChoosePlan(packageName: String, customPackageDetails: String? = null) {
-        _uiState.update { it.copy(showInquiryDialog = true, selectedPackage = packageName, customPackageDetails = customPackageDetails) }
+        _uiState.update { it.copy(showBookingDialog = true, selectedPackage = packageName, customPackageDetails = customPackageDetails) }
     }
 
-    fun onDismissInquiryDialog() {
+    fun onDismissBookingDialog() { // Renamed function
         if (!_uiState.value.isSubmittingInquiry) {
-            _uiState.update { it.copy(showInquiryDialog = false, customPackageDetails = null) }
+            _uiState.update { it.copy(showBookingDialog = false, customPackageDetails = null, bookingRequestNumber = null, showBookingConfirmation = false) } // Reset new fields
         }
     }
 
@@ -46,6 +42,7 @@ class PricingViewModel(private val emailService: EmailService = EmailService()) 
     ) {
         viewModelScope.launch {
             _uiState.update { it.copy(isSubmittingInquiry = true) }
+            val bookingReqNum = UUID.randomUUID().toString().substring(0, 8).uppercase() // Generate booking number
             try {
                 emailService.sendEmail(
                     name = name,
@@ -56,21 +53,26 @@ class PricingViewModel(private val emailService: EmailService = EmailService()) 
                     notes = notes,
                     packageName = _uiState.value.selectedPackage,
                     customPackageDetails = _uiState.value.customPackageDetails,
-                    location = location
+                    location = location,
+                    bookingRequestNumber = bookingReqNum // Pass booking number
                 )
                 _uiState.update {
                     it.copy(
-                        showInquiryDialog = false,
-                        snackbarMessage = "Inquiry sent successfully! We will contact you soon.",
-                        customPackageDetails = null
+                        showBookingDialog = false, // Close dialog
+                        snackbarMessage = "Booking request sent successfully! We will contact you soon.", // Use string resource later
+                        customPackageDetails = null,
+                        bookingRequestNumber = bookingReqNum, // Set booking number
+                        showBookingConfirmation = true, // Show confirmation
+                        isSubmittingInquiry = false // Reset submitting flag
                     )
                 }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(snackbarMessage = e.message ?: "An unknown error occurred.")
+                    it.copy(
+                        snackbarMessage = "Failed to send booking request. Please try again later.", // Use string resource later
+                        isSubmittingInquiry = false // Reset submitting flag
+                    )
                 }
-            } finally {
-                _uiState.update { it.copy(isSubmittingInquiry = false) }
             }
         }
     }

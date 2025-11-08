@@ -24,7 +24,7 @@
     <string name="home_feature_packages_title">Affordable Packages</string>
     <string name="home_feature_packages_description">Flexible pricing to suit every budget</string>
     <string name="contact_get_in_touch">Get In Touch</string>
-    <string name="contact_description">We\'d love to hear from you! Reach out for bookings or inquiries</string>
+    <string name="contact_description">We\'d love to hear from you! Reach out for bookings</string>
     <string name="contact_call_us">Call Us</string>
     <string name="contact_call_us_subtitle">Available 24/7 for your queries</string>
     <string name="contact_phone_number_1">+91 93546 54066</string>
@@ -103,7 +103,7 @@
     <string name="pricing_get_started">Get Started</string>
     <string name="pricing_custom_package_title">Need a Custom Package?</string>
     <string name="pricing_custom_package_description">Let us create a personalized package tailored to your specific requirements and budget</string>
-    <string name="pricing_contact_for_custom_quote">Contact Us for Custom Quote</string>
+    <string name="pricing_contact_for_custom_quote">Request Custom Booking</string>
     <string name="services_title">Our Services</string>
     <string name="services_subtitle">Capturing life\'s most beautiful moments</string>
     <string name="service_wedding_photography_title">Wedding Photography &amp; Videography</string>
@@ -134,6 +134,33 @@
     <string name="settings_language">Language</string>
     <string name="settings_select_language">Select Language</string>
     <string name="settings_cancel">Cancel</string>
+    <string name="booking_send_request">Send Booking Request</string>
+    <string name="booking_fill_details">Fill in your details and we\'ll confirm your booking soon!</string>
+    <string name="booking_cancel">Cancel</string>
+    <string name="booking_submit">Submit Booking</string>
+    <string name="booking_sending">Sending Booking...</string>
+    <string name="booking_name_empty_error">Name cannot be empty</string>
+    <string name="booking_phone_empty_error">Phone number cannot be empty</string>
+    <string name="booking_event_type_empty_error">Please select an event type</string>
+    <string name="booking_specify_event_type_error">Please specify the event type</string>
+    <string name="booking_date_empty_error">Please select a date</string>
+    <string name="booking_past_date_error">Past dates are not allowed</string>
+    <string name="booking_request_number_label">Booking Request No:</string>
+    <string name="booking_confirmation_message">Your booking request has been received! We will contact you ASAP to confirm the details.</string>
+    <string name="booking_inquiry_sent_success">Booking request sent successfully! We will contact you soon.</string>
+    <string name="booking_inquiry_failed">Failed to send booking request. Please try again later.</string>
+    <string name="booking_full_name_label">Full Name</string>
+    <string name="booking_phone_number_label">Phone Number</string>
+    <string name="booking_event_type_label">Event Type</string>
+    <string name="booking_specify_event_type_label">Specify Event Type</string>
+    <string name="booking_event_date_label">Event Date</string>
+    <string name="booking_additional_requirements_label">Additional Requirements</string>
+    <string name="booking_enter_full_name_placeholder">Enter your full name</string>
+    <string name="booking_enter_phone_placeholder">Enter your phone number</string>
+    <string name="booking_select_event_type_placeholder">Select event type</string>
+    <string name="booking_specify_placeholder">Please specify</string>
+    <string name="booking_select_date_placeholder">Select date</string>
+    <string name="booking_notes_placeholder">Any special requests or requirements...</string>
     <string-array name="event_types">
         <item>Wedding</item>
         <item>Pre-wedding</item>
