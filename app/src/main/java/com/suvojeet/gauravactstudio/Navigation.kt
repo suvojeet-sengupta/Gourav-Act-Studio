@@ -25,8 +25,8 @@ sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     object Gallery : Screen("gallery", R.string.gallery_screen)
     object About : Screen("about", R.string.about_screen)
     object Settings : Screen("settings", R.string.settings_title)
-    object Detail : Screen("detail/{imageUrl}") {
-        fun createRoute(imageUrl: String) = "detail/${imageUrl.encodeURL()}"
+    object Detail : Screen("detail/{mediaType}/{mediaUrl}") {
+        fun createRoute(mediaType: String, mediaUrl: String) = "detail/$mediaType/${mediaUrl.encodeURL()}"
     }
 }
 
@@ -56,11 +56,15 @@ fun AppNavHost(
         }
         composable(
             route = Screen.Detail.route,
-            arguments = listOf(navArgument("imageUrl") { type = NavType.StringType })
+            arguments = listOf(
+                navArgument("mediaType") { type = NavType.StringType },
+                navArgument("mediaUrl") { type = NavType.StringType }
+            )
         ) { backStackEntry ->
-            val imageUrl = backStackEntry.arguments?.getString("imageUrl")
-            if (imageUrl != null) {
-                DetailScreen(navController = navController, imageUrl = imageUrl.decodeURL())
+            val mediaType = backStackEntry.arguments?.getString("mediaType")
+            val mediaUrl = backStackEntry.arguments?.getString("mediaUrl")
+            if (mediaType != null && mediaUrl != null) {
+                DetailScreen(navController = navController, mediaType = mediaType, mediaUrl = mediaUrl.decodeURL())
             }
         }
 

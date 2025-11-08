@@ -29,11 +29,16 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 
+import com.suvojeet.gauravactstudio.ui.components.VideoPlayer // Import VideoPlayer
+import androidx.compose.foundation.layout.Column // Needed for VideoPlayer wrapper
+import java.util.Locale // For capitalize()
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     navController: NavController,
-    imageUrl: String
+    mediaUrl: String, // Changed from imageUrl
+    mediaType: String // New parameter
 ) {
     var scale by remember { mutableStateOf(1f) }
     var offsetX by remember { mutableStateOf(0f) }
@@ -42,7 +47,7 @@ fun DetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Image Detail") },
+                title = { Text("${mediaType.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }} Detail") }, // Dynamic title
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
@@ -63,29 +68,46 @@ fun DetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
-                .pointerInput(Unit) {
-                    detectTransformGestures { centroid, pan, zoom, _ ->
-                        scale = (scale * zoom).coerceIn(1f, 5f)
-                        val extraWidth = (scale - 1f) * (this.size.width / 2)
-                        val extraHeight = (scale - 1f) * (this.size.height / 2)
-                        offsetX = (offsetX + pan.x * scale).coerceIn(-extraWidth, extraWidth)
-                        offsetY = (offsetY + pan.y * scale).coerceIn(-extraHeight, extraHeight)
-                    }
-                }
         ) {
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer(
-                        scaleX = scale,
-                        scaleY = scale,
-                        translationX = offsetX,
-                        translationY = offsetY
+            if (mediaType == "image") {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .pointerInput(Unit) {
+                            detectTransformGestures { centroid, pan, zoom, _ ->
+                                scale = (scale * zoom).coerceIn(1f, 5f)
+                                val extraWidth = (scale - 1f) * (this.size.width / 2)
+                                val extraHeight = (scale - 1f) * (this.size.height / 2)
+                                offsetX = (offsetX + pan.x * scale).coerceIn(-extraWidth, extraWidth)
+                                offsetY = (offsetY + pan.y * scale).coerceIn(-extraHeight, extraHeight)
+                            }
+                        }
+                ) {
+                    AsyncImage(
+                        model = mediaUrl,
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .graphicsLayer(
+                                scaleX = scale,
+                                scaleY = scale,
+                                translationX = offsetX,
+                                translationY = offsetY
+                            )
                     )
-            )
+                }
+            } else if (mediaType == "video") {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    VideoPlayer(videoUrl = mediaUrl)
+                }
+            }
         }
     }
 }
@@ -94,6 +116,6 @@ fun DetailScreen(
 @Composable
 fun DetailScreenPreview() {
     GauravActStudioTheme {
-        DetailScreen(navController = rememberNavController(), imageUrl = "https://via.placeholder.com/150")
+        DetailScreen(navController = rememberNavController(), mediaUrl = "https://via.placeholder.com/150", mediaType = "image")
     }
 }
