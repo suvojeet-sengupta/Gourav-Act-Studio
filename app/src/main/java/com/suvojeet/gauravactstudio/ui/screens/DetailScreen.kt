@@ -31,6 +31,9 @@ import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 
 import com.suvojeet.gauravactstudio.ui.components.VideoPlayer // Import VideoPlayer
 import androidx.compose.foundation.layout.Column // Needed for VideoPlayer wrapper
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Arrangement
 import java.util.Locale // For capitalize()
 
 @OptIn(ExperimentalMaterial3Api::class)

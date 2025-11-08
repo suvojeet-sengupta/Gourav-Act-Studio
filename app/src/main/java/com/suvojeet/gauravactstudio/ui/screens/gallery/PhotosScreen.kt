@@ -74,7 +74,7 @@ fun PortfolioCard(item: PortfolioItem, navController: NavController) {
             .fillMaxWidth()
             .aspectRatio(1f)
             .clip(RoundedCornerShape(16.dp))
-            .clickable { navController.navigate(Screen.Detail.createRoute(item.imageUrl)) },
+            .clickable { navController.navigate(Screen.Detail.createRoute("image", item.imageUrl)) },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Box {

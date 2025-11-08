@@ -62,7 +62,7 @@ fun GalleryScreen(navController: NavController, modifier: Modifier = Modifier) {
 
         when (selectedTabIndex) {
             0 -> PhotosScreen(navController = navController)
-            1 -> VideosScreen()
+            1 -> VideosScreen(navController = navController)
         }
     }
 }

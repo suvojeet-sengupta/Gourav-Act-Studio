@@ -41,7 +41,7 @@ import com.suvojeet.gauravactstudio.ui.model.VideoItem // Import VideoItem
 fun VideosScreen(navController: NavController, modifier: Modifier = Modifier) {
     val videoItems = listOf(
         VideoItem(
-            title = stringResource(R.R.string.service_business_promotion_shoots_title),
+            title = stringResource(R.string.service_business_promotion_shoots_title),
             thumbnailUrl = "https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg", // Placeholder thumbnail, replace with actual
             videoUrl = "https://drive.google.com/uc?export=download&id=1Jg8eOA0AgvjOdyzAKsiQExI0PZBBgtbq"
         )
