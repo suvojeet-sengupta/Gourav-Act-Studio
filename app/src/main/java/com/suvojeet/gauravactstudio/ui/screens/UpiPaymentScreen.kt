@@ -16,6 +16,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Payment
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import kotlinx.coroutines.launch
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -47,6 +50,45 @@ fun UpiPaymentScreen(navController: NavController) {
     val upiId = "9354654066@ptaxis"
     val payeeName = "Gourav Act Studio"
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    var showSuccessSnackbar by remember { mutableStateOf(false) }
+    var showFailureSnackbar by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope() // For launching snackbar coroutine
+
+    val paymentResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        // This callback is executed when the user returns from the UPI app
+        // Note: UPI apps don't always return a clear success/failure code via ActivityResult.
+        // Often, you'd need to rely on backend reconciliation for definitive payment status.
+        // For a client-side confirmation, we'll assume success if the activity was launched
+        // and the user returned, or check for specific data if available.
+        // A more robust solution would involve checking the data returned by the UPI app
+        // or a backend system. For this example, we'll show a generic success/failure.
+
+        // Check if the result contains any data indicating success/failure
+        val data = result.data
+        val response = data?.getStringExtra("response")
+        if (response != null) {
+            // Parse the response string to determine status
+            val status = response.split("&").associate {
+                val parts = it.split("=")
+                parts[0] to parts.getOrElse(1) { "" }
+            }["Status"]
+
+            if (status == "SUCCESS") {
+                showSuccessSnackbar = true
+            } else {
+                showFailureSnackbar = true
+            }
+        } else {
+            // If no response data, assume a general outcome or prompt user to check status
+            // For simplicity, let's assume a general success if the user returned.
+            // In a real app, this would be more sophisticated.
+            showSuccessSnackbar = true // Or handle as a pending/unknown state
+        }
+    }
+
     val upiApps = listOf(
         UpiApp("Google Pay", "com.google.android.apps.nbu.paisa.user", Color(0xFF4285F4)),
         UpiApp("PhonePe", "com.phonepe.app", Color(0xFF5F259F)),
@@ -66,9 +108,35 @@ fun UpiPaymentScreen(navController: NavController) {
         label = "icon_scale"
     )
 
+        LaunchedEffect(showSuccessSnackbar) {
+        if (showSuccessSnackbar) {
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Payment Successful!",
+                    actionLabel = "Dismiss",
+                    duration = SnackbarDuration.Long
+                )
+                showSuccessSnackbar = false
+            }
+        }
+    }
+
+    LaunchedEffect(showFailureSnackbar) {
+        if (showFailureSnackbar) {
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Payment Failed or Cancelled.",
+                    actionLabel = "Dismiss",
+                    duration = SnackbarDuration.Long
+                )
+                showFailureSnackbar = false
+            }
+        }
+    }
+
     Scaffold(
-                // topBar removed
-    ) { paddingValues ->
+            snackbarHost = { SnackbarHost(snackbarHostState) }, // Add this line
+            // topBar removed    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -281,9 +349,16 @@ fun UpiPaymentScreen(navController: NavController) {
                                 }
 
                                 try {
-                                    context.startActivity(intent)
+                                    paymentResultLauncher.launch(intent) // Use the launcher
                                 } catch (e: Exception) {
                                     println("Error launching UPI app: ${e.message}")
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = "Error launching UPI app: ${e.message}",
+                                            actionLabel = "Dismiss",
+                                            duration = SnackbarDuration.Long
+                                        )
+                                    }
                                 }
                             }
                         },
