@@ -38,7 +38,8 @@ data class Service(
     val title: String,
     val description: String,
     val icon: ImageVector,
-    val gradient: List<Color> = listOf(Color(0xFF6366F1), Color(0xFF8B5CF6))
+    val gradient: List<Color> = listOf(Color(0xFF6366F1), Color(0xFF8B5CF6)),
+    val isHighlighted: Boolean = false // New property
 )
 
  @Composable
@@ -108,7 +109,8 @@ fun ServicesScreen() {
             stringResource(R.string.service_business_promotion_shoots_title),
             stringResource(R.string.service_business_promotion_shoots_description),
             Icons.Filled.Store,
-            listOf(Color(0xFF4CAF50), Color(0xFF8BC34A))
+            listOf(Color(0xFF4CAF50), Color(0xFF8BC34A)),
+            isHighlighted = true // Highlight this service
         )
     )
     val gridState = rememberLazyGridState()
@@ -186,10 +188,30 @@ fun ServiceCard(service: Service) {
         animationSpec = tween(100)
     )
 
+    val infiniteTransition = rememberInfiniteTransition(label = "highlight_animation")
+    val animatedBorderWidth by infiniteTransition.animateFloat(
+        initialValue = 2.dp.value,
+        targetValue = if (service.isHighlighted) 4.dp.value else 2.dp.value,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "highlight_border_width"
+    )
+
+    val borderModifier = if (service.isHighlighted) {
+        Modifier.border(
+            width = animatedBorderWidth.dp,
+            brush = Brush.linearGradient(service.gradient),
+            shape = RoundedCornerShape(20.dp)
+        )
+    } else Modifier
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .scale(scale),
+            .scale(scale)
+            .then(borderModifier), // Apply border modifier here
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(
