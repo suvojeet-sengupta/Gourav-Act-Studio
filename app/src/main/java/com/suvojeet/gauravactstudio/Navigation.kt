@@ -18,6 +18,8 @@ import com.suvojeet.gauravactstudio.ui.screens.SettingsScreen
 import com.suvojeet.gauravactstudio.util.decodeURL
 import com.suvojeet.gauravactstudio.util.encodeURL
 
+import com.suvojeet.gauravactstudio.ui.screens.UpiPaymentScreen
+
 sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     object Home : Screen("home", R.string.home_screen)
     object Services : Screen("services", R.string.services_screen)
@@ -28,6 +30,7 @@ sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     object Detail : Screen("detail/{mediaType}/{mediaUrl}") {
         fun createRoute(mediaType: String, mediaUrl: String) = "detail/$mediaType/${mediaUrl.encodeURL()}"
     }
+    object UpiPayment : Screen("upi_payment")
 }
 
 @Composable
@@ -43,7 +46,7 @@ fun AppNavHost(
             ServicesScreen()
         }
         composable(Screen.Pricing.route) {
-            PricingScreen()
+            PricingScreen(navController = navController)
         }
         composable(Screen.Gallery.route) {
             GalleryScreen(navController = navController)
@@ -67,6 +70,8 @@ fun AppNavHost(
                 DetailScreen(navController = navController, mediaType = mediaType, mediaUrl = mediaUrl.decodeURL())
             }
         }
-
+        composable(Screen.UpiPayment.route) {
+            UpiPaymentScreen(navController = navController)
+        }
     }
 }

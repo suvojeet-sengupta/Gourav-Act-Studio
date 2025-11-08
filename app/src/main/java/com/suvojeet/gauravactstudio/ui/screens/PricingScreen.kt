@@ -56,6 +56,7 @@ data class PricePackage(
 
  @Composable
 fun PricingScreen(
+    navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: PricingViewModel = viewModel()
 ) {
@@ -211,6 +212,11 @@ fun PricingScreen(
                                 textAlign = TextAlign.Center
                             )
                         }
+import androidx.navigation.NavController
+import com.suvojeet.gauravactstudio.Screen // Import Screen for navigation
+
+// ... existing code ...
+
                         Spacer(modifier = Modifier.height(16.dp)) // Added spacer
                         // Toggle Button
                         Button(
@@ -230,6 +236,28 @@ fun PricingScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = if (showCustomBuilder) "View Predefined Packages" else "Build Your Own Package",
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(12.dp)) // Spacer between buttons
+                        // Pay via UPI Button
+                        Button(
+                            onClick = { navController.navigate(Screen.UpiPayment.route) },
+                            modifier = Modifier.fillMaxWidth(0.8f),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Payment,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "Pay via UPI",
                                 fontWeight = FontWeight.SemiBold
                             )
                         }
