@@ -72,7 +72,8 @@ fun UpiPaymentScreen(navController: NavController) {
                 title = { 
                     Text(
                         "UPI Payment",
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleLarge
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
