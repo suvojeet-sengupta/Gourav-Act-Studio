@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import androidx.compose.material3.OutlinedTextFieldDefaults
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,7 +104,7 @@ fun UpiPaymentScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-import androidx.compose.material3.OutlinedTextFieldDefaults // Added import
+
 
 // ... existing code ...
 
