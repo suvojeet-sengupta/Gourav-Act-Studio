@@ -204,19 +204,19 @@ fun AboutScreen(navController: NavController) {
                     var showFullScreenImage by remember { mutableStateOf(false) }
 
                     AsyncImage(
-                        model = "https://lh3.googleusercontent.com/pw/AP1GczM7cermp0wVG-gn5GUM_fFVqUx6ZL64ckbrJO8UA0mP8W6v4Y860-7EFFhXiwvsUZkV7TAOKiQ6IFd1xYSQfgb3_LbVifTeAyBi-PVELrr0zQmlE9kK1mNfDHbuqn3HEFjQeyK4o00yOBuU_iPbC4qwyw=w1081-h250-s-no-gm?authuser=0",
+                        model = R.drawable.studioposter,
                         contentDescription = "Gaurav Act Studio Banner",
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
                             .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
                             .clickable { showFullScreenImage = true },
-                        contentScale = ContentScale.Fit
+                        contentScale = ContentScale.Crop
                     )
 
                     if (showFullScreenImage) {
                         FullScreenImageDialog(
-                            imageUrl = "https://lh3.googleusercontent.com/pw/AP1GczM7cermp0wVG-gn5GUM_fFVqUx6ZL64ckbrJO8UA0mP8W6v4Y860-7EFFhXiwvsUZkV7TAOKiQ6IFd1xYSQfgb3_LbVifTeAyBi-PVELrr0zQmlE9kK1mNfDHbuqn3HEFjQeyK4o00yOBuU_iPbC4qwyw=w1081-h250-s-no-gm?authuser=0",
+                            imageResId = R.drawable.studioposter,
                             onDismiss = { showFullScreenImage = false }
                         )
                     }
@@ -746,7 +746,7 @@ fun SettingsButton(navController: NavController) {
 }
 
 @Composable
-fun FullScreenImageDialog(imageUrl: String, onDismiss: () -> Unit) {
+fun FullScreenImageDialog(imageResId: Int, onDismiss: () -> Unit) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -757,7 +757,7 @@ fun FullScreenImageDialog(imageUrl: String, onDismiss: () -> Unit) {
                 contentAlignment = Alignment.Center
             ) {
                 AsyncImage(
-                    model = imageUrl,
+                    model = imageResId,
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Fit
