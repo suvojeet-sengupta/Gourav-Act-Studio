@@ -536,71 +536,89 @@ fun UpiPaymentScreen(navController: NavController) {
 
                         Button(
 
-                            onClick = {
+                                                        onClick = {
 
-                                if (isEnabled) {
+                                                            if (isEnabled) {
 
-                                                                        val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
+                                                                // --- YEH RAHE NAYE CHANGES ---
 
-                                                                        val encodedPayeeName = URLEncoder.encode(payeeName, StandardCharsets.UTF_8.toString())
+                                                                val transactionId = "TID" + System.currentTimeMillis() // Unique ID banaya
 
-                                    
+                                                                val transactionNote = "Payment for service" // Ek note
 
-                                                                        // --- YEH RAHA CHANGE ---
+                            
 
-                                                                        // Amount ko proper decimal format mein convert karo (e.g., "1.00")
+                                                                val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
 
-                                                                        val amountDouble = amount.toDoubleOrNull() ?: 0.0
+                                                                val encodedPayeeName = URLEncoder.encode(payeeName, StandardCharsets.UTF_8.toString())
 
-                                                                        val formattedAmount = String.format("%.2f", amountDouble)
+                                                                
 
-                                                                        val encodedAmount = URLEncoder.encode(formattedAmount, StandardCharsets.UTF_8.toString())
+                                                                // Pichhla fix (Amount format)
 
-                                                                        // --- CHANGE ENDS ---
+                                                                val amountDouble = amount.toDoubleOrNull() ?: 0.0
 
-                                    
+                                                                val formattedAmount = String.format("%.2f", amountDouble)
 
-                                                                        val uri = Uri.parse("upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR")
+                                                                val encodedAmount = URLEncoder.encode(formattedAmount, StandardCharsets.UTF_8.toString())
 
-                                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                                                                
 
-    
+                                                                // Naye parameters encode kiye
 
-                                    selectedUpiApp?.packageName?.let { packageName ->
+                                                                val encodedTr = URLEncoder.encode(transactionId, StandardCharsets.UTF_8.toString())
 
-                                        intent.setPackage(packageName)
+                                                                val encodedTn = URLEncoder.encode(transactionNote, StandardCharsets.UTF_8.toString())
 
-                                    }
+                                                                // --- CHANGES END ---
 
-    
+                            
 
-                                    try {
+                                                                // URI mein sab kuch add kiya
 
-                                        paymentResultLauncher.launch(intent) // Use the launcher
+                                                                val uri = Uri.parse("upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR&tr=$encodedTr&tn=$encodedTn")
 
-                                    } catch (e: Exception) {
+                                                                
 
-                                        println("Error launching UPI app: ${e.message}")
+                                                                val intent = Intent(Intent.ACTION_VIEW, uri)
 
-                                        scope.launch {
+                            
 
-                                            snackbarHostState.showSnackbar(
+                                                                selectedUpiApp?.packageName?.let { packageName ->
 
-                                                message = "Error launching UPI app: ${e.message}",
+                                                                    intent.setPackage(packageName)
 
-                                                actionLabel = "Dismiss",
+                                                                }
 
-                                                duration = SnackbarDuration.Long
+                            
 
-                                            )
+                                                                try {
 
-                                        }
+                                                                    paymentResultLauncher.launch(intent) // Use the launcher
 
-                                    }
+                                                                } catch (e: Exception) {
 
-                                }
+                                                                    println("Error launching UPI app: ${e.message}")
 
-                            },
+                                                                    scope.launch {
+
+                                                                        snackbarHostState.showSnackbar(
+
+                                                                            message = "Error launching UPI app: ${e.message}",
+
+                                                                            actionLabel = "Dismiss",
+
+                                                                            duration = SnackbarDuration.Long
+
+                                                                        )
+
+                                                                    }
+
+                                                                }
+
+                                                            }
+
+                                                        },
 
                             modifier = Modifier
 
