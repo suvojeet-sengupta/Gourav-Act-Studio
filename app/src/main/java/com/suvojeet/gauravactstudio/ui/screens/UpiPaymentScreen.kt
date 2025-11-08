@@ -76,15 +76,15 @@ fun UpiPaymentScreen(navController: NavController) {
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF6200EA),
-                    titleContentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -97,9 +97,9 @@ fun UpiPaymentScreen(navController: NavController) {
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            Color(0xFFF5F5FF),
-                            Color(0xFFE8EAF6),
-                            Color(0xFFFCE4EC)
+                            Color(0xFFE0F7FA), // Light Cyan
+                            Color(0xFFFADADD), // Light Pink
+                            Color(0xFFFFF9C4)  // Light Yellow
                         )
                     )
                 )
@@ -112,7 +112,7 @@ fun UpiPaymentScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                item { Spacer(modifier = Modifier.height(8.dp)) }
+                // item { Spacer(modifier = Modifier.height(8.dp)) } // <-- YEH WALA SPACE REMOVE KAR DIYA HAI
 
                 // Animated Payment Icon
                 item {
@@ -123,8 +123,8 @@ fun UpiPaymentScreen(navController: NavController) {
                             .background(
                                 brush = Brush.radialGradient(
                                     colors = listOf(
-                                        Color(0xFF6200EA),
-                                        Color(0xFF3700B3)
+                                        MaterialTheme.colorScheme.primary,
+                                        MaterialTheme.colorScheme.primaryContainer
                                     )
                                 ),
                                 shape = CircleShape
@@ -140,7 +140,7 @@ fun UpiPaymentScreen(navController: NavController) {
                                     scaleX = iconScale
                                     scaleY = iconScale
                                 },
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -152,12 +152,12 @@ fun UpiPaymentScreen(navController: NavController) {
                             text = "Quick & Secure",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1A237E)
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = "UPI Payment",
                             style = MaterialTheme.typography.titleLarge,
-                            color = Color(0xFF5C6BC0)
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -201,10 +201,10 @@ fun UpiPaymentScreen(navController: NavController) {
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(16.dp),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = Color(0xFF6200EA),
-                                    unfocusedBorderColor = Color(0xFFBDBDBD),
-                                    focusedLabelColor = Color(0xFF6200EA),
-                                    cursorColor = Color(0xFF6200EA)
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                    cursorColor = MaterialTheme.colorScheme.primary
                                 ),
                                 textStyle = MaterialTheme.typography.headlineSmall.copy(
                                     fontWeight = FontWeight.Bold,
@@ -217,7 +217,7 @@ fun UpiPaymentScreen(navController: NavController) {
                                 Text(
                                     text = "Amount: ₹${amount}",
                                     style = MaterialTheme.typography.bodyLarge,
-                                    color = Color(0xFF4CAF50),
+                                    color = MaterialTheme.colorScheme.secondary, // Use secondary for accent
                                     fontWeight = FontWeight.Medium
                                 )
                             }
@@ -233,7 +233,7 @@ fun UpiPaymentScreen(navController: NavController) {
                             .shadow(8.dp, RoundedCornerShape(24.dp)),
                         shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.surface
                         )
                     ) {
                         Column(
@@ -243,7 +243,7 @@ fun UpiPaymentScreen(navController: NavController) {
                                 text = "Select Payment App",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF424242),
+                                color = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.padding(bottom = 16.dp)
                             )
 
@@ -269,7 +269,7 @@ fun UpiPaymentScreen(navController: NavController) {
                             .shadow(4.dp, RoundedCornerShape(16.dp)),
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFFF3E5F5)
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) // Themed light background
                         )
                     ) {
                         Column(
@@ -315,8 +315,8 @@ fun UpiPaymentScreen(navController: NavController) {
                             .shadow(if (isEnabled) 12.dp else 4.dp, RoundedCornerShape(32.dp)),
                         shape = RoundedCornerShape(32.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (isEnabled) Color(0xFF6200EA) else Color(0xFFBDBDBD),
-                            contentColor = Color.White
+                            containerColor = if (isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         ),
                         enabled = isEnabled
                     ) {
@@ -449,3 +449,4 @@ fun UpiPaymentScreenPreview() {
         UpiPaymentScreen(navController = rememberNavController())
     }
 }
+
