@@ -18,10 +18,9 @@ import com.suvojeet.gauravactstudio.ui.components.VideoPlayer // Import the new 
 
 @Composable
 fun VideosScreen(modifier: Modifier = Modifier) {
-    val businessPromotionVideoUrl = "https://drive.google.com/file/d/1Jg8eOA0AgvjOdyzAKsiQExI0PZBBgtbq/view?usp=drivesdk"
-    // Note: Google Drive links (especially 'view?usp=drivesdk') are generally not direct video streams.
-    // ExoPlayer requires a direct URL to the video file (e.g., an .mp4 file).
-    // If the video doesn't play, a direct MP4 or streaming URL would be needed.
+    val businessPromotionVideoUrl = "https://drive.google.com/uc?export=download&id=1Jg8eOA0AgvjOdyzAKsiQExI0PZBBgtbq"
+    // Note: This Google Drive link (`/uc?export=download`) is a direct download link and is more likely to work with ExoPlayer.
+    // If the video still doesn't play, ensure the file permissions on Google Drive allow public access.
 
     Column(
         modifier = modifier
