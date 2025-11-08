@@ -1,6 +1,7 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -126,6 +127,7 @@ fun ServicesScreen() {
                     )
                 )
             )
+            .animateContentSize() // Add this modifier
     ) {
         // Header Section
         AnimatedVisibility(
