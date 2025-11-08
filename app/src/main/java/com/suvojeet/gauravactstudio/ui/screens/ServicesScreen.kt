@@ -126,7 +126,7 @@ fun ServicesScreen() {
             tonalElevation = 0.dp
         ) {
             Column(
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -135,7 +135,7 @@ fun ServicesScreen() {
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = stringResource(R.string.services_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
