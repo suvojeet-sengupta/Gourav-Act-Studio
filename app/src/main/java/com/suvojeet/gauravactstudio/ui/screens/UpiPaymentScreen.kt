@@ -522,152 +522,347 @@ fun UpiPaymentScreen(navController: NavController) {
 
     
 
-                    // Pay Button
-
-                    item {
-
-                        val isEnabled = amount.isNotBlank() && 
-
-                                       amount.toDoubleOrNull() != null && 
-
-                                       selectedUpiApp != null
+                                        // Pay Button
 
     
 
-                        Button(
+                                        item {
 
-                                                        onClick = {
+    
 
-                                                            if (isEnabled) {
+                                            val isEnabled = amount.isNotBlank() && 
 
-                                                                // --- YEH RAHE NAYE CHANGES ---
+    
 
-                                                                val transactionId = "TID" + System.currentTimeMillis() // Unique ID banaya
+                                                           amount.toDoubleOrNull() != null && 
 
-                                                                val transactionNote = "Payment for service" // Ek note
+    
 
-                            
+                                                           selectedUpiApp != null
 
-                                                                val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
+    
 
-                                                                val encodedPayeeName = URLEncoder.encode(payeeName, StandardCharsets.UTF_8.toString())
+                        
 
-                                                                
+    
 
-                                                                // Pichhla fix (Amount format)
+                                            Button(
 
-                                                                val amountDouble = amount.toDoubleOrNull() ?: 0.0
+    
 
-                                                                val formattedAmount = String.format("%.2f", amountDouble)
+                                                onClick = {
 
-                                                                val encodedAmount = URLEncoder.encode(formattedAmount, StandardCharsets.UTF_8.toString())
+    
 
-                                                                
+                                                    if (isEnabled) {
 
-                                                                // Naye parameters encode kiye
+    
 
-                                                                val encodedTr = URLEncoder.encode(transactionId, StandardCharsets.UTF_8.toString())
+                                                        val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
 
-                                                                val encodedTn = URLEncoder.encode(transactionNote, StandardCharsets.UTF_8.toString())
+    
 
-                                                                // --- CHANGES END ---
+                                                        
 
-                            
+    
 
-                                                                // URI mein sab kuch add kiya
+                                                        // Amount fix (yeh hamesha rahega)
 
-                                                                // SAFER URI (bina Payee Name ke)
-                                    val uri = Uri.parse("upi://pay?pa=$encodedUpiId&am=$encodedAmount&cu=INR&tr=$encodedTr&tn=$encodedTn")
+    
 
-                                                                
+                                                        val amountDouble = amount.toDoubleOrNull() ?: 0.0
 
-                                                                val intent = Intent(Intent.ACTION_VIEW, uri)
+    
 
-                            
+                                                        val formattedAmount = String.format("%.2f", amountDouble)
 
-                                                                selectedUpiApp?.packageName?.let { packageName ->
+    
 
-                                                                    intent.setPackage(packageName)
+                                                        val encodedAmount = URLEncoder.encode(formattedAmount, StandardCharsets.UTF_8.toString())
 
-                                                                }
+    
 
-                            
+                    
 
-                                                                try {
+    
 
-                                                                    paymentResultLauncher.launch(intent) // Use the launcher
+                                                        // --- YEH HAI ASLI LOGIC ---
 
-                                                                } catch (e: Exception) {
+    
 
-                                                                    println("Error launching UPI app: ${e.message}")
+                                                        val intent = Intent(Intent.ACTION_VIEW)
 
-                                                                    scope.launch {
+    
 
-                                                                        snackbarHostState.showSnackbar(
+                                                        val appPackage = selectedUpiApp?.packageName
 
-                                                                            message = "Error launching UPI app: ${e.message}",
+    
 
-                                                                            actionLabel = "Dismiss",
+                    
 
-                                                                            duration = SnackbarDuration.Long
+    
 
-                                                                        )
+                                                        // Base URI (simple, jo sabko pasand hai)
 
-                                                                    }
+    
 
-                                                                }
+                                                        val baseUri = "upi://pay?pa=$encodedUpiId&am=$encodedAmount&cu=INR"
+
+    
+
+                                                        
+
+    
+
+                                                        val uriString: String
+
+    
+
+                    
+
+    
+
+                                                        if (appPackage == "com.phonepe.app") {
+
+    
+
+                                                            // PhonePe ke liye "Special" URI (tr aur tn ke saath)
+
+    
+
+                                                            val transactionId = "TID" + System.currentTimeMillis()
+
+    
+
+                                                            val transactionNote = "Payment for service"
+
+    
+
+                                                            val encodedTr = URLEncoder.encode(transactionId, StandardCharsets.UTF_8.toString())
+
+    
+
+                                                            val encodedTn = URLEncoder.encode(transactionNote, StandardCharsets.UTF_8.toString())
+
+    
+
+                                                            
+
+    
+
+                                                            uriString = "$baseUri&tr=$encodedTr&tn=$encodedTn" // PhonePe gets extras
+
+    
+
+                                                            
+
+    
+
+                                                        } else {
+
+    
+
+                                                            // Baaki sab apps (GPay, Paytm) ke liye Simple URI
+
+    
+
+                                                            uriString = baseUri // GPay gets the simple one
+
+    
+
+                                                        }
+
+    
+
+                                                        
+
+    
+
+                                                        intent.data = Uri.parse(uriString)
+
+    
+
+                                                        
+
+    
+
+                                                        // Package set karna zaroori hai
+
+    
+
+                                                        appPackage?.let {
+
+    
+
+                                                            intent.setPackage(it)
+
+    
+
+                                                        }
+
+    
+
+                                                        // --- LOGIC ENDS ---
+
+    
+
+                    
+
+    
+
+                                                        try {
+
+    
+
+                                                            paymentResultLauncher.launch(intent) // Use the launcher
+
+    
+
+                                                        } catch (e: Exception) {
+
+    
+
+                                                            println("Error launching UPI app: ${e.message}")
+
+    
+
+                                                            scope.launch {
+
+    
+
+                                                                snackbarHostState.showSnackbar(
+
+    
+
+                                                                    // Error message bhi better kar diya
+
+    
+
+                                                                    message = "Could not find the selected UPI app. Please try another.",
+
+    
+
+                                                                    actionLabel = "Dismiss",
+
+    
+
+                                                                    duration = SnackbarDuration.Long
+
+    
+
+                                                                )
+
+    
 
                                                             }
 
-                                                        },
+    
 
-                            modifier = Modifier
+                                                        }
 
-                                .fillMaxWidth()
+    
 
-                                .height(64.dp)
+                                                    }
 
-                                .shadow(if (isEnabled) 12.dp else 4.dp, RoundedCornerShape(32.dp)),
+    
 
-                            shape = RoundedCornerShape(32.dp),
+                                                },
 
-                            colors = ButtonDefaults.buttonColors(
+    
 
-                                containerColor = if (isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                                                modifier = Modifier
 
-                                contentColor = MaterialTheme.colorScheme.onPrimary
+    
 
-                            ),
+                                                    .fillMaxWidth()
 
-                            enabled = isEnabled
+    
 
-                        ) {
+                                                    .height(64.dp)
 
-                            Icon(
+    
 
-                                imageVector = Icons.Filled.Payment,
+                                                    .shadow(if (isEnabled) 12.dp else 4.dp, RoundedCornerShape(32.dp)),
 
-                                contentDescription = null,
+    
 
-                                modifier = Modifier.size(24.dp)
+                                                shape = RoundedCornerShape(32.dp),
 
-                            )
+    
 
-                            Spacer(modifier = Modifier.width(12.dp))
+                                                colors = ButtonDefaults.buttonColors(
 
-                            Text(
+    
 
-                                text = "Pay Now",
+                                                    containerColor = if (isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
 
-                                fontWeight = FontWeight.Bold,
+    
 
-                                style = MaterialTheme.typography.titleLarge
+                                                    contentColor = MaterialTheme.colorScheme.onPrimary
 
-                            )
+    
 
-                        }
+                                                ),
 
-                    }
+    
+
+                                                enabled = isEnabled
+
+    
+
+                                            ) {
+
+    
+
+                                                Icon(
+
+    
+
+                                                    imageVector = Icons.Filled.Payment,
+
+    
+
+                                                    contentDescription = null,
+
+    
+
+                                                    modifier = Modifier.size(24.dp)
+
+    
+
+                                                )
+
+    
+
+                                                Spacer(modifier = Modifier.width(12.dp))
+
+    
+
+                                                Text(
+
+    
+
+                                                    text = "Pay Now",
+
+    
+
+                                                    fontWeight = FontWeight.Bold,
+
+    
+
+                                                    style = MaterialTheme.typography.titleLarge
+
+    
+
+                                                )
+
+    
+
+                                            }
+
+    
+
+                                        }
 
     
 
