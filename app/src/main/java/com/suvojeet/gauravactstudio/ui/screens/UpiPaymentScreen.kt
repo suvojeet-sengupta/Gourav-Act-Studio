@@ -540,15 +540,27 @@ fun UpiPaymentScreen(navController: NavController) {
 
                                 if (isEnabled) {
 
-                                    val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
+                                                                        val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
 
-                                    val encodedPayeeName = URLEncoder.encode(payeeName, StandardCharsets.UTF_8.toString())
+                                                                        val encodedPayeeName = URLEncoder.encode(payeeName, StandardCharsets.UTF_8.toString())
 
-                                    val encodedAmount = URLEncoder.encode(amount, StandardCharsets.UTF_8.toString())
+                                    
 
-    
+                                                                        // --- YEH RAHA CHANGE ---
 
-                                    val uri = Uri.parse("upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR")
+                                                                        // Amount ko proper decimal format mein convert karo (e.g., "1.00")
+
+                                                                        val amountDouble = amount.toDoubleOrNull() ?: 0.0
+
+                                                                        val formattedAmount = String.format("%.2f", amountDouble)
+
+                                                                        val encodedAmount = URLEncoder.encode(formattedAmount, StandardCharsets.UTF_8.toString())
+
+                                                                        // --- CHANGE ENDS ---
+
+                                    
+
+                                                                        val uri = Uri.parse("upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR")
 
                                     val intent = Intent(Intent.ACTION_VIEW, uri)
 
