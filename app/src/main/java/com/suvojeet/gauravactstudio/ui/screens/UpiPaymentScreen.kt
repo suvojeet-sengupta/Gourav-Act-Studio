@@ -134,263 +134,519 @@ fun UpiPaymentScreen(navController: NavController) {
         }
     }
 
-    Scaffold(
-            snackbarHost = { SnackbarHost(snackbarHostState) }, // Add this line
-            // topBar removed    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFFE0F7FA), // Light Cyan
-                            Color(0xFFFADADD), // Light Pink
-                            Color(0xFFFFF9C4)  // Light Yellow
-                        )
-                    )
-                )
-        ) {
-            LazyColumn(
+        Scaffold(
+
+            snackbarHost = { SnackbarHost(snackbarHostState) }
+
+        ) { paddingValues ->
+
+            Box(
+
                 modifier = Modifier
+
                     .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+
+                    .background(
+
+                        brush = Brush.verticalGradient(
+
+                            colors = listOf(
+
+                                Color(0xFFE0F7FA), // Light Cyan
+
+                                Color(0xFFFADADD), // Light Pink
+
+                                Color(0xFFFFF9C4)  // Light Yellow
+
+                            )
+
+                        )
+
+                    )
+
             ) {
-                // item { Spacer(modifier = Modifier.height(8.dp)) } // <-- YEH WALA SPACE REMOVE KAR DIYA HAI
 
-                // Animated Payment Icon
-                item {
-                    Box(
-                        modifier = Modifier
-                            .size(100.dp)
-                            .shadow(12.dp, CircleShape)
-                            .background(
-                                brush = Brush.radialGradient(
-                                    colors = listOf(
-                                        MaterialTheme.colorScheme.primary,
-                                        MaterialTheme.colorScheme.primaryContainer
-                                    )
-                                ),
-                                shape = CircleShape
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Payment,
-                            contentDescription = "UPI Payment",
+                LazyColumn(
+
+                    modifier = Modifier
+
+                        .fillMaxSize()
+
+                        .padding(paddingValues)
+
+                        .padding(horizontal = 20.dp),
+
+                    horizontalAlignment = Alignment.CenterHorizontally,
+
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
+
+                ) {
+
+                    // item { Spacer(modifier = Modifier.height(8.dp)) } // <-- YEH WALA SPACE REMOVE KAR DIYA HAI
+
+    
+
+                    // Animated Payment Icon
+
+                    item {
+
+                        Box(
+
                             modifier = Modifier
-                                .size(50.dp)
-                                .graphicsLayer {
-                                    scaleX = iconScale
-                                    scaleY = iconScale
-                                },
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                }
 
-                // Title
-                item {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = "Quick & Secure",
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            text = "UPI Payment",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
+                                .size(100.dp)
 
-                // Amount Input Card
-                item {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .shadow(8.dp, RoundedCornerShape(24.dp)),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.White
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(24.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Enter Amount",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF424242)
-                            )
-                            
-                            Spacer(modifier = Modifier.height(16.dp))
+                                .shadow(12.dp, CircleShape)
 
-                            OutlinedTextField(
-                                value = amount,
-                                onValueChange = { newValue ->
-                                    if (newValue.all { it.isDigit() || it == '.' } && 
-                                        newValue.count { it == '.' } <= 1) {
-                                        amount = newValue
-                                    }
-                                },
-                                label = { Text("₹ Amount in INR") },
-                                placeholder = { Text("0.00") },
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                                singleLine = true,
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(16.dp),
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    focusedLabelColor = MaterialTheme.colorScheme.primary,
-                                    cursorColor = MaterialTheme.colorScheme.primary
-                                ),
-                                textStyle = MaterialTheme.typography.headlineSmall.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center
-                                )
-                            )
+                                .background(
 
-                            if (amount.isNotBlank() && amount.toDoubleOrNull() != null) {
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "Amount: ₹${amount}",
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.secondary, // Use secondary for accent
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-                        }
-                    }
-                }
+                                    brush = Brush.radialGradient(
 
-                // UPI App Selection
-                item {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .shadow(8.dp, RoundedCornerShape(24.dp)),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(20.dp)
-                        ) {
-                            Text(
-                                text = "Select Payment App",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.padding(bottom = 16.dp)
-                            )
+                                        colors = listOf(
 
-                            upiApps.forEach { app ->
-                                UpiAppItem(
-                                    app = app,
-                                    isSelected = selectedUpiApp == app,
-                                    onSelect = { selectedUpiApp = app }
-                                )
-                                if (app != upiApps.last()) {
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                }
-                            }
-                        }
-                    }
-                }
+                                            MaterialTheme.colorScheme.primary,
 
-                // Payment Info
-                item {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .shadow(4.dp, RoundedCornerShape(16.dp)),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) // Themed light background
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            PaymentInfoRow("Payee", payeeName)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            PaymentInfoRow("UPI ID", upiId)
-                        }
-                    }
-                }
+                                            MaterialTheme.colorScheme.primaryContainer
 
-                // Pay Button
-                item {
-                    val isEnabled = amount.isNotBlank() && 
-                                   amount.toDoubleOrNull() != null && 
-                                   selectedUpiApp != null
-
-                    Button(
-                        onClick = {
-                            if (isEnabled) {
-                                val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
-                                val encodedPayeeName = URLEncoder.encode(payeeName, StandardCharsets.UTF_8.toString())
-                                val encodedAmount = URLEncoder.encode(amount, StandardCharsets.UTF_8.toString())
-
-                                val uri = Uri.parse("upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR")
-                                val intent = Intent(Intent.ACTION_VIEW, uri)
-
-                                selectedUpiApp?.packageName?.let { packageName ->
-                                    intent.setPackage(packageName)
-                                }
-
-                                try {
-                                    paymentResultLauncher.launch(intent) // Use the launcher
-                                } catch (e: Exception) {
-                                    println("Error launching UPI app: ${e.message}")
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            message = "Error launching UPI app: ${e.message}",
-                                            actionLabel = "Dismiss",
-                                            duration = SnackbarDuration.Long
                                         )
-                                    }
-                                }
-                            }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(64.dp)
-                            .shadow(if (isEnabled) 12.dp else 4.dp, RoundedCornerShape(32.dp)),
-                        shape = RoundedCornerShape(32.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = if (isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        ),
-                        enabled = isEnabled
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Payment,
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            text = "Pay Now",
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleLarge
-                        )
+
+                                    ),
+
+                                    shape = CircleShape
+
+                                ),
+
+                            contentAlignment = Alignment.Center
+
+                        ) {
+
+                            Icon(
+
+                                imageVector = Icons.Filled.Payment,
+
+                                contentDescription = "UPI Payment",
+
+                                modifier = Modifier
+
+                                    .size(50.dp)
+
+                                    .graphicsLayer {
+
+                                        scaleX = iconScale
+
+                                        scaleY = iconScale
+
+                                    },
+
+                                tint = MaterialTheme.colorScheme.onPrimary
+
+                            )
+
+                        }
+
                     }
+
+    
+
+                    // Title
+
+                    item {
+
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                            Text(
+
+                                text = "Quick & Secure",
+
+                                style = MaterialTheme.typography.headlineMedium,
+
+                                fontWeight = FontWeight.Bold,
+
+                                color = MaterialTheme.colorScheme.onSurface
+
+                            )
+
+                            Text(
+
+                                text = "UPI Payment",
+
+                                style = MaterialTheme.typography.titleLarge,
+
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+
+                            )
+
+                        }
+
+                    }
+
+    
+
+                    // Amount Input Card
+
+                    item {
+
+                        Card(
+
+                            modifier = Modifier
+
+                                .fillMaxWidth()
+
+                                .shadow(8.dp, RoundedCornerShape(24.dp)),
+
+                            shape = RoundedCornerShape(24.dp),
+
+                            colors = CardDefaults.cardColors(
+
+                                containerColor = Color.White
+
+                            )
+
+                        ) {
+
+                            Column(
+
+                                modifier = Modifier.padding(24.dp),
+
+                                horizontalAlignment = Alignment.CenterHorizontally
+
+                            ) {
+
+                                Text(
+
+                                    text = "Enter Amount",
+
+                                    style = MaterialTheme.typography.titleMedium,
+
+                                    fontWeight = FontWeight.SemiBold,
+
+                                    color = Color(0xFF424242)
+
+                                )
+
+                                
+
+                                Spacer(modifier = Modifier.height(16.dp))
+
+    
+
+                                OutlinedTextField(
+
+                                    value = amount,
+
+                                    onValueChange = { newValue ->
+
+                                        if (newValue.all { it.isDigit() || it == '.' } && 
+
+                                            newValue.count { it == '.' } <= 1) {
+
+                                            amount = newValue
+
+                                        }
+
+                                    },
+
+                                    label = { Text("₹ Amount in INR") },
+
+                                    placeholder = { Text("0.00") },
+
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+
+                                    singleLine = true,
+
+                                    modifier = Modifier.fillMaxWidth(),
+
+                                    shape = RoundedCornerShape(16.dp),
+
+                                    colors = OutlinedTextFieldDefaults.colors(
+
+                                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+
+                                        unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+
+                                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+
+                                        cursorColor = MaterialTheme.colorScheme.primary
+
+                                    ),
+
+                                    textStyle = MaterialTheme.typography.headlineSmall.copy(
+
+                                        fontWeight = FontWeight.Bold,
+
+                                        textAlign = TextAlign.Center
+
+                                    )
+
+                                )
+
+    
+
+                                if (amount.isNotBlank() && amount.toDoubleOrNull() != null) {
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text(
+
+                                        text = "Amount: ₹${amount}",
+
+                                        style = MaterialTheme.typography.bodyLarge,
+
+                                        color = MaterialTheme.colorScheme.secondary, // Use secondary for accent
+
+                                        fontWeight = FontWeight.Medium
+
+                                    )
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+    
+
+                    // UPI App Selection
+
+                    item {
+
+                        Card(
+
+                            modifier = Modifier
+
+                                .fillMaxWidth()
+
+                                .shadow(8.dp, RoundedCornerShape(24.dp)),
+
+                            shape = RoundedCornerShape(24.dp),
+
+                            colors = CardDefaults.cardColors(
+
+                                containerColor = MaterialTheme.colorScheme.surface
+
+                            )
+
+                        ) {
+
+                            Column(
+
+                                modifier = Modifier.padding(20.dp)
+
+                            ) {
+
+                                Text(
+
+                                    text = "Select Payment App",
+
+                                    style = MaterialTheme.typography.titleMedium,
+
+                                    fontWeight = FontWeight.SemiBold,
+
+                                    color = MaterialTheme.colorScheme.onSurface,
+
+                                    modifier = Modifier.padding(bottom = 16.dp)
+
+                                )
+
+    
+
+                                upiApps.forEach { app ->
+
+                                    UpiAppItem(
+
+                                        app = app,
+
+                                        isSelected = selectedUpiApp == app,
+
+                                        onSelect = { selectedUpiApp = app }
+
+                                    )
+
+                                    if (app != upiApps.last()) {
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+    
+
+                    // Payment Info
+
+                    item {
+
+                        Card(
+
+                            modifier = Modifier
+
+                                .fillMaxWidth()
+
+                                .shadow(4.dp, RoundedCornerShape(16.dp)),
+
+                            shape = RoundedCornerShape(16.dp),
+
+                            colors = CardDefaults.cardColors(
+
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) // Themed light background
+
+                            )
+
+                        ) {
+
+                            Column(
+
+                                modifier = Modifier.padding(16.dp)
+
+                            ) {
+
+                                PaymentInfoRow("Payee", payeeName)
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                PaymentInfoRow("UPI ID", upiId)
+
+                            }
+
+                        }
+
+                    }
+
+    
+
+                    // Pay Button
+
+                    item {
+
+                        val isEnabled = amount.isNotBlank() && 
+
+                                       amount.toDoubleOrNull() != null && 
+
+                                       selectedUpiApp != null
+
+    
+
+                        Button(
+
+                            onClick = {
+
+                                if (isEnabled) {
+
+                                    val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
+
+                                    val encodedPayeeName = URLEncoder.encode(payeeName, StandardCharsets.UTF_8.toString())
+
+                                    val encodedAmount = URLEncoder.encode(amount, StandardCharsets.UTF_8.toString())
+
+    
+
+                                    val uri = Uri.parse("upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR")
+
+                                    val intent = Intent(Intent.ACTION_VIEW, uri)
+
+    
+
+                                    selectedUpiApp?.packageName?.let { packageName ->
+
+                                        intent.setPackage(packageName)
+
+                                    }
+
+    
+
+                                    try {
+
+                                        paymentResultLauncher.launch(intent) // Use the launcher
+
+                                    } catch (e: Exception) {
+
+                                        println("Error launching UPI app: ${e.message}")
+
+                                        scope.launch {
+
+                                            snackbarHostState.showSnackbar(
+
+                                                message = "Error launching UPI app: ${e.message}",
+
+                                                actionLabel = "Dismiss",
+
+                                                duration = SnackbarDuration.Long
+
+                                            )
+
+                                        }
+
+                                    }
+
+                                }
+
+                            },
+
+                            modifier = Modifier
+
+                                .fillMaxWidth()
+
+                                .height(64.dp)
+
+                                .shadow(if (isEnabled) 12.dp else 4.dp, RoundedCornerShape(32.dp)),
+
+                            shape = RoundedCornerShape(32.dp),
+
+                            colors = ButtonDefaults.buttonColors(
+
+                                containerColor = if (isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+
+                            ),
+
+                            enabled = isEnabled
+
+                        ) {
+
+                            Icon(
+
+                                imageVector = Icons.Filled.Payment,
+
+                                contentDescription = null,
+
+                                modifier = Modifier.size(24.dp)
+
+                            )
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            Text(
+
+                                text = "Pay Now",
+
+                                fontWeight = FontWeight.Bold,
+
+                                style = MaterialTheme.typography.titleLarge
+
+                            )
+
+                        }
+
+                    }
+
+    
+
+                    item { Spacer(modifier = Modifier.height(16.dp)) }
+
                 }
 
-                item { Spacer(modifier = Modifier.height(16.dp)) }
             }
+
         }
-    }
 }
 
 @Composable
