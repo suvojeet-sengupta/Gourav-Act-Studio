@@ -134,11 +134,20 @@ fun SettingsHeader(navController: NavController, isVisible: Boolean) {
             .padding(horizontal = 20.dp)
     ) {
         AnimatedContent(isVisible) {
+            // Back Button
             IconButton(
                 onClick = { navController.popBackStack() },
-                modifier = Modifier.align(Alignment.CenterStart)
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .size(48.dp) // Give it a fixed size
+                    .clip(CircleShape) // Make it circular
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)) // Subtle background
             ) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onSurface // Darker tint for contrast
+                )
             }
         }
         AnimatedContent(isVisible, delay = 50) {
@@ -146,7 +155,9 @@ fun SettingsHeader(navController: NavController, isVisible: Boolean) {
                 text = stringResource(id = R.string.settings_title),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(start = 32.dp) // Move text slightly to the right
             )
         }
     }
