@@ -117,6 +117,52 @@ val Icons.Filled.YouTube: ImageVector
     }
 private var _youTube: ImageVector? = null
 
+val Icons.Filled.WhatsApp: ImageVector
+    get() {
+        if (_whatsApp != null) {
+            return _whatsApp!!
+        }
+        _whatsApp = materialIcon(name = "Filled.WhatsApp") {
+            path(fill = SolidColor(Color.Black)) {
+                moveTo(12.0f, 2.0f)
+                curveTo(6.48f, 2.0f, 2.0f, 6.48f, 2.0f, 12.0f)
+                curveToRelative(0.0f, 1.75f, 0.45f, 3.4f, 1.26f, 4.86f)
+                lineTo(2.0f, 22.0f)
+                lineToRelative(5.26f, -1.24f)
+                curveTo(8.6f, 21.55f, 10.25f, 22.0f, 12.0f, 22.0f)
+                curveToRelative(5.52f, 0.0f, 10.0f, -4.48f, 10.0f, -10.0f)
+                reflectiveCurveTo(17.52f, 2.0f, 12.0f, 2.0f)
+                close()
+                moveTo(17.0f, 15.88f)
+                curveToRelative(-0.25f, 0.13f, -1.47f, 0.72f, -1.7f, 0.8f)
+                curveToRelative(-0.23f, 0.08f, -0.39f, 0.13f, -0.56f, 0.3f)
+                curveToRelative(-0.17f, 0.17f, -0.68f, 0.85f, -0.83f, 1.02f)
+                curveToRelative(-0.15f, 0.17f, -0.3f, 0.18f, -0.56f, 0.06f)
+                curveToRelative(-0.25f, -0.12f, -1.07f, -0.39f, -2.04f, -1.26f)
+                curveToRelative(-0.76f, -0.66f, -1.27f, -1.47f, -1.42f, -1.72f)
+                curveToRelative(-0.15f, -0.25f, -0.02f, -0.38f, 0.1f, -0.5f)
+                curveToRelative(0.11f, -0.11f, 0.25f, -0.28f, 0.38f, -0.42f)
+                curveToRelative(0.12f, -0.14f, 0.17f, -0.25f, 0.25f, -0.41f)
+                curveToRelative(0.08f, -0.17f, 0.04f, -0.31f, -0.02f, -0.43f)
+                curveToRelative(-0.06f, -0.12f, -0.56f, -1.34f, -0.76f, -1.84f)
+                curveToRelative(-0.2f, -0.48f, -0.41f, -0.42f, -0.56f, -0.42f)
+                curveToRelative(-0.14f, 0.0f, -0.3f, 0.0f, -0.47f, 0.0f)
+                curveToRelative(-0.17f, 0.0f, -0.44f, 0.06f, -0.68f, 0.31f)
+                curveToRelative(-0.24f, 0.25f, -0.93f, 0.9f, -0.93f, 2.2f)
+                curveToRelative(0.0f, 1.3f, 0.95f, 2.55f, 1.08f, 2.72f)
+                curveToRelative(0.13f, 0.17f, 1.87f, 2.93f, 4.53f, 4.0f)
+                curveToRelative(0.64f, 0.26f, 1.14f, 0.41f, 1.54f, 0.52f)
+                curveToRelative(0.6f, 0.17f, 1.15f, 0.14f, 1.58f, 0.09f)
+                curveToRelative(0.48f, -0.06f, 1.47f, -0.6f, 1.67f, -1.18f)
+                curveToRelative(0.2f, -0.58f, 0.2f, -1.08f, 0.14f, -1.18f)
+                curveToRelative(-0.06f, -0.1f, -0.22f, -0.16f, -0.47f, -0.28f)
+                close()
+            }
+        }
+        return _whatsApp!!
+    }
+private var _whatsApp: ImageVector? = null
+
 @Composable
 fun AboutScreen(navController: NavController) {
     val context = LocalContext.current
@@ -440,6 +486,21 @@ fun ContactCard(context: Context, onEmailClick: () -> Unit, phoneNumbers: List<S
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
+
+            ContactItem(
+                icon = Icons.Filled.WhatsApp,
+                title = "WhatsApp",
+                info = "+91 93546 54066",
+                gradient = listOf(Color(0xFF25D366), Color(0xFF128C7E)),
+                onClick = {
+                    val phoneNumber = "+919354654066"
+                    val message = "I get your contact information from your app. I have some query."
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse("https://api.whatsapp.com/send?phone=$phoneNumber&text=${Uri.encode(message)}")
+                    }
+                    context.startActivity(intent)
+                }
+            )
         }
     }
 }
@@ -558,6 +619,7 @@ fun FeaturesCard() {
 
 @Composable
 fun SocialMediaCard() {
+    val context = LocalContext.current
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -585,19 +647,41 @@ fun SocialMediaCard() {
                     icon = Icons.Filled.Facebook,
                     label = "Facebook",
                     gradient = listOf(Color(0xFF1877F2), Color(0xFF42B0FF)),
-                    url = "https://www.facebook.com/share/17e6BCSVKr/"
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/share/17e6BCSVKr/"))
+                        context.startActivity(intent)
+                    }
                 )
                 SocialButton(
                     icon = Icons.Filled.Instagram,
                     label = "Instagram",
                     gradient = listOf(Color(0xFFE4405F), Color(0xFFFCAF45)),
-                    url = "https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=xz8exwz"
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=xz8exwz"))
+                        context.startActivity(intent)
+                    }
                 )
                 SocialButton(
                     icon = Icons.Filled.YouTube,
                     label = "YouTube",
                     gradient = listOf(Color(0xFFFF0000), Color(0xFFFF6B6B)),
-                    url = "https://youtube.com/@gauravact?si=_RPRL0fM5-UZr5YN"
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://youtube.com/@gauravact?si=_RPRL0fM5-UZr5YN"))
+                        context.startActivity(intent)
+                    }
+                )
+                SocialButton(
+                    icon = Icons.Filled.WhatsApp,
+                    label = "WhatsApp",
+                    gradient = listOf(Color(0xFF25D366), Color(0xFF128C7E)),
+                    onClick = {
+                        val phoneNumber = "+919354654066"
+                        val message = "I get your contact information from your app. I have some query."
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse("https://api.whatsapp.com/send?phone=$phoneNumber&text=${Uri.encode(message)}")
+                        }
+                        context.startActivity(intent)
+                    }
                 )
             }
         }
@@ -605,14 +689,10 @@ fun SocialMediaCard() {
 }
 
 @Composable
-fun SocialButton(icon: ImageVector, label: String, gradient: List<Color>, url: String) {
-    val context = LocalContext.current
+fun SocialButton(icon: ImageVector, label: String, gradient: List<Color>, onClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            context.startActivity(intent)
-        }
+        modifier = Modifier.clickable { onClick() }
     ) {
         Box(
             modifier = Modifier
