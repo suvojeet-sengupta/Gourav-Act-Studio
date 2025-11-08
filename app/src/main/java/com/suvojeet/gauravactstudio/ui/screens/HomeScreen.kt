@@ -49,20 +49,19 @@ import androidx.compose.ui.layout.ContentScale
 
 @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
-    var isVisible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        delay(20)
-        isVisible = true
-    }
-
     val scrollState = rememberScrollState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    var isVisible by remember { mutableStateOf(false) }
+
     LaunchedEffect(currentRoute) {
         if (currentRoute == Screen.Home.route) {
-            scrollState.scrollTo(0)
+            delay(20) // Keep a small delay for animation
+            isVisible = true
+            scrollState.scrollTo(0) // Also scroll to top when Home is active
+        } else {
+            isVisible = false // Reset when navigating away
         }
     }
 
