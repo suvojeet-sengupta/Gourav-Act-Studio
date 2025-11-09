@@ -484,15 +484,9 @@ fun UpiPaymentScreen(navController: NavController) {
                                 val amountDouble = amount.toDoubleOrNull() ?: 0.0
                                 val formattedAmount = String.format("%.2f", amountDouble)
                                 val encodedAmount = URLEncoder.encode(formattedAmount, StandardCharsets.UTF_8.toString())
-                                // Merchant payments need ALL details
-                                val encodedPayeeName = URLEncoder.encode(payeeName, StandardCharsets.UTF_8.toString())
-                                val transactionId = "TID" + System.currentTimeMillis()
-                                val encodedTr = URLEncoder.encode(transactionId, StandardCharsets.UTF_8.toString())
-                                val transactionNote = "Payment to GauravActStudio" // Ya kuch bhi
-                                val encodedTn = URLEncoder.encode(transactionNote, StandardCharsets.UTF_8.toString())
-
-                                // Building the COMPLETE Merchant UPI String
-                                val uriString = "upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR&tn=$encodedTn"
+                                // We are now sending ONLY the ID and Amount.
+                                // Forcing the UPI app to fetch the Payee Name (pn) itself.
+                                val uriString = "upi://pay?pa=$encodedUpiId&am=$encodedAmount&cu=INR"
                                 
                                 val intent = Intent(Intent.ACTION_VIEW)
                                 val appPackage = selectedUpiApp?.packageName
