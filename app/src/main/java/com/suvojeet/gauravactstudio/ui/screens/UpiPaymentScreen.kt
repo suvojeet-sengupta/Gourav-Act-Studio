@@ -492,7 +492,7 @@ fun UpiPaymentScreen(navController: NavController) {
                                 val encodedTn = URLEncoder.encode(transactionNote, StandardCharsets.UTF_8.toString())
 
                                 // Building the COMPLETE Merchant UPI String
-                                val uriString = "upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR&tr=$encodedTr&tn=$encodedTn"
+                                val uriString = "upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR&tn=$encodedTn"
                                 
                                 val intent = Intent(Intent.ACTION_VIEW)
                                 val appPackage = selectedUpiApp?.packageName
