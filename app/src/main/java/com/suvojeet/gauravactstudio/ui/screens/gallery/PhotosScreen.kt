@@ -54,6 +54,9 @@ fun PhotosScreen(navController: NavController, modifier: Modifier = Modifier) {
         PortfolioItem("Baby Shoot", "https://lh3.googleusercontent.com/pw/AP1GczN9QPJB3fIn8pGGAyjtI-wfSAAA2dMoQsnOng0qcTAqdwy30k0LzU2ySQWneD1D2vNb5oIPWQuE84sKhqJ9yUWlaalwi1NTaV3-Pp-mO7DpZ04-vK2uolMHrvFPuqbCyj6AIm53z5LaFvxRHZX3rq11Gg=w683-h1024-s-no-gm?authuser=0"),
         PortfolioItem("Product Photography", "https://lh3.googleusercontent.com/pw/AP1GczN4OHR2tGmJ7T1ADMSyYqbAly10ZmIhnhkJ4vwYlnYiUq8DQhPsbCesTQus6SiEVvfg8Puk8MydH-qVxJTqO7VpxvxoIxbpWTEQDlDhUnCxfd9FbSomFN3BADuboxRbdoGzXNr6UZFFKsEeYyWJ2lgcwA=w736-h919-s-no-gm?authuser=0")
     )
+    val categories = portfolioItems.groupBy { it.title }.map { (title, items) ->
+        PortfolioItem(title, items.first().imageUrl)
+    }
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 160.dp),
@@ -61,20 +64,26 @@ fun PhotosScreen(navController: NavController, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier.padding(top = 16.dp)
     ) {
-        items(portfolioItems) { item ->
-            PortfolioCard(item = item, navController = navController)
+        items(categories) { category ->
+            PortfolioCard(item = category, navController = navController, isCategory = true)
         }
     }
 }
 
 @Composable
-fun PortfolioCard(item: PortfolioItem, navController: NavController) {
+fun PortfolioCard(item: PortfolioItem, navController: NavController, isCategory: Boolean = false) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
             .clip(RoundedCornerShape(16.dp))
-            .clickable { navController.navigate(Screen.Detail.createRoute("image", item.imageUrl)) },
+            .clickable {
+                if (isCategory) {
+                    navController.navigate("category_photos/${item.title}")
+                } else {
+                    navController.navigate(Screen.Detail.createRoute("image", item.imageUrl))
+                }
+            },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Box {

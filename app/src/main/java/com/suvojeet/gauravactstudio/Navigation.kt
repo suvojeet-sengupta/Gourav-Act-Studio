@@ -18,6 +18,7 @@ import com.suvojeet.gauravactstudio.ui.screens.SettingsScreen
 import com.suvojeet.gauravactstudio.util.decodeURL
 import com.suvojeet.gauravactstudio.util.encodeURL
 
+import com.suvojeet.gauravactstudio.ui.screens.gallery.CategoryPhotosScreen
 import com.suvojeet.gauravactstudio.ui.screens.UpiPaymentScreen
 
 sealed class Screen(val route: String, @StringRes val title: Int? = null) {
@@ -29,6 +30,9 @@ sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     object Settings : Screen("settings", R.string.settings_title)
     object Detail : Screen("detail/{mediaType}?mediaUrl={mediaUrl}") {
         fun createRoute(mediaType: String, mediaUrl: String) = "detail/$mediaType?mediaUrl=${mediaUrl.encodeURL()}"
+    }
+    object CategoryPhotos : Screen("category_photos/{category}") {
+        fun createRoute(category: String) = "category_photos/$category"
     }
     object UpiPayment : Screen("upi_payment")
 }
@@ -68,6 +72,17 @@ fun AppNavHost(
             val mediaUrl = backStackEntry.arguments?.getString("mediaUrl")
             if (mediaType != null && mediaUrl != null) {
                 DetailScreen(navController = navController, mediaType = mediaType, mediaUrl = mediaUrl.decodeURL())
+            }
+        }
+        composable(
+            route = Screen.CategoryPhotos.route,
+            arguments = listOf(
+                navArgument("category") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val category = backStackEntry.arguments?.getString("category")
+            if (category != null) {
+                CategoryPhotosScreen(navController = navController, category = category)
             }
         }
         composable(Screen.UpiPayment.route) {
