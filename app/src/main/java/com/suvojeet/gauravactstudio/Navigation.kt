@@ -47,7 +47,7 @@ fun AppNavHost(
             HomeScreen(navController = navController)
         }
         composable(Screen.Services.route) {
-            ServicesScreen()
+            ServicesScreen(navController = navController)
         }
         composable(Screen.Pricing.route) {
             PricingScreen(navController = navController)

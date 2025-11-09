@@ -49,7 +49,7 @@ data class Service(
 )
 
  @Composable
-fun ServicesScreen() {
+fun ServicesScreen(navController: NavController) {
     val servicesList = listOf(
         Service(
             stringResource(R.string.service_wedding_photography_title),
@@ -180,14 +180,14 @@ fun ServicesScreen() {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(servicesList) { service ->
-                ServiceCard(service = service)
+                ServiceCard(service = service, navController = navController)
             }
         }
     }
 }
 
  @Composable
-fun ServiceCard(service: Service) {
+fun ServiceCard(service: Service, navController: NavController) {
     var isPressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.95f else 1f,
@@ -217,7 +217,8 @@ fun ServiceCard(service: Service) {
         modifier = Modifier
             .fillMaxWidth()
             .scale(scale)
-            .then(borderModifier), // Apply border modifier here
+            .then(borderModifier) // Apply border modifier here
+            .clickable { navController.navigate(Screen.Pricing.route) },
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(
