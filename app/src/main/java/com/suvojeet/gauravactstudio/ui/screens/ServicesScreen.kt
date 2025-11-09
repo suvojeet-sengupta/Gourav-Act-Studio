@@ -41,6 +41,7 @@ import androidx.compose.foundation.clickable
 import androidx.navigation.NavController
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
+import androidx.navigation.compose.rememberNavController
 import com.suvojeet.gauravactstudio.Screen
 
 data class Service(
