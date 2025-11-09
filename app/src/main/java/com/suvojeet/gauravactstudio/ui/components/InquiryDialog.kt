@@ -62,6 +62,8 @@ fun BookingDialog(
         eventType: String,
         otherEventType: String,
         date: String,
+        eventTime: String,
+        eventAddress: String,
         notes: String,
         location: String
     ) -> Unit
@@ -71,6 +73,8 @@ fun BookingDialog(
     var eventType by remember { mutableStateOf("") }
     var otherEventType by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
+    var eventTime by remember { mutableStateOf("") }
+    var eventAddress by remember { mutableStateOf("") }
     var notes by remember { mutableStateOf("") }
     var location by remember { mutableStateOf("Unknown location") }
 
@@ -81,6 +85,10 @@ fun BookingDialog(
     // Date Picker State
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
+
+    // Time Picker State
+    var showTimePicker by remember { mutableStateOf(false) }
+    val timePickerState = rememberTimePickerState()
 
     // Location
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
@@ -134,6 +142,8 @@ fun BookingDialog(
     var otherEventTypeRequiredError by remember { mutableStateOf(false) }
     var dateError by remember { mutableStateOf(false) }
     var invalidDateError by remember { mutableStateOf(false) }
+    var eventTimeError by remember { mutableStateOf(false) }
+    var eventAddressError by remember { mutableStateOf(false) }
 
     val validateForm: () -> Boolean = {
         nameError = name.isBlank()
@@ -141,8 +151,10 @@ fun BookingDialog(
         eventTypeError = eventType.isBlank()
         otherEventTypeRequiredError = eventType == "Other" && otherEventType.isBlank()
         dateError = date.isBlank()
+        eventTimeError = eventTime.isBlank()
+        eventAddressError = eventAddress.isBlank()
 
-        !nameError && !phoneError && !eventTypeError && !otherEventTypeRequiredError && !dateError && !invalidDateError
+        !nameError && !phoneError && !eventTypeError && !otherEventTypeRequiredError && !dateError && !invalidDateError && !eventTimeError && !eventAddressError
     }
 
     // Animation
@@ -178,6 +190,26 @@ fun BookingDialog(
             }
         ) {
             DatePicker(state = datePickerState)
+        }
+    }
+
+    if (showTimePicker) {
+        TimePickerDialog(
+            onDismissRequest = { showTimePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showTimePicker = false
+                        eventTime = "${timePickerState.hour}:${timePickerState.minute}"
+                        eventTimeError = false
+                    }
+                ) { Text("OK") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showTimePicker = false }) { Text("Cancel") }
+            }
+        ) {
+            TimePicker(state = timePickerState)
         }
     }
 
@@ -469,6 +501,74 @@ fun BookingDialog(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
+                        // Event Time Field
+                        FormField(
+                            icon = Icons.Filled.Schedule,
+                            label = "Event Time"
+                        ) {
+                            OutlinedTextField(
+                                value = eventTime,
+                                onValueChange = { eventTime = it; eventTimeError = false },
+                                readOnly = true,
+                                placeholder = { Text("Select time") },
+                                trailingIcon = {
+                                    IconButton(
+                                        onClick = { showTimePicker = true },
+                                        enabled = !isSubmitting
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Schedule,
+                                            contentDescription = "Select Time",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                enabled = !isSubmitting,
+                                shape = RoundedCornerShape(16.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = Color(0xFFE0E0E0)
+                                ),
+                                isError = eventTimeError,
+                                supportingText = {
+                                    if (eventTimeError) {
+                                        Text("Event time cannot be empty", color = MaterialTheme.colorScheme.error)
+                                    }
+                                }
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Event Address Field
+                        FormField(
+                            icon = Icons.Filled.LocationOn,
+                            label = "Event Address"
+                        ) {
+                            OutlinedTextField(
+                                value = eventAddress,
+                                onValueChange = { eventAddress = it; eventAddressError = false },
+                                placeholder = { Text("Enter event address") },
+                                modifier = Modifier.fillMaxWidth(),
+                                enabled = !isSubmitting,
+                                shape = RoundedCornerShape(16.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = Color(0xFFE0E0E0)
+                                ),
+                                singleLine = true,
+                                isError = eventAddressError,
+                                supportingText = {
+                                    if (eventAddressError) {
+                                        Text("Event address cannot be empty", color = MaterialTheme.colorScheme.error)
+                                    }
+                                }
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
                         // Notes Field
                         FormField(
                             icon = Icons.Filled.Notes,
@@ -527,7 +627,7 @@ fun BookingDialog(
                             Button(
                                 onClick = {
                                     if (validateForm()) {
-                                        onSubmit(name, phone, eventType, otherEventType, date, notes, location)
+                                        onSubmit(name, phone, eventType, otherEventType, date, eventTime, eventAddress, notes, location)
                                     }
                                 },
                                 enabled = !isSubmitting,

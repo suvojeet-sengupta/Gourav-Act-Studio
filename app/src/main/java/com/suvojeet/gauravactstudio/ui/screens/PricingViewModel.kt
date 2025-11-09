@@ -46,6 +46,8 @@ class PricingViewModel(private val emailService: EmailService = EmailService()) 
         eventType: String,
         otherEventType: String,
         date: String,
+        eventTime: String,
+        eventAddress: String,
         notes: String,
         location: String
     ) {
@@ -59,6 +61,8 @@ class PricingViewModel(private val emailService: EmailService = EmailService()) 
                     eventType = eventType,
                     otherEventType = otherEventType,
                     date = date,
+                    eventTime = eventTime,
+                    eventAddress = eventAddress,
                     notes = notes,
                     packageName = _uiState.value.selectedPackage,
                     customPackageDetails = _uiState.value.customPackageDetails,
@@ -78,7 +82,7 @@ class PricingViewModel(private val emailService: EmailService = EmailService()) 
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
-                        snackbarMessage = "Failed to send booking request. Please try again later.", // Use string resource later
+                        snackbarMessage = "Failed to send booking request. Please try again later.", // Use string resource later,
                         isSubmittingInquiry = false // Reset submitting flag
                     )
                 }
