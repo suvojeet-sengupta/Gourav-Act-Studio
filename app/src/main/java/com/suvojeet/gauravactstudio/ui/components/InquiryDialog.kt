@@ -207,7 +207,8 @@ fun BookingDialog(
             },
             dismissButton = {
                 TextButton(onClick = { showTimePicker = false }) { Text("Cancel") }
-            }
+            },
+            title = { Text("Select Event Time") }
         ) {
             TimePicker(state = timePickerState)
         }
