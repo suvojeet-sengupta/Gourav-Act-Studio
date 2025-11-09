@@ -46,7 +46,7 @@ fun DetailScreen(
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(50)
+        kotlinx.coroutines.delay(10)
         isVisible = true
     }
 
@@ -201,7 +201,7 @@ fun ModernTopAppBar(
 ) {
     val animatedAlpha by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0f,
-        animationSpec = tween(durationMillis = 400),
+        animationSpec = tween(durationMillis = 200),
         label = "TopBar Alpha"
     )
 
@@ -271,7 +271,7 @@ fun ZoomControls(
 ) {
     val animatedAlpha by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0f,
-        animationSpec = tween(durationMillis = 600, delayMillis = 200),
+        animationSpec = tween(durationMillis = 300, delayMillis = 50),
         label = "Zoom Controls Alpha"
     )
 
