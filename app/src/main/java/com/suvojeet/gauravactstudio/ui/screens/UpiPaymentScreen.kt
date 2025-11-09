@@ -480,6 +480,10 @@ fun UpiPaymentScreen(navController: NavController) {
                     Button(
                         onClick = {
                             if (isEnabled) {
+                                val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
+                                val amountDouble = amount.toDoubleOrNull() ?: 0.0
+                                val formattedAmount = String.format("%.2f", amountDouble)
+                                val encodedAmount = URLEncoder.encode(formattedAmount, StandardCharsets.UTF_8.toString())
                                 // Merchant payments need ALL details
                                 val encodedPayeeName = URLEncoder.encode(payeeName, StandardCharsets.UTF_8.toString())
                                 val transactionId = "TID" + System.currentTimeMillis()
