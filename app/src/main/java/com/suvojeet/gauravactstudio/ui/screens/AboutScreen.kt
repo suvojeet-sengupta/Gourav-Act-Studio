@@ -201,8 +201,6 @@ fun AboutScreen(navController: NavController) {
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    var showFullScreenImage by remember { mutableStateOf(false) }
-
                     AsyncImage(
                         model = R.drawable.studioposter,
                         contentDescription = "Gaurav Act Studio Banner",
@@ -210,16 +208,12 @@ fun AboutScreen(navController: NavController) {
                             .fillMaxWidth()
                             .height(200.dp)
                             .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-                            .clickable { showFullScreenImage = true },
+                            .clickable { 
+                                val imageUri = "android.resource://${context.packageName}/${R.drawable.studioposter}"
+                                navController.navigate(Screen.Detail.createRoute(imageUri, "image"))
+                             },
                         contentScale = ContentScale.Crop
                     )
-
-                    if (showFullScreenImage) {
-                        FullScreenImageDialog(
-                            imageResId = R.drawable.studioposter,
-                            onDismiss = { showFullScreenImage = false }
-                        )
-                    }
 
                     AnimatedContent(isVisible, delay = 40) {
                         Text(
@@ -745,36 +739,4 @@ fun SettingsButton(navController: NavController) {
     }
 }
 
-@Composable
-fun FullScreenImageDialog(imageResId: Int, onDismiss: () -> Unit) {
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = Color.Black.copy(alpha = 0.8f)
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                AsyncImage(
-                    model = imageResId,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
-                )
-                IconButton(
-                    onClick = onDismiss,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(16.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = "Close",
-                        tint = Color.White
-                    )
-                }
-            }
-        }
-    }
-}
+
