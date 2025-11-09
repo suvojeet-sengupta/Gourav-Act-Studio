@@ -78,6 +78,8 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended:1.6.7")
 
+    implementation("com.google.accompanist:accompanist-permissions:0.37.3")
+
     // Navigation
     implementation("io.ktor:ktor-client-cio:2.3.2")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.2")
