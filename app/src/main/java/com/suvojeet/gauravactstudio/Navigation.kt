@@ -27,8 +27,8 @@ sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     object Gallery : Screen("gallery", R.string.gallery_screen)
     object About : Screen("about", R.string.about_screen)
     object Settings : Screen("settings", R.string.settings_title)
-    object Detail : Screen("detail/{mediaType}/{mediaUrl}") {
-        fun createRoute(mediaType: String, mediaUrl: String) = "detail/$mediaType/${mediaUrl.encodeURL()}"
+    object Detail : Screen("detail/{mediaType}?mediaUrl={mediaUrl}") {
+        fun createRoute(mediaType: String, mediaUrl: String) = "detail/$mediaType?mediaUrl=${mediaUrl.encodeURL()}"
     }
     object UpiPayment : Screen("upi_payment")
 }
