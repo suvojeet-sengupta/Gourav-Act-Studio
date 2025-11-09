@@ -282,6 +282,6 @@ fun ServiceCard(service: Service, navController: NavController) {
  @Composable
 fun ServicesScreenPreview() {
     GauravActStudioTheme {
-        ServicesScreen()
+        ServicesScreen(navController = rememberNavController())
     }
 }
