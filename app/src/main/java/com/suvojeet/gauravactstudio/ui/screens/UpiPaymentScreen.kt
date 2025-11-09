@@ -480,26 +480,18 @@ fun UpiPaymentScreen(navController: NavController) {
                     Button(
                         onClick = {
                             if (isEnabled) {
-                                val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
-                                val amountDouble = amount.toDoubleOrNull() ?: 0.0
-                                val formattedAmount = String.format("%.2f", amountDouble)
-                                val encodedAmount = URLEncoder.encode(formattedAmount, StandardCharsets.UTF_8.toString())
+                                // Merchant payments need ALL details
+                                val encodedPayeeName = URLEncoder.encode(payeeName, StandardCharsets.UTF_8.toString())
+                                val transactionId = "TID" + System.currentTimeMillis()
+                                val encodedTr = URLEncoder.encode(transactionId, StandardCharsets.UTF_8.toString())
+                                val transactionNote = "Payment to GauravActStudio" // Ya kuch bhi
+                                val encodedTn = URLEncoder.encode(transactionNote, StandardCharsets.UTF_8.toString())
 
+                                // Building the COMPLETE Merchant UPI String
+                                val uriString = "upi://pay?pa=$encodedUpiId&pn=$encodedPayeeName&am=$encodedAmount&cu=INR&tr=$encodedTr&tn=$encodedTn"
+                                
                                 val intent = Intent(Intent.ACTION_VIEW)
                                 val appPackage = selectedUpiApp?.packageName
-
-                                val baseUri = "upi://pay?pa=$encodedUpiId&am=$encodedAmount&cu=INR"
-                                val uriString: String
-
-                                if (appPackage == "com.phonepe.app") {
-                                    val transactionId = "TID" + System.currentTimeMillis()
-                                    val transactionNote = "Payment for service"
-                                    val encodedTr = URLEncoder.encode(transactionId, StandardCharsets.UTF_8.toString())
-                                    val encodedTn = URLEncoder.encode(transactionNote, StandardCharsets.UTF_8.toString())
-                                    uriString = "$baseUri&tr=$encodedTr&tn=$encodedTn"
-                                } else {
-                                    uriString = baseUri
-                                }
 
                                 intent.data = Uri.parse(uriString)
                                 appPackage?.let { intent.setPackage(it) }
