@@ -208,9 +208,9 @@ fun AboutScreen(navController: NavController) {
                             .fillMaxWidth()
                             .height(200.dp)
                             .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-                            .clickable { 
+                            .clickable {
                                 val imageUri = "android.resource://${context.packageName}/${R.drawable.studioposter}"
-                                navController.navigate(Screen.Detail.createRoute(imageUri, "image"))
+                                navController.navigate(Screen.Detail.createRoute("image", imageUri))
                              },
                         contentScale = ContentScale.Crop
                     )
