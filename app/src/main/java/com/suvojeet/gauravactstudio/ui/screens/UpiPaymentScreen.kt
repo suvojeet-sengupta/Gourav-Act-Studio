@@ -48,7 +48,7 @@ fun UpiPaymentScreen(navController: NavController) {
     var amount by remember { mutableStateOf("") }
     var selectedUpiApp by remember { mutableStateOf<UpiApp?>(null) }
     val upiId = "9354654066@ptaxis"
-    val payeeName = "Gourav Act Studio"
+    val payeeName = "Gaurav Act Studio"
 
     val snackbarHostState = remember { SnackbarHostState() }
     var showSuccessSnackbar by remember { mutableStateOf(false) }
