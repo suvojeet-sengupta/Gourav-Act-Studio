@@ -160,11 +160,6 @@ fun WelcomeScreen(onCompletion: () -> Unit) {
                         onLanguageSelected = { language ->
                             selectedLanguage = language
                             Prefs.setLanguage(context, language)
-                            if (permissionsState.allPermissionsGranted) {
-                                // Will trigger onCompletion via LaunchedEffect
-                            } else {
-                                permissionsState.launchMultiplePermissionRequest()
-                            }
                         }
                     )
                 }
@@ -182,6 +177,21 @@ fun WelcomeScreen(onCompletion: () -> Unit) {
                                 permissionsState.launchMultiplePermissionRequest()
                             }
                         )
+                    } else if (selectedLanguage != null && permissionsState.allPermissionsGranted) {
+                        // Show continue button if language selected and permissions granted
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Button(
+                            onClick = onCompletion,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(48.dp),
+                            shape = RoundedCornerShape(24.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF8B5CF6)
+                            )
+                        ) {
+                            Text("Continue", color = Color.White, fontSize = 16.sp)
+                        }
                     }
                 }
 
