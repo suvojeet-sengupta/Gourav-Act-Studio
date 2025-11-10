@@ -171,4 +171,33 @@
         <item>Product Photography</item>
         <item>Other</item>
     </string-array>
+
+    <string name="about_us_title">About Us</string>
+    <string name="about_us_description_1">We are a passionate team of photographers and videographers dedicated to capturing life\'s most precious moments. With years of experience and state-of-the-art equipment, we transform your special occasions into timeless memories.</string>
+    <string name="about_us_description_2">Our mission is to deliver exceptional quality and creative artistry that exceeds expectations. Every project is unique, and we approach each one with fresh eyes and innovative ideas.</string>
+    <string name="our_achievements_title">Our Achievements</string>
+    <string name="happy_clients_label">Happy Clients</string>
+    <string name="events_covered_label">Events Covered</string>
+    <string name="rating_label">Rating</string>
+    <string name="get_in_touch_title">Get In Touch</string>
+    <string name="email_label">Email</string>
+    <string name="phone_label">Phone</string>
+    <string name="whatsapp_label">WhatsApp</string>
+    <string name="why_choose_us_title">Why Choose Us</string>
+    <string name="premium_quality_title">Premium Quality</string>
+    <string name="premium_quality_description">4K videography and high-resolution photography</string>
+    <string name="fast_delivery_title">Fast Delivery</string>
+    <string name="fast_delivery_description">Quick turnaround time for your memories</string>
+    <string name="affordable_pricing_title">Affordable Pricing</string>
+    <string name="affordable_pricing_description">Flexible packages to suit every budget</string>
+    <string name="support_title">24/7 Support</string>
+    <string name="support_description">Always available for your queries</string>
+    <string name="follow_us_title">Follow Us</string>
+    <string name="facebook_label">Facebook</string>
+    <string name="instagram_label">Instagram</string>
+    <string name="youtube_label">YouTube</string>
+    <string name="settings_preferences_button">Settings &amp; Preferences</string>
+    <string name="gaurav_act_studio_banner">Gaurav Act Studio Banner</string>
+    <string name="professional_photography_videography">Professional Photography &amp; Videography</string>
+    <string name="gaurav_act_studio">Gaurav Act Studio</string>
 </resources>

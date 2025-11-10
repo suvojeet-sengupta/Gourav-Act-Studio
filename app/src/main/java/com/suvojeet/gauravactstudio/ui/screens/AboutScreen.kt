@@ -203,7 +203,7 @@ fun AboutScreen(navController: NavController) {
                 ) {
                     AsyncImage(
                         model = R.drawable.studioposter,
-                        contentDescription = "Gaurav Act Studio Banner",
+                        contentDescription = stringResource(R.string.gaurav_act_studio_banner),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
@@ -217,7 +217,7 @@ fun AboutScreen(navController: NavController) {
 
                     AnimatedContent(isVisible, delay = 40) {
                         Text(
-                            text = "Gaurav Act Studio",
+                            text = stringResource(R.string.gaurav_act_studio),
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
@@ -228,7 +228,7 @@ fun AboutScreen(navController: NavController) {
 
                     AnimatedContent(isVisible, delay = 80) {
                         Text(
-                            text = "Professional Photography & Videography",
+                            text = stringResource(R.string.professional_photography_videography),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center
@@ -327,7 +327,7 @@ fun AboutCard() {
                 Spacer(modifier = Modifier.width(16.dp))
 
                 Text(
-                    text = "About Us",
+                    text = stringResource(R.string.about_us_title),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -337,7 +337,7 @@ fun AboutCard() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "We are a passionate team of photographers and videographers dedicated to capturing life's most precious moments. With years of experience and state-of-the-art equipment, we transform your special occasions into timeless memories.",
+                text = stringResource(R.string.about_us_description_1),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = 22.sp
@@ -346,7 +346,7 @@ fun AboutCard() {
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Our mission is to deliver exceptional quality and creative artistry that exceeds expectations. Every project is unique, and we approach each one with fresh eyes and innovative ideas.",
+                text = stringResource(R.string.about_us_description_2),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = 22.sp
@@ -365,7 +365,7 @@ fun QuickStatsCard() {
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Text(
-                text = "Our Achievements",
+                text = stringResource(R.string.our_achievements_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -379,19 +379,19 @@ fun QuickStatsCard() {
                 StatItem(
                     icon = Icons.Filled.People,
                     number = "500+",
-                    label = "Happy Clients",
+                    label = stringResource(R.string.happy_clients_label),
                     gradient = listOf(Color(0xFFEC4899), Color(0xFFF97316))
                 )
                 StatItem(
                     icon = Icons.Filled.Event,
                     number = "1000+",
-                    label = "Events Covered",
+                    label = stringResource(R.string.events_covered_label),
                     gradient = listOf(Color(0xFF3B82F6), Color(0xFF06B6D4))
                 )
                 StatItem(
                     icon = Icons.Filled.Star,
                     number = "5.0",
-                    label = "Rating",
+                    label = stringResource(R.string.rating_label),
                     gradient = listOf(Color(0xFFF59E0B), Color(0xFFFBBF24))
                 )
             }
@@ -448,7 +448,7 @@ fun ContactCard(context: Context, onEmailClick: () -> Unit, phoneNumbers: List<S
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
             Text(
-                text = "Get In Touch",
+                text = stringResource(R.string.get_in_touch_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -457,7 +457,7 @@ fun ContactCard(context: Context, onEmailClick: () -> Unit, phoneNumbers: List<S
 
             ContactItem(
                 icon = Icons.Filled.Email,
-                title = "Email",
+                title = stringResource(R.string.email_label),
                 info = "gauravkumarpjt@gmail.com",
                 gradient = listOf(Color(0xFF3B82F6), Color(0xFF06B6D4)),
                 onClick = onEmailClick
@@ -468,7 +468,7 @@ fun ContactCard(context: Context, onEmailClick: () -> Unit, phoneNumbers: List<S
             phoneNumbers.forEach { phoneNumber ->
                 ContactItem(
                     icon = Icons.Filled.Phone,
-                    title = "Phone",
+                    title = stringResource(R.string.phone_label),
                     info = phoneNumber,
                     gradient = listOf(Color(0xFF10B981), Color(0xFF14B8A6)),
                     onClick = {
@@ -483,7 +483,7 @@ fun ContactCard(context: Context, onEmailClick: () -> Unit, phoneNumbers: List<S
 
             ContactItem(
                 icon = Icons.Filled.WhatsApp,
-                title = "WhatsApp",
+                title = stringResource(R.string.whatsapp_label),
                 info = "+91 93546 54066",
                 gradient = listOf(Color(0xFF25D366), Color(0xFF128C7E)),
                 onClick = {
@@ -571,7 +571,7 @@ fun FeaturesCard() {
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
             Text(
-                text = "Why Choose Us",
+                text = stringResource(R.string.why_choose_us_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -580,32 +580,32 @@ fun FeaturesCard() {
 
             FeatureItem(
                 icon = Icons.Filled.HighQuality,
-                title = "Premium Quality",
-                description = "4K videography and high-resolution photography"
+                title = stringResource(R.string.premium_quality_title),
+                description = stringResource(R.string.premium_quality_description)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             FeatureItem(
                 icon = Icons.Filled.Speed,
-                title = "Fast Delivery",
-                description = "Quick turnaround time for your memories"
+                title = stringResource(R.string.fast_delivery_title),
+                description = stringResource(R.string.fast_delivery_description)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             FeatureItem(
                 icon = Icons.Filled.PriceCheck,
-                title = "Affordable Pricing",
-                description = "Flexible packages to suit every budget"
+                title = stringResource(R.string.affordable_pricing_title),
+                description = stringResource(R.string.affordable_pricing_description)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             FeatureItem(
                 icon = Icons.Filled.Support,
-                title = "24/7 Support",
-                description = "Always available for your queries"
+                title = stringResource(R.string.support_title),
+                description = stringResource(R.string.support_description)
             )
         }
     }
@@ -625,7 +625,7 @@ fun SocialMediaCard() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Follow Us",
+                text = stringResource(R.string.follow_us_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -639,7 +639,7 @@ fun SocialMediaCard() {
             ) {
                 SocialButton(
                     icon = Icons.Filled.Facebook,
-                    label = "Facebook",
+                    label = stringResource(R.string.facebook_label),
                     gradient = listOf(Color(0xFF1877F2), Color(0xFF42B0FF)),
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/share/17e6BCSVKr/"))
@@ -648,7 +648,7 @@ fun SocialMediaCard() {
                 )
                 SocialButton(
                     icon = Icons.Filled.Instagram,
-                    label = "Instagram",
+                    label = stringResource(R.string.instagram_label),
                     gradient = listOf(Color(0xFFE4405F), Color(0xFFFCAF45)),
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=xz8exwz"))
@@ -657,7 +657,7 @@ fun SocialMediaCard() {
                 )
                 SocialButton(
                     icon = Icons.Filled.YouTube,
-                    label = "YouTube",
+                    label = stringResource(R.string.youtube_label),
                     gradient = listOf(Color(0xFFFF0000), Color(0xFFFF6B6B)),
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://youtube.com/@gauravact?si=_RPRL0fM5-UZr5YN"))
@@ -666,7 +666,7 @@ fun SocialMediaCard() {
                 )
                 SocialButton(
                     icon = Icons.Filled.WhatsApp,
-                    label = "WhatsApp",
+                    label = stringResource(R.string.whatsapp_label),
                     gradient = listOf(Color(0xFF25D366), Color(0xFF128C7E)),
                     onClick = {
                         val phoneNumber = "+919354654066"
@@ -732,7 +732,7 @@ fun SettingsButton(navController: NavController) {
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(
-            text = "Settings & Preferences",
+            text = stringResource(R.string.settings_preferences_button),
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold
         )

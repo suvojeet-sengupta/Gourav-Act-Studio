@@ -2,44 +2,47 @@
     <string name="app_name">गौरव एक्ट स्टूडियो</string>
     <string name="home_screen">होम</string>
     <string name="services_screen">सेवाएं</string>
-    <string name="pricing_screen">मूल्य निर्धारण</string>
+    <string name="pricing_screen">कीमत</string>
     <string name="gallery_screen">गैलरी</string>
     <string name="about_screen">हमारे बारे में</string>
+    <string name="about_studio_title">स्टूडियो के बारे में</string>
+    <string name="about_studio_description">स्टूडियो शादी की शूटिंग, जन्मदिन की शूटिंग, वीडियो फोटोशूट, सिनेमैटिक वीडियो और पारंपरिक वीडियो सहित सभी प्रकार की शूटिंग प्रदान करता है। वे शादी के कार्ड भी डिजाइन करते हैं।</string>
+    <string name="contact_us_title">हमसे संपर्क करें</string>
     <string name="app_logo_gaurav">गौरव</string>
     <string name="app_logo_act_studio">एक्ट स्टूडियो</string>
     <string name="home_hero_title">आपकी दृष्टि, हमारी कला।</string>
-    <string name="home_hero_subtitle">पलों को कैद करना, यादें बनाना।</string>
-    <string name="home_explore_services">हमारी सेवाएं देखें</string>
+    <string name="home_hero_subtitle">क्षणों को कैद करना, यादें बनाना।</string>
+    <string name="home_explore_services">हमारी सेवाएं एक्सप्लोर करें</string>
     <string name="home_stat_happy_clients">खुश ग्राहक</string>
     <string name="home_stat_events_covered">कवर किए गए इवेंट</string>
     <string name="home_stat_rated_service">रेटेड सेवा</string>
     <string name="home_features_title">हमें क्यों चुनें?</string>
     <string name="home_feature_quality_title">प्रीमियम गुणवत्ता</string>
     <string name="home_feature_quality_description">4K वीडियोग्राफी और उच्च-रिज़ॉल्यूशन फोटोग्राफी</string>
-    <string name="home_feature_delivery_title">तेज डिलीवरी</string>
-    <string name="home_feature_delivery_description">आपकी अनमोल यादों के लिए त्वरित बदलाव का समय</string>
+    <string name="home_feature_delivery_title">तेजी से वितरण</string>
+    <string name="home_feature_delivery_description">आपकी कीमती यादों के लिए त्वरित बदलाव का समय</string>
     <string name="home_feature_packages_title">किफायती पैकेज</string>
     <string name="home_feature_packages_description">हर बजट के अनुरूप लचीला मूल्य निर्धारण</string>
-    <string name="contact_get_in_touch">संपर्क करें</string>
-    <string name="contact_description">हम आपसे सुनना पसंद करेंगे! बुकिंग के लिए संपर्क करें</string>
+    <string name="contact_get_in_touch">संपर्क में रहें</string>
+    <string name="contact_description">हमें आपसे सुनना अच्छा लगेगा! बुकिंग के लिए संपर्क करें</string>
     <string name="contact_call_us">हमें कॉल करें</string>
-    <string name="contact_call_us_subtitle">आपकी पूछताछ के लिए 24/7 उपलब्ध</string>
+    <string name="contact_call_us_subtitle">आपके प्रश्नों के लिए 24/7 उपलब्ध</string>
     <string name="contact_phone_number_1">+91 93546 54066</string>
     <string name="contact_phone_number_2">+91 70179 72737</string>
     <string name="contact_email_us">हमें ईमेल करें</string>
-    <string name="contact_email_us_subtitle">24 घंटे के भीतर जवाब पाएं</string>
-    <string name="contact_email_address">gauravkumarpjt @gmail.com</string>
-    <string name="contact_visit_studio">हमारे स्टूडियो पर जाएं</string>
-    <string name="contact_visit_studio_subtitle">व्यक्तिगत रूप से हमारा पोर्टफोलियो देखें</string>
-    <string name="contact_address_line_1">गांव नगला धीमर, एटा रोड</string>
+    <string name="contact_email_us_subtitle">24 घंटे के भीतर प्रतिक्रिया प्राप्त करें</string>
+    <string name="contact_email_address">gauravkumarpjt@gmail.com</string>
+    <string name="contact_visit_studio">हमारे स्टूडियो पर जाएँ</string>
+    <string name="contact_visit_studio_subtitle">आओ और हमारे पोर्टफोलियो को व्यक्तिगत रूप से देखें</string>
+    <string name="contact_address_line_1">गाँव नगला धीमर, एटा रोड</string>
     <string name="contact_address_line_2">भोंडेला पॉलिटेक्निक कॉलेज के पास</string>
-    <string name="contact_address_line_3">टूंडला, फिरोजाबाद (यूपी) - 283204</string>
-    <string name="contact_follow_us">सोशल मीडिया पर हमें फॉलो करें</string>
+    <string name="contact_address_line_3">टुंडला, फिरोजाबाद (यूपी) - 283204</string>
+    <string name="contact_follow_us">हमें सोशल मीडिया पर फॉलो करें</string>
     <string name="contact_business_hours">व्यावसायिक घंटे</string>
     <string name="contact_business_hours_days">सोमवार - रविवार</string>
-    <string name="contact_business_hours_time">सुबह 8:00 बजे - रात 8:00 बजे</string>
-    <string name="contact_status_open">वर्तमान में खुला है</string>
-    <string name="contact_status_closed">बंद है</string>
+    <string name="contact_business_hours_time">सुबह 8:00 - रात 8:00 बजे</string>
+    <string name="contact_status_open">अभी खुला है</string>
+    <string name="contact_status_closed">बंद</string>
     <string name="contact_view_on_map">गूगल मैप्स पर देखें</string>
     <string name="contact_tap_to_directions">दिशा-निर्देश प्राप्त करने के लिए टैप करें</string>
     <string name="gallery_title">हमारी गैलरी</string>
@@ -51,9 +54,9 @@
         <item>मैटरनिटी एल्बम 1</item>
         <item>इवेंट एल्बम 1</item>
         <item>फैशन पोर्टफोलियो 1</item>
-        <item>प्रोडक्ट शोकेस 1</item>
+        <item>उत्पाद शोकेस 1</item>
     </string-array>
-    <string name="pricing_title">हमारी मूल्य निर्धारण योजनाएं</string>
+    <string name="pricing_title">हमारी मूल्य-निर्धारण योजनाएं</string>
     <string name="pricing_subtitle">अपने खास पलों के लिए सही पैकेज चुनें</string>
     <string name="pricing_package_standard_name">स्टैंडर्ड पैकेज</string>
     <string-array name="pricing_package_standard_features">
@@ -61,101 +64,140 @@
         <item>सभी तस्वीरों के साथ 32GB पेन ड्राइव</item>
         <item>फोटो और वीडियो के लिए 2 कैमरे</item>
         <item>बुनियादी संपादन शामिल</item>
-        <item>उसी दिन हाइलाइट्स</item>
+        <item>उसी दिन की हाइलाइट्स</item>
     </string-array>
     <string name="pricing_package_deluxe_name">डीलक्स पैकेज</string>
     <string-array name="pricing_package_deluxe_features">
         <item>2 पेशेवर कैमरे</item>
-        <item>एरियल शॉट्स के लिए 1 ड्रोन</item>
-        <item>1-2 सिनेमाई हाइलाइट वीडियो</item>
-        <item>सभी सामग्री के साथ 32GB USB</item>
+        <item>हवाई शॉट्स के लिए 1 ड्रोन</item>
+        <item>1-2 सिनेमैटिक हाइलाइट वीडियो</item>
+        <item>सभी सामग्री के साथ 32GB यूएसबी</item>
         <item>प्रीमियम फोटो एल्बम</item>
         <item>उन्नत रंग ग्रेडिंग</item>
     </string-array>
     <string name="pricing_package_premium_name">प्रीमियम पैकेज</string>
     <string-array name="pricing_package_premium_features">
-        <item>सिनेमाई + पारंपरिक वीडियो और फोटो</item>
+        <item>सिनेमैटिक + पारंपरिक वीडियो और फोटो</item>
         <item>कई हाइलाइट वीडियो</item>
         <item>2 पेशेवर वीडियोग्राफर</item>
         <item>2 पेशेवर फोटोग्राफर</item>
         <item>ड्रोन कवरेज शामिल</item>
-        <item>40-शीट एल्बम और USB कॉम्बो</item>
-        <item>तेज 7-दिवसीय डिलीवरी</item>
+        <item>40-शीट एल्बम और यूएसबी कॉम्बो</item>
+        <item>तेज 7-दिन की डिलीवरी</item>
     </string-array>
     <string name="pricing_package_elite_name">एलीट पैकेज</string>
     <string-array name="pricing_package_elite_features">
-        <item>प्री-वेडिंग शूट एट लोकेशन</item>
+        <item>स्थान पर प्री-वेडिंग शूट</item>
         <item>अंगूठी समारोह का पूरा कवरेज</item>
-        <item>पूर्ण वेडिंग शूट (सिनेमाई + पारंपरिक)</item>
+        <item>पूरी शादी की शूटिंग (सिनेमैटिक + पारंपरिक)</item>
         <item>2 पेशेवर वीडियोग्राफर</item>
         <item>2 पेशेवर फोटोग्राफर</item>
-        <item>एरियल शॉट्स के लिए कई ड्रोन</item>
+        <item>हवाई शॉट्स के लिए कई ड्रोन</item>
         <item>40-शीट प्रीमियम एल्बम</item>
         <item>उसी दिन फोटो डिलीवरी</item>
     </string-array>
-    <string name="pricing_onwards">आगे</string>
-    <string name="pricing_perfect_for_needs">आपकी ज़रूरतों के लिए बिल्कुल सही</string>
+    <string name="pricing_onwards">से आगे</string>
+    <string name="pricing_perfect_for_needs">आपकी जरूरतों के लिए बिल्कुल सही</string>
     <string name="pricing_most_popular">सबसे लोकप्रिय</string>
-    <string name="pricing_choose_this_plan">यह योजना चुनें</string>
-    <string name="pricing_get_started">शुरू करें</string>
+    <string name="pricing_choose_this_plan">इस योजना को चुनें</string>
+    <string name="pricing_get_started">शुरू हो जाओ</string>
     <string name="pricing_custom_package_title">एक कस्टम पैकेज चाहिए?</string>
     <string name="pricing_custom_package_description">आइए हम आपकी विशिष्ट आवश्यकताओं और बजट के अनुरूप एक व्यक्तिगत पैकेज बनाएं</string>
     <string name="pricing_contact_for_custom_quote">कस्टम बुकिंग का अनुरोध करें</string>
     <string name="services_title">हमारी सेवाएं</string>
     <string name="services_subtitle">जीवन के सबसे खूबसूरत पलों को कैद करना</string>
-    <string name="service_wedding_photography_title">वेडिंग फोटोग्राफी और वीडियोग्राफी</string>
-    <string name="service_wedding_photography_description">सिनेमाई और पारंपरिक शैलियाँ हर अनमोल पल कोelegance के साथ कैद करने के लिए।</string>
+    <string name="service_wedding_photography_title">शादी की फोटोग्राफी और वीडियोग्राफी</string>
+    <string name="service_wedding_photography_description">हर कीमती पल को शान से कैद करने के लिए सिनेमैटिक और पारंपरिक शैलियाँ।</string>
     <string name="service_ring_ceremony_title">अंगूठी समारोह</string>
-    <string name="service_ring_ceremony_description">आपकी यात्रा की शुरुआत को खूबसूरती से दस्तावेजित करना।</string>
+    <string name="service_ring_ceremony_description">आपकी एक साथ यात्रा की शुरुआत का खूबसूरती से दस्तावेजीकरण।</string>
     <string name="service_birthday_celebrations_title">जन्मदिन समारोह</string>
-    <string name="service_birthday_celebrations_description">आपके जन्मदिन की यादों को जीवंत तस्वीरों और वीडियो के साथ जीवन भर के लिए यादगार बनाना।</string>
+    <string name="service_birthday_celebrations_description">जीवंत तस्वीरों और वीडियो के साथ अपने जन्मदिन की यादों को जीवन भर के लिए बनाना।</string>
     <string name="service_pre_wedding_shoots_title">प्री-वेडिंग शूट</string>
     <string name="service_pre_wedding_shoots_description">आपकी अनूठी प्रेम कहानी बताने के लिए रचनात्मक और रोमांटिक शूट।</string>
     <string name="service_maternity_shoots_title">मैटरनिटी शूट</string>
     <string name="service_maternity_shoots_description">कोमल तस्वीरों के साथ मातृत्व की खूबसूरत यात्रा को संजोना।</string>
     <string name="service_baby_shoots_title">बेबी शूट</string>
-    <string name="service_baby_shoots_description">आपके नन्हे-मुन्नों के शुरुआती दिनों के मनमोहक और दिल को छू लेने वाले कैप्चर।</string>
+    <string name="service_baby_shoots_description">आपके नन्हे-मुन्नों के शुरुआती दिनों के मनमोहक और दिल को छू लेने वाले पल।</string>
     <string name="service_corporate_events_title">कॉर्पोरेट इवेंट्स</string>
-    <string name="service_corporate_events_description">व्यावसायिक आयोजनों, सम्मेलनों और पार्टियों के लिए पेशेवर कवरेज।</string>
+    <string name="service_corporate_events_description">व्यावसायिक कार्यक्रमों, सम्मेलनों और पार्टियों के लिए व्यावसायिक कवरेज।</string>
     <string name="service_fashion_portfolio_title">फैशन और पोर्टफोलियो</string>
-    <string name="service_fashion_portfolio_description">शानदार दृश्यों के साथ अपनी शैली और व्यक्तित्व का प्रदर्शन।</string>
+    <string name="service_fashion_portfolio_description">आश्चर्यजनक दृश्यों के साथ अपनी शैली और व्यक्तित्व का प्रदर्शन।</string>
     <string name="service_product_photography_title">उत्पाद फोटोग्राफी</string>
-    <string name="service_product_photography_description">आपके उत्पादों को पेशेवर रूप से उजागर करने के लिए उच्च-गुणवत्ता वाली छवियां।</string>
-    <string name="service_wedding_card_design_title">वेडिंग कार्ड डिजाइन</string>
-    <string name="service_wedding_card_design_description">आपकी शैली से मेल खाने के लिए सुंदर और अद्वितीय वेडिंग कार्ड डिजाइन।</string>
-    <string name="service_business_promotion_shoots_title">व्यवसाय और प्रचार शूट</string>
-    <string name="service_business_promotion_shoots_description">व्यवसाय प्रचार और ई-कॉमर्स दुकानों के लिए उच्च-गुणवत्ता वाली फोटोग्राफी और वीडियोग्राफी।</string>
+    <string name="service_product_photography_description">अपने उत्पादों को पेशेवर रूप से उजागर करने के लिए उच्च-गुणवत्ता वाली छवियां।</string>
+    <string name="service_wedding_card_design_title">शादी का कार्ड डिजाइन</string>
+    <string name="service_wedding_card_design_description">आपकी शैली से मेल खाने के लिए सुंदर और अद्वितीय शादी के कार्ड डिजाइन।</string>
+    <string name="service_business_promotion_shoots_title">व्यापार और प्रचार शूट</string>
+    <string name="service_business_promotion_shoots_description">व्यापार प्रचार और ई-कॉमर्स की दुकानों के लिए उच्च गुणवत्ता वाली फोटोग्राफी और वीडियोग्राफी।</string>
     <string name="settings_title">सेटिंग्स</string>
     <string name="settings_subtitle">अपनी ऐप प्राथमिकताएं प्रबंधित करें</string>
-    <string name="settings_invite_app">ऐप आमंत्रित करें</string>
+    <string name="settings_invite_app">ऐप को आमंत्रित करें</string>
     <string name="settings_language">भाषा</string>
     <string name="settings_select_language">भाषा चुनें</string>
     <string name="settings_cancel">रद्द करें</string>
     <string name="booking_send_request">बुकिंग अनुरोध भेजें</string>
     <string name="booking_fill_details">अपना विवरण भरें और हम जल्द ही आपकी बुकिंग की पुष्टि करेंगे!</string>
     <string name="booking_cancel">रद्द करें</string>
-    <string name="booking_submit">बुकिंग जमा करें</string>
+    <string name="booking_submit">बुकिंग सबमिट करें</string>
     <string name="booking_sending">बुकिंग भेज रहा है...</string>
     <string name="booking_name_empty_error">नाम खाली नहीं हो सकता</string>
     <string name="booking_phone_empty_error">फ़ोन नंबर खाली नहीं हो सकता</string>
-    <string name="booking_event_type_empty_error">कृपया एक इवेंट प्रकार चुनें</string>
-    <string name="booking_specify_event_type_error">कृपया इवेंट प्रकार निर्दिष्ट करें</string>
-    <string name="booking_date_empty_error">कृपया एक तिथि चुनें</string>
-    <string name="booking_past_date_error">पिछली तिथियों की अनुमति नहीं है</string>
+    <string name="booking_event_type_empty_error">कृपया एक ईवेंट प्रकार चुनें</string>
+    <string name="booking_specify_event_type_error">कृपया ईवेंट प्रकार निर्दिष्ट करें</string>
+    <string name="booking_date_empty_error">कृपया एक तारीख चुनें</string>
+    <string name="booking_past_date_error">पिछली तारीखों की अनुमति नहीं है</string>
     <string name="booking_request_number_label">बुकिंग अनुरोध संख्या:</string>
-    <string name="booking_confirmation_message">आपका बुकिंग अनुरोध प्राप्त हो गया है! हम विवरण की पुष्टि के लिए जल्द से जल्द आपसे संपर्क करेंगे।</string>
+    <string name="booking_confirmation_message">आपका बुकिंग अनुरोध प्राप्त हो गया है! हम विवरण की पुष्टि करने के लिए जल्द से जल्द आपसे संपर्क करेंगे।</string>
     <string name="booking_inquiry_sent_success">बुकिंग अनुरोध सफलतापूर्वक भेजा गया! हम जल्द ही आपसे संपर्क करेंगे।</string>
-    <string name="booking_inquiry_failed">बुकिंग अनुरोध भेजने में विफल रहा। कृपया बाद में पुनः प्रयास करें।</string>
+    <string name="booking_inquiry_failed">बुकिंग अनुरोध भेजने में विफल। कृपया बाद में पुन: प्रयास करें।</string>
     <string name="booking_full_name_label">पूरा नाम</string>
     <string name="booking_phone_number_label">फ़ोन नंबर</string>
-    <string name="booking_event_type_label">इवेंट प्रकार</string>
-    <string name="booking_specify_event_type_label">इवेंट प्रकार निर्दिष्ट करें</string>
-    <string name="booking_event_date_label">इवेंट तिथि</string>
-    <string name="booking_additional_requirements_label">अतिरिक्त आवश्यकताएँ</string>
+    <string name="booking_event_type_label">कार्यक्रम का प्रकार</string>
+    <string name="booking_specify_event_type_label">ईवेंट प्रकार निर्दिष्ट करें</string>
+    <string name="booking_event_date_label"> आयोजन की तिथि</string>
+    <string name="booking_additional_requirements_label">अतिरिक्त आवश्यकताएं</string>
     <string name="booking_enter_full_name_placeholder">अपना पूरा नाम दर्ज करें</string>
     <string name="booking_enter_phone_placeholder">अपना फ़ोन नंबर दर्ज करें</string>
-    <string name="booking_select_event_type_placeholder">इवेंट प्रकार चुनें</string>
+    <string name="booking_select_event_type_placeholder">ईवेंट प्रकार चुनें</string>
     <string name="booking_specify_placeholder">कृपया निर्दिष्ट करें</string>
-    <string name="booking_select_date_placeholder">तिथि चुनें</string>
-    <string name="booking_notes_placeholder">कोई विशेष अनुरोध या आवश्यकताएँ...</string>
+    <string name="booking_select_date_placeholder">तारीख चुनें</string>
+    <string name="booking_notes_placeholder">कोई विशेष अनुरोध या आवश्यकताएं...</string>
+    <string-array name="event_types">
+        <item>शादी</item>
+        <item>प्री-वेडिंग</item>
+        <item>सगाई</item>
+        <item>जन्मदिन की पार्टी</item>
+        <item>कॉर्पोरेट इवेंट</item>
+        <item>फैशन शूट</item>
+        <item>उत्पाद फोटोग्राफी</item>
+        <item>अन्य</item>
+    </string-array>
+
+    <string name="about_us_title">हमारे बारे में</string>
+    <string name="about_us_description_1">हम फोटोग्राफरों और वीडियोग्राफरों की एक उत्साही टीम हैं जो जीवन के सबसे कीमती पलों को कैद करने के लिए समर्पित हैं। वर्षों के अनुभव और अत्याधुनिक उपकरणों के साथ, हम आपके विशेष अवसरों को अविस्मरणीय यादों में बदल देते हैं।</string>
+    <string name="about_us_description_2">हमारा मिशन असाधारण गुणवत्ता और रचनात्मक कलात्मकता प्रदान करना है जो अपेक्षाओं से बढ़कर हो। प्रत्येक परियोजना अद्वितीय है, और हम प्रत्येक को नई आंखों और नवीन विचारों के साथ देखते हैं।</string>
+    <string name="our_achievements_title">हमारी उपलब्धियां</string>
+    <string name="happy_clients_label">खुश ग्राहक</string>
+    <string name="events_covered_label">कवर किए गए इवेंट</string>
+    <string name="rating_label">रेटिंग</string>
+    <string name="get_in_touch_title">संपर्क करें</string>
+    <string name="email_label">ईमेल</string>
+    <string name="phone_label">फ़ोन</string>
+    <string name="whatsapp_label">व्हाट्सएप</string>
+    <string name="why_choose_us_title">हमें क्यों चुनें</string>
+    <string name="premium_quality_title">प्रीमियम गुणवत्ता</string>
+    <string name="premium_quality_description">4K वीडियोग्राफी और उच्च-रिज़ॉल्यूशन फोटोग्राफी</string>
+    <string name="fast_delivery_title">तेजी से वितरण</string>
+    <string name="fast_delivery_description">आपकी यादों के लिए त्वरित बदलाव का समय</string>
+    <string name="affordable_pricing_title">किफायती मूल्य निर्धारण</string>
+    <string name="affordable_pricing_description">हर बजट के अनुरूप लचीले पैकेज</string>
+    <string name="support_title">24/7 सहायता</string>
+    <string name="support_description">आपके प्रश्नों के लिए हमेशा उपलब्ध</string>
+    <string name="follow_us_title">हमें फॉलो करें</string>
+    <string name="facebook_label">फेसबुक</string>
+    <string name="instagram_label">इंस्टाग्राम</string>
+    <string name="youtube_label">यूट्यूब</string>
+    <string name="settings_preferences_button">सेटिंग्स और प्राथमिकताएं</string>
+    <string name="gaurav_act_studio_banner">गौरव एक्ट स्टूडियो बैनर</string>
+    <string name="professional_photography_videography">पेशेवर फोटोग्राफी और वीडियोग्राफी</string>
+    <string name="gaurav_act_studio">गौरव एक्ट स्टूडियो</string>
 </resources>
