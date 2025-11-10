@@ -235,7 +235,7 @@ fun PricingScreen(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = if (showCustomBuilder) "View Predefined Packages" else "Build Your Own Package",
+                                text = if (showCustomBuilder) stringResource(R.string.view_predefined_packages) else stringResource(R.string.create_your_own_package),
                                 fontWeight = FontWeight.SemiBold
                             )
                         }
@@ -257,7 +257,7 @@ fun PricingScreen(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "Pay via UPI",
+                                text = stringResource(R.string.pay_via_upi),
                                 fontWeight = FontWeight.SemiBold
                             )
                         }

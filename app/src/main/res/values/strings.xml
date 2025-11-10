@@ -200,4 +200,7 @@
     <string name="gaurav_act_studio_banner">Gaurav Act Studio Banner</string>
     <string name="professional_photography_videography">Professional Photography &amp; Videography</string>
     <string name="gaurav_act_studio">Gaurav Act Studio</string>
+    <string name="create_your_own_package">Create Your Own Package</string>
+    <string name="pay_via_upi">Pay via UPI</string>
+    <string name="view_predefined_packages">View Predefined Packages</string>
 </resources>

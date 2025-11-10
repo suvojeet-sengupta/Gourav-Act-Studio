@@ -200,4 +200,7 @@
     <string name="gaurav_act_studio_banner">गौरव एक्ट स्टूडियो बैनर</string>
     <string name="professional_photography_videography">पेशेवर फोटोग्राफी और वीडियोग्राफी</string>
     <string name="gaurav_act_studio">गौरव एक्ट स्टूडियो</string>
+    <string name="create_your_own_package">अपना खुद का पैकेज बनाएं</string>
+    <string name="pay_via_upi">UPI के माध्यम से भुगतान करें</string>
+    <string name="view_predefined_packages">पूर्वनिर्धारित पैकेज देखें</string>
 </resources>
