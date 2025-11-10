@@ -37,6 +37,12 @@ fun CreateOwnPackage(onContact: (String, String) -> Unit) {
     val eventTypes = stringArrayResource(R.array.event_types).toList()
     var eventTypeExpanded by remember { mutableStateOf(false) }
 
+    val isSpecificPackage = remember(selectedEventType, numCameras, numDays, selectedVideoType, selectedAlbumSheets) {
+        (selectedEventType == "Wedding" && numCameras == 2 && numDays == 1 &&
+                ((selectedAlbumSheets == AlbumSheets.SHEETS_30 && selectedVideoType == VideoType.CINEMATIC) ||
+                        (selectedAlbumSheets == AlbumSheets.SHEETS_20 && selectedVideoType == VideoType.TRADITIONAL)))
+    }
+
     val estimatedPrice = remember(selectedEventType, numCameras, numDays, selectedVideoType, selectedAlbumSheets) {
         calculateCustomPackagePrice(selectedEventType, numCameras, numDays, selectedVideoType, selectedAlbumSheets)
     }
@@ -222,19 +228,25 @@ fun CreateOwnPackage(onContact: (String, String) -> Unit) {
             Spacer(modifier = Modifier.height(24.dp))
 
             // Estimated Price
-            Text(
-                text = "Estimated Price: ₹${String.format("%,d", estimatedPrice)}",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.ExtraBold,
-                color = MaterialTheme.colorScheme.primary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+            if (isSpecificPackage) {
+                Text(
+                    text = "Estimated Price: ₹${String.format("%,d", estimatedPrice)}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
             
             OutlinedButton(
                 onClick = {
-                    val details = "Custom Package: Event Type - $selectedEventType, Cameras - $numCameras, Days - $numDays, Video - ${selectedVideoType.name.replace("_", " ").lowercase().capitalize(Locale.ROOT)}, Album - ${selectedAlbumSheets.sheets} Sheets. Estimated Price: ₹${String.format("%,d", estimatedPrice)}"
+                    val details = if (isSpecificPackage) {
+                        "Custom Package: Event Type - $selectedEventType, Cameras - $numCameras, Days - $numDays, Video - ${selectedVideoType.name.replace("_", " ").lowercase().capitalize(Locale.ROOT)}, Album - ${selectedAlbumSheets.sheets} Sheets. Estimated Price: ₹${String.format("%,d", estimatedPrice)}"
+                    } else {
+                        "Custom Package Inquiry: Event Type - $selectedEventType, Cameras - $numCameras, Days - $numDays, Video - ${selectedVideoType.name.replace("_", " ").lowercase().capitalize(Locale.ROOT)}, Album - ${selectedAlbumSheets.sheets} Sheets."
+                    }
                     onContact(customPackageTitle, details)
                 },
                 modifier = Modifier
@@ -278,36 +290,48 @@ fun calculateCustomPackagePrice(
     videoType: VideoType,
     albumSheets: AlbumSheets
 ): Int {
-    var basePrice = 10000 // Base price
-
-    // Event type influence
-    basePrice += when (eventType) {
-        "Wedding" -> 15000
-        "Birthday Party" -> 5000
-        "Pre-wedding" -> 10000
-        else -> 2000
+    // Specific pricing for wedding packages as per user's request
+    if (eventType == "Wedding" && numCameras == 2 && numDays == 1) {
+        if (albumSheets == AlbumSheets.SHEETS_30 && videoType == VideoType.CINEMATIC) {
+            return 12000
+        }
+        if (albumSheets == AlbumSheets.SHEETS_20 && videoType == VideoType.TRADITIONAL) {
+            return 11000
+        }
     }
 
-    // Cameras influence
-    basePrice += (numCameras - 1) * 5000
+    // General pricing for other configurations or event types
+    var price = 0
 
-    // Days influence
-    basePrice += (numDays - 1) * 7000
+    // Base price for any event
+    price += when (eventType) {
+        "Wedding" -> 8000 // Base for wedding, if not one of the specific packages above
+        "Birthday Party" -> 2000
+        "Pre-wedding" -> 5000
+        else -> 1000 // Default for unknown event types
+    }
+
+    // Cameras influence (cost per camera, assuming 1 camera is included in base)
+    price += (numCameras - 1) * 2000 // Cost for additional cameras
+
+    // Days influence (cost per day, assuming 1 day is included in base)
+    price += (numDays - 1) * 3000 // Cost for additional days
 
     // Video type influence
-    basePrice += when (videoType) {
-        VideoType.CINEMATIC -> 8000
-        VideoType.TRADITIONAL -> 4000
-        VideoType.BOTH -> 12000
+    price += when (videoType) {
+        VideoType.CINEMATIC -> 4000
+        VideoType.TRADITIONAL -> 2000
+        VideoType.BOTH -> 6000
     }
 
     // Album sheets influence
-    basePrice += when (albumSheets) {
-        AlbumSheets.SHEETS_20 -> 3000
-        AlbumSheets.SHEETS_30 -> 6000
-        AlbumSheets.SHEETS_40 -> 9000
-        AlbumSheets.SHEETS_50 -> 12000
+    price += when (albumSheets) {
+        AlbumSheets.SHEETS_20 -> 1500
+        AlbumSheets.SHEETS_30 -> 2500
+        AlbumSheets.SHEETS_40 -> 3500
+        AlbumSheets.SHEETS_50 -> 4500
     }
 
-    return basePrice
+    // Ensure minimum price is not too low
+    return maxOf(price, 5000)
 }
