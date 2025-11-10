@@ -145,6 +145,7 @@
     <string name="booking_specify_event_type_error">कृपया ईवेंट प्रकार निर्दिष्ट करें</string>
     <string name="booking_date_empty_error">कृपया एक तारीख चुनें</string>
     <string name="booking_past_date_error">पिछली तारीखों की अनुमति नहीं है</string>
+    <string name="booking_phone_length_error">फ़ोन नंबर 10 अंकों का होना चाहिए</string>
     <string name="booking_request_number_label">बुकिंग अनुरोध संख्या:</string>
     <string name="booking_confirmation_message">आपका बुकिंग अनुरोध प्राप्त हो गया है! हम विवरण की पुष्टि करने के लिए जल्द से जल्द आपसे संपर्क करेंगे।</string>
     <string name="booking_inquiry_sent_success">बुकिंग अनुरोध सफलतापूर्वक भेजा गया! हम जल्द ही आपसे संपर्क करेंगे।</string>

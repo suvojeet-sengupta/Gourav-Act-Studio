@@ -138,6 +138,7 @@ fun BookingDialog(
     // Validation states
     var nameError by remember { mutableStateOf(false) }
     var phoneError by remember { mutableStateOf(false) }
+    var phoneLengthError by remember { mutableStateOf(false) }
     var eventTypeError by remember { mutableStateOf(false) }
     var otherEventTypeRequiredError by remember { mutableStateOf(false) }
     var dateError by remember { mutableStateOf(false) }
@@ -148,13 +149,14 @@ fun BookingDialog(
     val validateForm: () -> Boolean = {
         nameError = name.isBlank()
         phoneError = phone.isBlank()
+        phoneLengthError = phone.length != 10
         eventTypeError = eventType.isBlank()
         otherEventTypeRequiredError = eventType == "Other" && otherEventType.isBlank()
         dateError = date.isBlank()
         eventTimeError = eventTime.isBlank()
         eventAddressError = eventAddress.isBlank()
 
-        !nameError && !phoneError && !eventTypeError && !otherEventTypeRequiredError && !dateError && !invalidDateError && !eventTimeError && !eventAddressError
+        !nameError && !phoneError && !phoneLengthError && !eventTypeError && !otherEventTypeRequiredError && !dateError && !invalidDateError && !eventTimeError && !eventAddressError
     }
 
     // Animation
@@ -351,7 +353,15 @@ fun BookingDialog(
                         ) {
                             OutlinedTextField(
                                 value = phone,
-                                onValueChange = { phone = it; phoneError = false },
+                                onValueChange = {
+                                    if (it.length <= 10) {
+                                        phone = it
+                                        phoneError = false
+                                        phoneLengthError = false
+                                    } else {
+                                        phoneLengthError = true
+                                    }
+                                },
                                 placeholder = { Text(stringResource(R.string.booking_enter_phone_placeholder)) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                                 modifier = Modifier.fillMaxWidth(),
@@ -362,10 +372,12 @@ fun BookingDialog(
                                     unfocusedBorderColor = Color(0xFFE0E0E0)
                                 ),
                                 singleLine = true,
-                                isError = phoneError,
+                                isError = phoneError || phoneLengthError,
                                 supportingText = {
                                     if (phoneError) {
                                         Text(stringResource(R.string.booking_phone_empty_error), color = MaterialTheme.colorScheme.error)
+                                    } else if (phoneLengthError) {
+                                        Text(stringResource(R.string.booking_phone_length_error), color = MaterialTheme.colorScheme.error)
                                     }
                                 }
                             )

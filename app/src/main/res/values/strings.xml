@@ -145,6 +145,7 @@
     <string name="booking_specify_event_type_error">Please specify the event type</string>
     <string name="booking_date_empty_error">Please select a date</string>
     <string name="booking_past_date_error">Past dates are not allowed</string>
+    <string name="booking_phone_length_error">Phone number must be 10 digits</string>
     <string name="booking_request_number_label">Booking Request No:</string>
     <string name="booking_confirmation_message">Your booking request has been received! We will contact you ASAP to confirm the details.</string>
     <string name="booking_inquiry_sent_success">Booking request sent successfully! We will contact you soon.</string>
