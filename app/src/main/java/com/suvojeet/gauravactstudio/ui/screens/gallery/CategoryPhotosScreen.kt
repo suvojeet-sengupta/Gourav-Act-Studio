@@ -207,7 +207,7 @@ fun PortfolioCard(item: PortfolioItem, navController: NavController, isCategory:
             },
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        Box {
+        Box(contentAlignment = Alignment.Center) {
             var isLoading by remember { mutableStateOf(true) }
             AsyncImage(
                 model = item.imageUrl,
@@ -218,26 +218,33 @@ fun PortfolioCard(item: PortfolioItem, navController: NavController, isCategory:
                 onError = { isLoading = false }
             )
 
-            if (!isCategory) {
-                // Overlay gradient for detail images
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .fillMaxWidth()
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.6f))
-                            )
+            // Title overlay
+            val overlayModifier = if (isCategory) {
+                Modifier
+                    .matchParentSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+            } else {
+                Modifier
+                    .align(Alignment.BottomStart)
+                    .fillMaxWidth()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.6f))
                         )
-                        .padding(10.dp)
-                ) {
-                    Text(
-                        text = item.title,
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold,
-                        style = MaterialTheme.typography.titleMedium
                     )
-                }
+            }
+
+            Box(
+                modifier = overlayModifier.padding(10.dp),
+                contentAlignment = if (isCategory) Alignment.Center else Alignment.BottomStart
+            ) {
+                Text(
+                    text = item.title,
+                    color = Color.White,
+                    fontWeight = if (isCategory) FontWeight.Bold else FontWeight.SemiBold,
+                    style = if (isCategory) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.titleMedium,
+                    textAlign = if (isCategory) TextAlign.Center else TextAlign.Start
+                )
             }
         }
     }
