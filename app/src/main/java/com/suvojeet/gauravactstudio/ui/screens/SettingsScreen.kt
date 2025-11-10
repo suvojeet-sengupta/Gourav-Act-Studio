@@ -119,6 +119,7 @@ fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) 
         ModernLanguageDialog(
             onDismiss = { showLanguageDialog = false },
             onSelectLanguage = { lang ->
+                com.suvojeet.gauravactstudio.util.Prefs.setLanguage(context, lang)
                 activity?.setLocale(lang)
                 showLanguageDialog = false
             }
