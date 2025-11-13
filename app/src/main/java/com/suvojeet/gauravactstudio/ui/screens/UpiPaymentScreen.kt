@@ -479,32 +479,12 @@ fun UpiPaymentScreen(navController: NavController) {
 
                     Button(
                         onClick = {
-                            if (isEnabled) {
-                                val encodedUpiId = URLEncoder.encode(upiId, StandardCharsets.UTF_8.toString())
-                                val amountDouble = amount.toDoubleOrNull() ?: 0.0
-                                val formattedAmount = String.format("%.2f", amountDouble)
-                                val encodedAmount = URLEncoder.encode(formattedAmount, StandardCharsets.UTF_8.toString())
-                                // We are now sending ONLY the ID and Amount.
-                                // Forcing the UPI app to fetch the Payee Name (pn) itself.
-                                val uriString = "upi://pay?pa=$encodedUpiId&am=$encodedAmount&cu=INR"
-                                
-                                val intent = Intent(Intent.ACTION_VIEW)
-                                val appPackage = selectedUpiApp?.packageName
-
-                                intent.data = Uri.parse(uriString)
-                                appPackage?.let { intent.setPackage(it) }
-
-                                try {
-                                    paymentResultLauncher.launch(intent)
-                                } catch (e: Exception) {
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            message = "Could not find the selected UPI app. Please try another.",
-                                            actionLabel = "Dismiss",
-                                            duration = SnackbarDuration.Long
-                                        )
-                                    }
-                                }
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = "This feature is under development",
+                                    actionLabel = "Dismiss",
+                                    duration = SnackbarDuration.Long
+                                )
                             }
                         },
                         modifier = Modifier

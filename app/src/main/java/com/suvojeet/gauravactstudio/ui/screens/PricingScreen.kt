@@ -175,6 +175,7 @@ fun PricingScreen(
                     .fillMaxSize()
             ) {
                 var showCustomBuilder by remember { mutableStateOf(false) }
+                var showUpiDevelopmentDialog by remember { mutableStateOf(false) } // State for UPI dialog
 
                 // Header Section
                 Surface(
@@ -242,7 +243,7 @@ fun PricingScreen(
                         Spacer(modifier = Modifier.height(12.dp)) // Spacer between buttons
                         // Pay via UPI Button
                         Button(
-                            onClick = { navController.navigate(Screen.UpiPayment.route) },
+                            onClick = { showUpiDevelopmentDialog = true }, // Show dialog instead of navigating
                             modifier = Modifier.fillMaxWidth(0.8f),
                             shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -262,6 +263,20 @@ fun PricingScreen(
                             )
                         }
                     }
+                }
+
+                // UPI Development Dialog
+                if (showUpiDevelopmentDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showUpiDevelopmentDialog = false },
+                        title = { Text("Feature Under Development") },
+                        text = { Text("This feature is under development.") },
+                        confirmButton = {
+                            TextButton(onClick = { showUpiDevelopmentDialog = false }) {
+                                Text("OK")
+                            }
+                        }
+                    )
                 }
 
                 // Content based on toggle
