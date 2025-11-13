@@ -115,7 +115,6 @@ fun YourPhotosScreen(
                     .padding(horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
                 AnimatedContent(isVisible) {
                     Icon(
                         imageVector = Icons.Filled.CloudDownload,
