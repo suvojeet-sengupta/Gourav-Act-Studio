@@ -23,6 +23,8 @@
     <string name="home_feature_delivery_description">Quick turnaround time for your precious memories</string>
     <string name="home_feature_packages_title">Affordable Packages</string>
     <string name="home_feature_packages_description">Flexible pricing to suit every budget</string>
+    <string name="home_feature_your_photos_title">Your Photos</string>
+    <string name="home_feature_your_photos_description">Request your photos from a past event</string>
     <string name="contact_get_in_touch">Get In Touch</string>
     <string name="contact_description">We\'d love to hear from you! Reach out for bookings</string>
     <string name="contact_call_us">Call Us</string>
@@ -204,4 +206,5 @@
     <string name="create_your_own_package">Create Your Own Package</string>
     <string name="pay_via_upi">Pay via UPI</string>
     <string name="view_predefined_packages">View Predefined Packages</string>
+    <string name="your_photos_screen">Your Photos</string>
 </resources>

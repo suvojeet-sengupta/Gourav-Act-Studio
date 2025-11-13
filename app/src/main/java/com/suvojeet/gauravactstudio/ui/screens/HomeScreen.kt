@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.clickable
 
 @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -101,7 +102,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
 
             // Features with modern design
 AnimatedContent(isVisible, delay = 80) {
-                ModernFeaturesSection(isVisible)
+                ModernFeaturesSection(isVisible, navController)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -266,6 +267,84 @@ fun HeroSection(isVisible: Boolean, navController: NavController) {
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
                             text = stringResource(R.string.home_explore_services),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            letterSpacing = 0.5.sp
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        AnimatedContent(isVisible, delay = 160) {
+            val interactionSource = remember { MutableInteractionSource() }
+            val isPressed by interactionSource.collectIsPressedAsState()
+            val scale by animateFloatAsState(
+                targetValue = if (isPressed) 0.95f else 1f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                ),
+                label = "Button Scale"
+            )
+            val animatedColor1 by animateColorAsState(
+                targetValue = if (isPressed) Color(0xFF10B981) else Color(0xFF06B6D4),
+                animationSpec = tween(durationMillis = 200),
+                label = "Color1 Animation"
+            )
+            val animatedColor2 by animateColorAsState(
+                targetValue = if (isPressed) Color(0xFF06B6D4) else Color(0xFF10B981),
+                animationSpec = tween(durationMillis = 200),
+                label = "Color2 Animation"
+            )
+
+            Button(
+                onClick = {
+                    navController.navigate(Screen.YourPhotos.route)
+                },
+                interactionSource = interactionSource,
+                modifier = Modifier
+                    .height(64.dp)
+                    .fillMaxWidth(0.85f)
+                    .scale(scale)
+                    .shadow(
+                        elevation = 20.dp,
+                        shape = RoundedCornerShape(32.dp),
+                        ambientColor = Color(0xFF10B981).copy(alpha = 0.4f),
+                        spotColor = Color(0xFF06B6D4).copy(alpha = 0.4f)
+                    ),
+                shape = RoundedCornerShape(32.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(animatedColor1, animatedColor2)
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Photo,
+                            contentDescription = null,
+                            modifier = Modifier.size(28.dp),
+                            tint = Color.White
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = stringResource(R.string.home_feature_your_photos_title),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
@@ -478,7 +557,7 @@ fun ModernStatCard(
 }
 
 @Composable
-fun ModernFeaturesSection(isVisible: Boolean) {
+fun ModernFeaturesSection(isVisible: Boolean, navController: NavController) { // Add NavController
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -580,11 +659,14 @@ fun ModernFeatureItem(
     icon: ImageVector,
     title: String,
     description: String,
-    accentColor: Color
+    accentColor: Color,
+    onClick: (() -> Unit)? = null
 ) {
     Row(
         verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .let { if (onClick != null) it.clickable(onClick = onClick) else it }
     ) {
         Box(
             modifier = Modifier

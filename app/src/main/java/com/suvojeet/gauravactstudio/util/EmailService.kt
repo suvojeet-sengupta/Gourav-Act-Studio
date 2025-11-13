@@ -25,6 +25,15 @@ data class EmailRequest(
 )
 
 @Serializable
+data class YourPhotosEmailRequest(
+    @SerialName("service_id") val service_id: String,
+    @SerialName("template_id") val template_id: String,
+    @SerialName("user_id") val user_id: String,
+    @SerialName("accessToken") val accessToken: String,
+    @SerialName("template_params") val template_params: YourPhotosTemplateParams
+)
+
+@Serializable
 data class TemplateParams(
     @SerialName("name") val name: String,
     @SerialName("phone") val phone: String,
@@ -38,6 +47,15 @@ data class TemplateParams(
     @SerialName("custom_package_details") val custom_package_details: String? = null,
     @SerialName("location") val location: String,
     @SerialName("booking_request_number") val booking_request_number: String? = null // New field
+)
+
+@Serializable
+data class YourPhotosTemplateParams(
+    @SerialName("name") val name: String,
+    @SerialName("whatsapp_number") val whatsapp_number: String,
+    @SerialName("event_date") val event_date: String,
+    @SerialName("event_type") val event_type: String,
+    @SerialName("user_email") val user_email: String
 )
 
 class EmailService {
@@ -101,6 +119,38 @@ class EmailService {
         } catch (e: Exception) {
             Log.e("EmailService", "Failed to send email", e)
             throw Exception("Failed to send booking request. Please try again later.") // Updated error message
+        }
+    }
+
+    suspend fun sendYourPhotosRequest(
+        name: String,
+        whatsappNumber: String,
+        eventDate: String,
+        eventType: String
+    ) {
+        val request = YourPhotosEmailRequest(
+            service_id = "service_ovxd5wh",
+            template_id = "template_your_photos", // Replace with your actual template ID
+            user_id = PUBLIC_KEY,
+            accessToken = PRIVATE_KEY,
+            template_params = YourPhotosTemplateParams(
+                name = name,
+                whatsapp_number = whatsappNumber,
+                event_date = eventDate,
+                event_type = eventType,
+                user_email = "gauravkumarpjt@gmail.com"
+            )
+        )
+
+        try {
+            val response = client.post("https://api.emailjs.com/api/v1.0/email/send") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+            Log.d("EmailService", "Got response: ${response.status} ${response.bodyAsText()}")
+        } catch (e: Exception) {
+            Log.e("EmailService", "Failed to send 'Your Photos' request", e)
+            throw Exception("Failed to send request. Please try again later.")
         }
     }
 }
