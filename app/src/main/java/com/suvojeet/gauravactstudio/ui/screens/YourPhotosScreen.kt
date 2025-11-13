@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import com.suvojeet.gauravactstudio.ui.components.LightDecorativeBackground
 import kotlinx.coroutines.delay
 
@@ -92,7 +93,18 @@ fun YourPhotosScreen(
 
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
-            containerColor = Color.Transparent
+            containerColor = Color.Transparent,
+            topBar = {
+                TopAppBar(
+                    title = { },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                )
+            }
         ) { paddingValues ->
             Column(
                 modifier = Modifier
