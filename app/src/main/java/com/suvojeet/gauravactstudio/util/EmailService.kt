@@ -130,7 +130,7 @@ class EmailService {
     ) {
         val request = YourPhotosEmailRequest(
             service_id = "service_ovxd5wh",
-            template_id = "template_your_photos", // Replace with your actual template ID
+            template_id = "template_f11y90n", // Replace with your actual template ID
             user_id = PUBLIC_KEY,
             accessToken = PRIVATE_KEY,
             template_params = YourPhotosTemplateParams(
