@@ -111,7 +111,7 @@ fun YourPhotosScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
                     .verticalScroll(scrollState)
-                    .padding(horizontal = 20.dp, vertical = 32.dp),
+                    .padding(horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 AnimatedContent(isVisible) {
