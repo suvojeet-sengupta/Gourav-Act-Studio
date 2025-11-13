@@ -39,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import com.suvojeet.gauravactstudio.MainActivity
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+import com.suvojeet.gauravactstudio.ui.components.LightDecorativeBackground
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import kotlinx.coroutines.delay
 
