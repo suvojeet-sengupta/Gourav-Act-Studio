@@ -96,7 +96,7 @@ fun YourPhotosScreen(
             containerColor = Color.Transparent,
             topBar = {
                 TopAppBar(
-                    title = { },
+                    title = { Text("Get Your Photos") },
                     navigationIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -114,24 +114,16 @@ fun YourPhotosScreen(
                     .padding(horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.height(16.dp))
                 AnimatedContent(isVisible) {
                     Icon(
                         imageVector = Icons.Filled.CloudDownload,
                         contentDescription = null,
-                        modifier = Modifier.size(48.dp),
+                        modifier = Modifier.size(64.dp),
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                AnimatedContent(isVisible, delay = 100) {
-                    Text(
-                        text = "Get Your Photos",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(24.dp))
                 AnimatedContent(isVisible, delay = 200) {
                     Text(
                         text = "Fill in the details below to request your event photos.",
@@ -143,14 +135,20 @@ fun YourPhotosScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            elevation = 16.dp,
+                            shape = MaterialTheme.shapes.large,
+                            ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                        ),
                     shape = MaterialTheme.shapes.large,
-                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.8f))
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Column(
                         modifier = Modifier.padding(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
                         OutlinedTextField(
                             value = name,
@@ -181,6 +179,7 @@ fun YourPhotosScreen(
                             modifier = Modifier.fillMaxWidth(),
                             enabled = !uiState.isSubmitting
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
                         Button(
                             onClick = {
                                 viewModel.submitRequest(
@@ -193,19 +192,40 @@ fun YourPhotosScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(56.dp),
-                            enabled = !uiState.isSubmitting && name.isNotBlank() && whatsappNumber.isNotBlank() && eventDate.isNotBlank() && eventType.isNotBlank()
+                            enabled = !uiState.isSubmitting && name.isNotBlank() && whatsappNumber.isNotBlank() && eventDate.isNotBlank() && eventType.isNotBlank(),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                            contentPadding = PaddingValues(0.dp)
                         ) {
-                            if (uiState.isSubmitting) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(24.dp),
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                            } else {
-                                Text("Submit Request")
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        brush = Brush.horizontalGradient(
+                                            colors = listOf(
+                                                MaterialTheme.colorScheme.primary,
+                                                MaterialTheme.colorScheme.secondary
+                                            )
+                                        )
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (uiState.isSubmitting) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(24.dp),
+                                        color = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                } else {
+                                    Text(
+                                        "Submit Request",
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
                             }
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(32.dp))
             }
         }
     }
