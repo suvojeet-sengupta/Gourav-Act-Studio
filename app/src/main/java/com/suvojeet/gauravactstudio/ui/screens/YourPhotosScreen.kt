@@ -34,6 +34,46 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import com.suvojeet.gauravactstudio.ui.components.LightDecorativeBackground
 import kotlinx.coroutines.delay
 
+import android.app.DatePickerDialog
+import android.widget.DatePicker
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CloudDownload
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import com.suvojeet.gauravactstudio.ui.components.LightDecorativeBackground
+import kotlinx.coroutines.delay
+import java.util.Calendar
+import java.util.Date
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun YourPhotosScreen(
@@ -48,6 +88,19 @@ fun YourPhotosScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scrollState = rememberScrollState()
     var isVisible by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
+            eventDate = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
+        }, year, month, day
+    )
 
     LaunchedEffect(Unit) {
         delay(50)
@@ -160,7 +213,14 @@ fun YourPhotosScreen(
                         )
                         OutlinedTextField(
                             value = whatsappNumber,
-                            onValueChange = { whatsappNumber = it },
+                            onValueChange = {
+                                val newText = it.filter { char -> char.isDigit() }
+                                if (newText.length <= 10) {
+                                    if (newText.isEmpty() || newText.first() in listOf('9', '8', '7', '6')) {
+                                        whatsappNumber = newText
+                                    }
+                                }
+                            },
                             label = { Text("WhatsApp Number") },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                             modifier = Modifier.fillMaxWidth(),
@@ -168,10 +228,18 @@ fun YourPhotosScreen(
                         )
                         OutlinedTextField(
                             value = eventDate,
-                            onValueChange = { eventDate = it },
+                            onValueChange = { },
                             label = { Text("Event Date (e.g., DD-MM-YYYY)") },
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = !uiState.isSubmitting
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { datePickerDialog.show() },
+                            enabled = false,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                                disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
                         )
                         OutlinedTextField(
                             value = eventType,
