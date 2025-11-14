@@ -1,6 +1,8 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.net.Uri
 import android.widget.DatePicker
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -84,10 +86,27 @@ fun YourPhotosScreen(
         AlertDialog(
             onDismissRequest = { viewModel.dismissSuccessDialog() },
             title = { Text("Request Sent") },
-            text = { Text("Your request for photos has been sent successfully. We will contact you soon.") },
+            text = { Text("Your request for photos has been sent successfully. You will get contacted from 9354654066 or you can directly request via whatsapp too.") },
             confirmButton = {
-                TextButton(onClick = { viewModel.dismissSuccessDialog() }) {
-                    Text("OK")
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextButton(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                data = Uri.parse("https://api.whatsapp.com/send?phone=919354654066")
+                            }
+                            context.startActivity(intent)
+                            viewModel.dismissSuccessDialog()
+                        }
+                    ) {
+                        Text("WhatsApp")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TextButton(onClick = { viewModel.dismissSuccessDialog() }) {
+                        Text("OK")
+                    }
                 }
             }
         )
