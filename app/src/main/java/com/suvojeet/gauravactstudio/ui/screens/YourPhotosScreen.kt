@@ -54,6 +54,7 @@ fun YourPhotosScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scrollState = rememberScrollState()
     var isVisible by remember { mutableStateOf(false) }
+    var showConfirmationDialog by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     var showDatePicker by remember { mutableStateOf(false) }
@@ -124,6 +125,43 @@ fun YourPhotosScreen(
                     TextButton(onClick = { viewModel.dismissSuccessDialog() }) {
                         Text("OK")
                     }
+                }
+            }
+        )
+    }
+
+    if (showConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = { showConfirmationDialog = false },
+            title = { Text("Confirm Your Details") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Please review your details before submitting:")
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Name: $name", fontWeight = FontWeight.Bold)
+                    Text("WhatsApp Number: $whatsappNumber", fontWeight = FontWeight.Bold)
+                    Text("Event Date: $eventDate", fontWeight = FontWeight.Bold)
+                    Text("Event Type: $eventType", fontWeight = FontWeight.Bold)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showConfirmationDialog = false
+                        viewModel.submitRequest(
+                            name = name,
+                            whatsappNumber = whatsappNumber,
+                            eventDate = eventDate,
+                            eventType = eventType
+                        )
+                    }
+                ) {
+                    Text("Confirm & Send")
+                }
+            },
+            dismissButton = {
+                OutlinedButton(onClick = { showConfirmationDialog = false }) {
+                    Text("Cancel")
                 }
             }
         )
@@ -255,12 +293,7 @@ fun YourPhotosScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(
                             onClick = {
-                                viewModel.submitRequest(
-                                    name = name,
-                                    whatsappNumber = whatsappNumber,
-                                    eventDate = eventDate,
-                                    eventType = eventType
-                                )
+                                showConfirmationDialog = true
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
