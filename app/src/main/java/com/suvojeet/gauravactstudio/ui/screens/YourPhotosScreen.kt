@@ -209,6 +209,7 @@ fun YourPhotosScreen(
                             label = { Text("Name") },
                             modifier = Modifier.fillMaxWidth(),
                             enabled = !uiState.isSubmitting,
+                            singleLine = true,
                             shape = RoundedCornerShape(16.dp)
                         )
                         OutlinedTextField(
