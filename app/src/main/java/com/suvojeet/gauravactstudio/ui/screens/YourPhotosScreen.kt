@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import com.suvojeet.gauravactstudio.ui.components.LightDecorativeBackground
+import androidx.compose.foundation.shape.RoundedCornerShape
 import kotlinx.coroutines.delay
 import java.util.Calendar
 import java.util.Date
@@ -55,17 +56,33 @@ fun YourPhotosScreen(
     var isVisible by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val calendar = Calendar.getInstance()
-    val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
-    val day = calendar.get(Calendar.DAY_OF_MONTH)
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
 
-    val datePickerDialog = DatePickerDialog(
-        context,
-        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
-            eventDate = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
-        }, year, month, day
-    )
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDatePicker = false
+                        datePickerState.selectedDateMillis?.let { millis ->
+                            val calendar = Calendar.getInstance().apply { timeInMillis = millis }
+                            val day = calendar.get(Calendar.DAY_OF_MONTH)
+                            val month = calendar.get(Calendar.MONTH) + 1
+                            val year = calendar.get(Calendar.YEAR)
+                            eventDate = "$day/$month/$year"
+                        }
+                    }
+                ) { Text("OK") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
 
     LaunchedEffect(Unit) {
         delay(50)
@@ -191,7 +208,8 @@ fun YourPhotosScreen(
                             onValueChange = { name = it },
                             label = { Text("Name") },
                             modifier = Modifier.fillMaxWidth(),
-                            enabled = !uiState.isSubmitting
+                            enabled = !uiState.isSubmitting,
+                            shape = RoundedCornerShape(16.dp)
                         )
                         OutlinedTextField(
                             value = whatsappNumber,
@@ -206,7 +224,8 @@ fun YourPhotosScreen(
                             label = { Text("WhatsApp Number") },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                             modifier = Modifier.fillMaxWidth(),
-                            enabled = !uiState.isSubmitting
+                            enabled = !uiState.isSubmitting,
+                            shape = RoundedCornerShape(16.dp)
                         )
                         OutlinedTextField(
                             value = eventDate,
@@ -214,8 +233,9 @@ fun YourPhotosScreen(
                             label = { Text("Event Date (e.g., DD-MM-YYYY)") },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { datePickerDialog.show() },
+                                .clickable { showDatePicker = true },
                             enabled = false,
+                            shape = RoundedCornerShape(16.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 disabledTextColor = MaterialTheme.colorScheme.onSurface,
                                 disabledBorderColor = MaterialTheme.colorScheme.outline,
@@ -228,7 +248,8 @@ fun YourPhotosScreen(
                             onValueChange = { eventType = it },
                             label = { Text("Event Type (e.g., Wedding, Birthday)") },
                             modifier = Modifier.fillMaxWidth(),
-                            enabled = !uiState.isSubmitting
+                            enabled = !uiState.isSubmitting,
+                            shape = RoundedCornerShape(16.dp)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(
