@@ -24,6 +24,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -56,6 +57,22 @@ fun YourPhotosScreen(
     var isVisible by remember { mutableStateOf(false) }
     var showConfirmationDialog by remember { mutableStateOf(false) }
 
+    var nameError by remember { mutableStateOf(false) }
+    var whatsappNumberError by remember { mutableStateOf(false) }
+    var whatsappNumberLengthError by remember { mutableStateOf(false) }
+    var eventDateError by remember { mutableStateOf(false) }
+    var eventTypeError by remember { mutableStateOf(false) }
+
+    val validateForm = {
+        nameError = name.isBlank()
+        whatsappNumberError = whatsappNumber.isBlank()
+        whatsappNumberLengthError = whatsappNumber.isNotBlank() && whatsappNumber.length < 10
+        eventDateError = eventDate.isBlank()
+        eventTypeError = eventType.isBlank()
+
+        !nameError && !whatsappNumberError && !whatsappNumberLengthError && !eventDateError && !eventTypeError
+    }
+
     val context = LocalContext.current
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
@@ -73,6 +90,7 @@ fun YourPhotosScreen(
                             val month = calendar.get(Calendar.MONTH) + 1
                             val year = calendar.get(Calendar.YEAR)
                             eventDate = "$day/$month/$year"
+                            eventDateError = false
                         }
                     }
                 ) { Text("OK") }
@@ -243,12 +261,23 @@ fun YourPhotosScreen(
                     ) {
                         OutlinedTextField(
                             value = name,
-                            onValueChange = { name = it },
+                            onValueChange = { name = it; nameError = false },
                             label = { Text("Name") },
                             modifier = Modifier.fillMaxWidth(),
                             enabled = !uiState.isSubmitting,
                             singleLine = true,
-                            shape = RoundedCornerShape(16.dp)
+                            shape = RoundedCornerShape(16.dp),
+                            isError = nameError,
+                            supportingText = {
+                                if (nameError) {
+                                    Text("Name cannot be empty", color = MaterialTheme.colorScheme.error)
+                                }
+                            },
+                            trailingIcon = {
+                                if (nameError) {
+                                    Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colorScheme.error)
+                                }
+                            }
                         )
                         OutlinedTextField(
                             value = whatsappNumber,
@@ -257,6 +286,8 @@ fun YourPhotosScreen(
                                 if (newText.length <= 10) {
                                     if (newText.isEmpty() || newText.first() in listOf('9', '8', '7', '6')) {
                                         whatsappNumber = newText
+                                        whatsappNumberError = false
+                                        whatsappNumberLengthError = false
                                     }
                                 }
                             },
@@ -264,7 +295,20 @@ fun YourPhotosScreen(
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                             modifier = Modifier.fillMaxWidth(),
                             enabled = !uiState.isSubmitting,
-                            shape = RoundedCornerShape(16.dp)
+                            shape = RoundedCornerShape(16.dp),
+                            isError = whatsappNumberError || whatsappNumberLengthError,
+                            supportingText = {
+                                if (whatsappNumberError) {
+                                    Text("WhatsApp Number cannot be empty", color = MaterialTheme.colorScheme.error)
+                                } else if (whatsappNumberLengthError) {
+                                    Text("WhatsApp Number must be 10 digits", color = MaterialTheme.colorScheme.error)
+                                }
+                            },
+                            trailingIcon = {
+                                if (whatsappNumberError || whatsappNumberLengthError) {
+                                    Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colorScheme.error)
+                                }
+                            }
                         )
                         OutlinedTextField(
                             value = eventDate,
@@ -277,28 +321,52 @@ fun YourPhotosScreen(
                             shape = RoundedCornerShape(16.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                                disabledBorderColor = if (eventDateError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
                                 disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                 disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
+                            ),
+                            isError = eventDateError,
+                            supportingText = {
+                                if (eventDateError) {
+                                    Text("Event Date cannot be empty", color = MaterialTheme.colorScheme.error)
+                                }
+                            },
+                            trailingIcon = {
+                                if (eventDateError) {
+                                    Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colorScheme.error)
+                                }
+                            }
                         )
                         OutlinedTextField(
                             value = eventType,
-                            onValueChange = { eventType = it },
+                            onValueChange = { eventType = it; eventTypeError = false },
                             label = { Text("Event Type (e.g., Wedding, Birthday)") },
                             modifier = Modifier.fillMaxWidth(),
                             enabled = !uiState.isSubmitting,
-                            shape = RoundedCornerShape(16.dp)
+                            shape = RoundedCornerShape(16.dp),
+                            isError = eventTypeError,
+                            supportingText = {
+                                if (eventTypeError) {
+                                    Text("Event Type cannot be empty", color = MaterialTheme.colorScheme.error)
+                                }
+                            },
+                            trailingIcon = {
+                                if (eventTypeError) {
+                                    Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colorScheme.error)
+                                }
+                            }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(
                             onClick = {
-                                showConfirmationDialog = true
+                                if (validateForm()) {
+                                    showConfirmationDialog = true
+                                }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(56.dp),
-                            enabled = !uiState.isSubmitting && name.isNotBlank() && whatsappNumber.isNotBlank() && eventDate.isNotBlank() && eventType.isNotBlank(),
+                            enabled = !uiState.isSubmitting,
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                             contentPadding = PaddingValues(0.dp)
                         ) {
