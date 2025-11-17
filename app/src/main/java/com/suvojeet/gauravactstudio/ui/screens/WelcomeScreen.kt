@@ -427,7 +427,7 @@ fun LanguageButton(
     Card(
         onClick = onClick,
         modifier = modifier
-            .height(140.dp)
+            .aspectRatio(1f)
             .scale(scale)
             .shadow(
                 elevation = if (isSelected) 16.dp else 8.dp,
