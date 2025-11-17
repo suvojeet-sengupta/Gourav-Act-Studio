@@ -41,6 +41,7 @@ import com.suvojeet.gauravactstudio.R
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.draw.blur
@@ -617,6 +618,7 @@ fun ModernFeatureItem(
 fun ModernAddressSection() {
     val context = LocalContext.current
     val mapUrl = "https://maps.app.goo.gl/Wg2P5A4AafHxZsJF6"
+    val reviewUrl = "https://search.google.com/local/writereview?placeid=ChIJIfpBPgBndDkR4uZfZxPF5iQ"
 
     Card(
         modifier = Modifier
@@ -759,6 +761,37 @@ fun ModernAddressSection() {
                                 fontSize = 16.sp
                             )
                         }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedButton(
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(reviewUrl))
+                        context.startActivity(intent)
+                    },
+                    modifier = Modifier
+                        .height(56.dp)
+                        .fillMaxWidth(),
+                    shape = RoundedCornerShape(28.dp),
+                    border = BorderStroke(1.5.dp, Color(0xFF06B6D4))
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Star,
+                            contentDescription = null,
+                            tint = Color(0xFF06B6D4)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = "Rate us on Google Maps",
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF06B6D4),
+                            fontSize = 16.sp
+                        )
                     }
                 }
             }
