@@ -122,16 +122,12 @@ fun MainScreen() {
                                 bookingRequestNumber = bookingRequestNumber // Pass to EmailService
                             )
                             isSuccess = true // Trigger success animation
-                            // Wait for animation to play before dismissing
-                            kotlinx.coroutines.delay(1500)
-                            showBookingDialog = false
                             snackbarHostState.showSnackbar("Booking request sent successfully! Ref: $bookingRequestNumber")
                         } catch (e: Exception) {
                             snackbarHostState.showSnackbar(e.message ?: "Failed to send request")
                         } finally {
                             isSubmitting = false
-                            isSuccess = false // Reset for next time (though dialog is closed)
-                            bookingRequestNumber = null
+                            // isSuccess remains true until dialog is dismissed by user
                         }
                     }
                 }
