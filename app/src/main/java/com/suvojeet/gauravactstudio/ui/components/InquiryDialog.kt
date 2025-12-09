@@ -424,60 +424,68 @@ fun BookingDialog(
                 // Date & Time Row
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Box(modifier = Modifier.weight(1f)) {
-                        FormField(
-                            icon = Icons.Filled.DateRange,
-                            label = "Date"
-                        ) {
-                            OutlinedTextField(
-                                value = date,
-                                onValueChange = { date = it; dateError = false },
-                                readOnly = true,
-                                placeholder = { Text("Select") },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable(enabled = !isSubmitting) { showDatePicker = true },
-                                enabled = !isSubmitting,
-                                shape = RoundedCornerShape(12.dp),
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                    unfocusedBorderColor = Color(0xFFE0E0E0)
-                                ),
-                                isError = dateError || invalidDateError,
-                                supportingText = {
-                                    if (dateError) Text("Required", color = MaterialTheme.colorScheme.error)
-                                }
-                            )
-                        }
-                    }
+                                            FormField(
+                                                icon = Icons.Filled.DateRange,
+                                                label = "Date"
+                                            ) {
+                                                Box(modifier = Modifier.fillMaxWidth()) {
+                                                    OutlinedTextField(
+                                                        value = date,
+                                                        onValueChange = { date = it; dateError = false },
+                                                        readOnly = true,
+                                                        placeholder = { Text("Select") },
+                                                        modifier = Modifier.fillMaxWidth(),
+                                                        enabled = !isSubmitting,
+                                                        shape = RoundedCornerShape(12.dp),
+                                                        colors = OutlinedTextFieldDefaults.colors(
+                                                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                                            unfocusedBorderColor = Color(0xFFE0E0E0)
+                                                        ),
+                                                        isError = dateError || invalidDateError,
+                                                        supportingText = {
+                                                            if (dateError) Text("Required", color = MaterialTheme.colorScheme.error)
+                                                        }
+                                                    )
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .matchParentSize()
+                                                            .clickable(enabled = !isSubmitting) { showDatePicker = true }
+                                                    )
+                                                }
+                                            }                    }
                     
                     Spacer(modifier = Modifier.width(12.dp))
                     
                     Box(modifier = Modifier.weight(1f)) {
-                        FormField(
-                            icon = Icons.Filled.Schedule,
-                            label = "Time"
-                        ) {
-                            OutlinedTextField(
-                                value = eventTime,
-                                onValueChange = { eventTime = it; eventTimeError = false },
-                                readOnly = true,
-                                placeholder = { Text("Select") },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable(enabled = !isSubmitting) { showTimePicker = true },
-                                enabled = !isSubmitting,
-                                shape = RoundedCornerShape(12.dp),
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                    unfocusedBorderColor = Color(0xFFE0E0E0)
-                                ),
-                                isError = eventTimeError,
-                                supportingText = {
-                                    if (eventTimeError) Text("Required", color = MaterialTheme.colorScheme.error)
-                                }
-                            )
-                        }
-                    }
+                                            FormField(
+                                                icon = Icons.Filled.Schedule,
+                                                label = "Time"
+                                            ) {
+                                                Box(modifier = Modifier.fillMaxWidth()) {
+                                                    OutlinedTextField(
+                                                        value = eventTime,
+                                                        onValueChange = { eventTime = it; eventTimeError = false },
+                                                        readOnly = true,
+                                                        placeholder = { Text("Select") },
+                                                        modifier = Modifier.fillMaxWidth(),
+                                                        enabled = !isSubmitting,
+                                                        shape = RoundedCornerShape(12.dp),
+                                                        colors = OutlinedTextFieldDefaults.colors(
+                                                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                                            unfocusedBorderColor = Color(0xFFE0E0E0)
+                                                        ),
+                                                        isError = eventTimeError,
+                                                        supportingText = {
+                                                            if (eventTimeError) Text("Required", color = MaterialTheme.colorScheme.error)
+                                                        }
+                                                    )
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .matchParentSize()
+                                                            .clickable(enabled = !isSubmitting) { showTimePicker = true }
+                                                    )
+                                                }
+                                            }                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
