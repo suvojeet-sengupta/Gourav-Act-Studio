@@ -1,15 +1,31 @@
 package com.suvojeet.gauravactstudio.ui.screens.gallery
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.suvojeet.gauravactstudio.ui.model.PortfolioItem
+import com.suvojeet.gauravactstudio.ui.screens.gallery.PortfolioCard
+import kotlinx.coroutines.delay
 
 @Composable
 fun PhotosScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -27,15 +43,64 @@ fun PhotosScreen(navController: NavController, modifier: Modifier = Modifier) {
         PortfolioItem(title, items.first().imageUrl, 1.2f)
     }
 
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Adaptive(minSize = 160.dp),
-        verticalItemSpacing = 12.dp,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = modifier.padding(top = 16.dp)
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(20)
+        isVisible = true
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFFFAFAFA),
+                        Color(0xFFFFFBFE),
+                        Color(0xFFF5F5F7)
+                    )
+                )
+            )
     ) {
-        items(categories) { category ->
-            PortfolioCard(item = category, navController = navController, isCategory = true)
+        // ... (Background content if any)
+
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(minSize = 160.dp),
+            verticalItemSpacing = 12.dp,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+        ) {
+            items(categories.size) { index ->
+                val category = categories[index]
+                AnimatedStaggeredItem(visible = isVisible, index = index) {
+                    PortfolioCard(item = category, navController = navController, isCategory = true)
+                }
+            }
         }
+    }
+}
+
+@Composable
+fun AnimatedStaggeredItem(
+    visible: Boolean,
+    index: Int,
+    content: @Composable () -> Unit
+) {
+    val enterAnimation = remember(visible) {
+        if (visible) {
+            fadeIn(animationSpec = tween(300, delayMillis = index * 50)) +
+                    slideInVertically(animationSpec = tween(300, delayMillis = index * 50)) { 50 }
+        } else {
+            EnterTransition.None
+        }
+    }
+    
+    AnimatedVisibility(
+        visible = visible,
+        enter = enterAnimation
+    ) {
+        content()
     }
 }
 
