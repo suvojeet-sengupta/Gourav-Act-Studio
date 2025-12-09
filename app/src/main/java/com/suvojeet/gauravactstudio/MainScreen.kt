@@ -67,6 +67,7 @@ fun MainScreen() {
     
     var showBookingDialog by remember { mutableStateOf(false) }
     var isSubmitting by remember { mutableStateOf(false) }
+    var isSuccess by remember { mutableStateOf(false) }
 
     Scaffold(
         bottomBar = {
@@ -92,7 +93,11 @@ fun MainScreen() {
             BookingDialog(
                 packageName = "General Inquiry",
                 isSubmitting = isSubmitting,
-                onDismiss = { showBookingDialog = false },
+                isSuccess = isSuccess,
+                onDismiss = {
+                    showBookingDialog = false
+                    isSuccess = false // Reset success state
+                },
                 onSubmit = { name, phone, eventType, otherEventType, date, eventTime, eventAddress, notes, location ->
                     scope.launch {
                         isSubmitting = true
@@ -109,12 +114,16 @@ fun MainScreen() {
                                 packageName = "General Inquiry",
                                 location = location
                             )
+                            isSuccess = true // Trigger success animation
+                            // Wait for animation to play before dismissing
+                            kotlinx.coroutines.delay(1500)
                             showBookingDialog = false
                             snackbarHostState.showSnackbar("Booking request sent successfully!")
                         } catch (e: Exception) {
                             snackbarHostState.showSnackbar(e.message ?: "Failed to send request")
                         } finally {
                             isSubmitting = false
+                            isSuccess = false // Reset for next time (though dialog is closed)
                         }
                     }
                 }

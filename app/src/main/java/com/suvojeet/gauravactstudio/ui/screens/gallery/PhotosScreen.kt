@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -89,8 +90,9 @@ fun AnimatedStaggeredItem(
 ) {
     val enterAnimation = remember(visible) {
         if (visible) {
-            fadeIn(animationSpec = tween(300, delayMillis = index * 50)) +
-                    slideInVertically(animationSpec = tween(300, delayMillis = index * 50)) { 50 }
+            fadeIn(animationSpec = tween(500, delayMillis = index * 50)) +
+                    slideInVertically(animationSpec = tween(500, delayMillis = index * 50)) { 100 } +
+                    scaleIn(initialScale = 0.85f, animationSpec = tween(500, delayMillis = index * 50))
         } else {
             EnterTransition.None
         }
