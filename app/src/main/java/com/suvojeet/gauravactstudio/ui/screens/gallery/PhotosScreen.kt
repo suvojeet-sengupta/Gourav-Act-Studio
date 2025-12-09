@@ -2,6 +2,8 @@ package com.suvojeet.gauravactstudio.ui.screens.gallery
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
@@ -90,9 +92,21 @@ fun AnimatedStaggeredItem(
 ) {
     val enterAnimation = remember(visible) {
         if (visible) {
-            fadeIn(animationSpec = tween(500, delayMillis = index * 50)) +
-                    slideInVertically(animationSpec = tween(500, delayMillis = index * 50)) { 100 } +
-                    scaleIn(initialScale = 0.85f, animationSpec = tween(500, delayMillis = index * 50))
+            fadeIn(animationSpec = tween(durationMillis = 300, delayMillis = index * 50)) +
+                    slideInVertically(
+                        initialOffsetY = { it / 2 }, // Half of content height
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        )
+                    ) +
+                    scaleIn(
+                        initialScale = 0.8f,
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        )
+                    )
         } else {
             EnterTransition.None
         }

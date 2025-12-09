@@ -68,6 +68,7 @@ fun MainScreen() {
     var showBookingDialog by remember { mutableStateOf(false) }
     var isSubmitting by remember { mutableStateOf(false) }
     var isSuccess by remember { mutableStateOf(false) }
+    var bookingRequestNumber by remember { mutableStateOf<String?>(null) } // New state for request number
 
     Scaffold(
         bottomBar = {
@@ -75,7 +76,10 @@ fun MainScreen() {
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { showBookingDialog = true },
+                onClick = {
+                    showBookingDialog = true
+                    bookingRequestNumber = "GA-" + System.currentTimeMillis().toString().takeLast(7) // Simple unique ID
+                },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = Color.White,
                 icon = { Icon(Icons.Filled.EditCalendar, contentDescription = null) },
@@ -94,9 +98,11 @@ fun MainScreen() {
                 packageName = "General Inquiry",
                 isSubmitting = isSubmitting,
                 isSuccess = isSuccess,
+                bookingRequestNumber = bookingRequestNumber, // Pass the request number
                 onDismiss = {
                     showBookingDialog = false
                     isSuccess = false // Reset success state
+                    bookingRequestNumber = null // Clear request number
                 },
                 onSubmit = { name, phone, eventType, otherEventType, date, eventTime, eventAddress, notes, location ->
                     scope.launch {
@@ -112,18 +118,20 @@ fun MainScreen() {
                                 eventAddress = eventAddress,
                                 notes = notes,
                                 packageName = "General Inquiry",
-                                location = location
+                                location = location,
+                                bookingRequestNumber = bookingRequestNumber // Pass to EmailService
                             )
                             isSuccess = true // Trigger success animation
                             // Wait for animation to play before dismissing
                             kotlinx.coroutines.delay(1500)
                             showBookingDialog = false
-                            snackbarHostState.showSnackbar("Booking request sent successfully!")
+                            snackbarHostState.showSnackbar("Booking request sent successfully! Ref: $bookingRequestNumber")
                         } catch (e: Exception) {
                             snackbarHostState.showSnackbar(e.message ?: "Failed to send request")
                         } finally {
                             isSubmitting = false
                             isSuccess = false // Reset for next time (though dialog is closed)
+                            bookingRequestNumber = null
                         }
                     }
                 }
