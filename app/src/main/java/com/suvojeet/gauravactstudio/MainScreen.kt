@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.rememberNavController
 import com.suvojeet.gauravactstudio.ui.components.BookingDialog
-import com.suvojeet.gauravactstudio.ui.components.MinimalBottomNav
+import com.suvojeet.gauravactstudio.ui.components.BottomNavigationBar
 import com.suvojeet.gauravactstudio.util.EmailService
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.Spacer
@@ -70,7 +70,7 @@ fun MainScreen() {
 
     Scaffold(
         bottomBar = {
-            MinimalBottomNav(navController = navController)
+            BottomNavigationBar(navController = navController)
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
