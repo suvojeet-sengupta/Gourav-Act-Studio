@@ -4,23 +4,35 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.suvojeet.gauravactstudio.ui.components.BottomNavigationBar
-import kotlin.math.abs
+import com.suvojeet.gauravactstudio.ui.components.BookingDialog
+import com.suvojeet.gauravactstudio.ui.components.MinimalBottomNav
+import com.suvojeet.gauravactstudio.util.EmailService
+import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun MainScreen() {
@@ -48,65 +60,65 @@ fun MainScreen() {
             launcher.launch(permissions)
         }
     }
+    
     val navController = rememberNavController()
-
-    val screens = listOf(
-        Screen.Home,
-        Screen.Services,
-        Screen.Gallery,
-        Screen.Pricing,
-        Screen.About
-    )
-
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-    val currentRoute = currentDestination?.route
-
-    var dragAmount by remember { mutableStateOf(0f) }
-    var swiped by remember { mutableStateOf(false) }
-
-    val swipeableModifier = Modifier.pointerInput(currentRoute) {
-        detectHorizontalDragGestures(
-            onDragStart = {
-                dragAmount = 0f
-                swiped = false
-            },
-            onHorizontalDrag = { change, delta ->
-                if (!swiped) {
-                    dragAmount += delta
-                    val screenWidth = size.width
-                    val swipeThreshold = screenWidth / 4
-
-                    if (abs(dragAmount) > swipeThreshold) {
-                        swiped = true
-                        val currentIndex = screens.indexOfFirst { it.route == currentRoute }
-                        if (currentIndex != -1) {
-                            if (dragAmount < 0) { // Swipe left
-                                if (currentIndex < screens.size - 1) {
-                                    val nextScreen = screens[currentIndex + 1]
-                                    navController.navigate(nextScreen.route)
-                                }
-                            } else { // Swipe right
-                                if (currentIndex > 0) {
-                                    val previousScreen = screens[currentIndex - 1]
-                                    navController.navigate(previousScreen.route)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        )
-    }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    
+    var showBookingDialog by remember { mutableStateOf(false) }
+    var isSubmitting by remember { mutableStateOf(false) }
 
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(navController = navController)
-        }
+            MinimalBottomNav(navController = navController)
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = { showBookingDialog = true },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = Color.White,
+                icon = { Icon(Icons.Filled.EditCalendar, contentDescription = null) },
+                text = { Text("Book Now") }
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         AppNavHost(
             navController = navController,
-            modifier = Modifier.padding(innerPadding).then(swipeableModifier)
+            modifier = Modifier.padding(innerPadding)
         )
+
+        if (showBookingDialog) {
+            BookingDialog(
+                packageName = "General Inquiry",
+                isSubmitting = isSubmitting,
+                onDismiss = { showBookingDialog = false },
+                onSubmit = { name, phone, eventType, otherEventType, date, eventTime, eventAddress, notes, location ->
+                    scope.launch {
+                        isSubmitting = true
+                        try {
+                            EmailService().sendEmail(
+                                name = name,
+                                phone = phone,
+                                eventType = eventType,
+                                otherEventType = otherEventType,
+                                date = date,
+                                eventTime = eventTime,
+                                eventAddress = eventAddress,
+                                notes = notes,
+                                packageName = "General Inquiry",
+                                location = location
+                            )
+                            showBookingDialog = false
+                            snackbarHostState.showSnackbar("Booking request sent successfully!")
+                        } catch (e: Exception) {
+                            snackbarHostState.showSnackbar(e.message ?: "Failed to send request")
+                        } finally {
+                            isSubmitting = false
+                        }
+                    }
+                }
+            )
+        }
     }
 }
