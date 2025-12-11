@@ -207,4 +207,5 @@
     <string name="pay_via_upi">Pay via UPI</string>
     <string name="view_predefined_packages">View Predefined Packages</string>
     <string name="share_package">Share Package</string>
+    <string name="your_photos_screen">Your Photos</string>
 </resources>

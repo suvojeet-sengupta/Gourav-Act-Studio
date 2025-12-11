@@ -1,26 +1,30 @@
 package com.suvojeet.gauravactstudio.ui.theme
 
+import androidx.compose.material3.Typography as MaterialTypography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.suvojeet.gauravactstudio.R // Import R to access font resources
+import com.suvojeet.gauravactstudio.R
 import androidx.compose.ui.res.fontResource
 
 // Define custom FontFamilies
-val PlayfairDisplayFontFamily = FontFamily(
+// NOTE: Uncomment these lines and add font files to res/font to enable custom fonts
+val PlayfairDisplayFontFamily = FontFamily.Default
+/* FontFamily(
     Font(R.font.playfair_display_bold, FontWeight.Bold)
-)
+) */
 
-val RobotoFontFamily = FontFamily(
+val RobotoFontFamily = FontFamily.Default
+/* FontFamily(
     Font(R.font.roboto_light, FontWeight.Light),
     Font(R.font.roboto_regular, FontWeight.Normal),
     Font(R.font.roboto_medium, FontWeight.Medium)
-)
+) */
 
 // Set of Material typography styles to start with
-val Typography = Typography(
+val Typography = MaterialTypography(
     headlineLarge = TextStyle(
         fontFamily = PlayfairDisplayFontFamily,
         fontWeight = FontWeight.Bold,
