@@ -49,6 +49,11 @@ fun YourPhotosScreen(
 ) {
     var name by remember { mutableStateOf("") }
     var whatsappNumber by remember { mutableStateOf("") }
+    val formattedWhatsappNumber by remember(whatsappNumber) {
+        derivedStateOf {
+            whatsappNumber.chunked(5).joinToString(" ")
+        }
+    }
     var eventDate by remember { mutableStateOf("") }
     var eventType by remember { mutableStateOf("") }
     val uiState by viewModel.uiState.collectAsState()
@@ -280,11 +285,11 @@ fun YourPhotosScreen(
                             }
                         )
                         OutlinedTextField(
-                            value = whatsappNumber,
+                            value = formattedWhatsappNumber,
                             onValueChange = {
                                 val newText = it.filter { char -> char.isDigit() }
                                 if (newText.length <= 10) {
-                                    if (newText.isEmpty() || newText.first() in listOf('9', '8', '7', '6')) {
+                                    if (newText.isEmpty() || (newText.isNotEmpty() && newText.first() in listOf('9', '8', '7', '6'))) {
                                         whatsappNumber = newText
                                         whatsappNumberError = false
                                         whatsappNumberLengthError = false

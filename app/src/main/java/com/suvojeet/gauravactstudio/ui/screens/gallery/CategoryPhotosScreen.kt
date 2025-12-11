@@ -121,6 +121,7 @@ fun CategoryPhotosScreen(navController: NavController, category: String, modifie
             Spacer(modifier = Modifier.height(24.dp))
 
             AnimatedContent(isVisible, delay = 100) {
+                val context = LocalContext.current // Get context here
                 LazyVerticalStaggeredGrid(
                     columns = StaggeredGridCells.Adaptive(minSize = 160.dp),
                     verticalItemSpacing = 16.dp,
@@ -128,7 +129,17 @@ fun CategoryPhotosScreen(navController: NavController, category: String, modifie
                     modifier = Modifier.padding(bottom = 16.dp)
                 ) {
                     items(portfolioItems) { item ->
-                        PortfolioCard(item = item, navController = navController)
+                        PortfolioCard(
+                            item = item,
+                            navController = navController,
+                            onShareClick = { photoItem ->
+                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_TEXT, "Check out this amazing photo from Gaurav Act Studio: ${photoItem.imageUrl}")
+                                }
+                                context.startActivity(Intent.createChooser(shareIntent, "Share Photo"))
+                            }
+                        )
                     }
                 }
             }
@@ -198,7 +209,7 @@ private fun LightDecorativeBackground(scrollOffset: Int = 0) {
 }
 
 @Composable
-fun PortfolioCard(item: PortfolioItem, navController: NavController, isCategory: Boolean = false) {
+fun PortfolioCard(item: PortfolioItem, navController: NavController, isCategory: Boolean = false, onShareClick: (PortfolioItem) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -250,18 +261,34 @@ fun PortfolioCard(item: PortfolioItem, navController: NavController, isCategory:
                         .align(Alignment.TopEnd)
                         .padding(8.dp)
                 ) {
-                    IconButton(
-                        onClick = { isLiked = !isLiked },
-                        modifier = Modifier
-                            .size(32.dp)
-                            .background(Color.Black.copy(alpha = 0.3f), CircleShape)
-                    ) {
-                        Icon(
-                            imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                            contentDescription = "Like",
-                            tint = if (isLiked) Color(0xFFEC4899) else Color.White,
-                            modifier = Modifier.size(18.dp)
-                        )
+                    Row {
+                        IconButton(
+                            onClick = { isLiked = !isLiked },
+                            modifier = Modifier
+                                .size(32.dp)
+                                .background(Color.Black.copy(alpha = 0.3f), CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                                contentDescription = "Like",
+                                tint = if (isLiked) Color(0xFFEC4899) else Color.White,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(8.dp)) // Space between icons
+                        IconButton(
+                            onClick = { onShareClick(item) },
+                            modifier = Modifier
+                                .size(32.dp)
+                                .background(Color.Black.copy(alpha = 0.3f), CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Share,
+                                contentDescription = "Share",
+                                tint = Color.White,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
                     }
                 }
             }

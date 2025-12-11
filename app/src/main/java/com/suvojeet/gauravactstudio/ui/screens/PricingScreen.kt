@@ -33,13 +33,13 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import java.util.Locale
+import androidx.compose.ui.platform.LocalContext
 import com.suvojeet.gauravactstudio.ui.screens.CreateOwnPackage
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
-import androidx.compose.material3.DropdownMenuItem
+import android.content.Intent
 import androidx.compose.runtime.collectAsState
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -503,6 +503,30 @@ fun PricePackageCard(pricePackage: PricePackage, modifier: Modifier = Modifier, 
                     contentDescription = null,
                     modifier = Modifier.size(20.dp)
                 )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp)) // Add spacer between CTA and Share button
+
+            val context = LocalContext.current
+            OutlinedButton(
+                onClick = {
+                    val shareText = "Check out the '${pricePackage.name}' package from Gaurav Act Studio! Price: ${pricePackage.price}. Features: ${pricePackage.features.joinToString(", ")}. Learn more: [App Download Link/Website]"
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, shareText)
+                    }
+                    context.startActivity(Intent.createChooser(shareIntent, "Share Pricing Package"))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Icon(Icons.Filled.Share, contentDescription = "Share Package", modifier = Modifier.size(20.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(stringResource(R.string.share_package))
             }
         }
     }

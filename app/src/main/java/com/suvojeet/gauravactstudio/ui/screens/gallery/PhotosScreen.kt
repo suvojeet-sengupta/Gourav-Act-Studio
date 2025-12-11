@@ -22,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import android.content.Intent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -77,7 +78,7 @@ fun PhotosScreen(navController: NavController, modifier: Modifier = Modifier) {
             items(categories.size) { index ->
                 val category = categories[index]
                 AnimatedStaggeredItem(visible = isVisible, index = index) {
-                    PortfolioCard(item = category, navController = navController, isCategory = true)
+                    PortfolioCard(item = category, navController = navController, isCategory = true, onShareClick = {})
                 }
             }
         }
