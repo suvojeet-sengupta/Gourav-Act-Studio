@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -305,7 +306,7 @@ fun PortfolioCard(item: PortfolioItem, navController: NavController, isCategory:
                             modifier = Modifier
                                 .size(32.dp)
                                 .background(Color.Black.copy(alpha = 0.3f), CircleShape)
-                                .androidx.compose.ui.draw.scale(finalScale)
+                                .scale(finalScale)
                         ) {
                             Icon(
                                 imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,

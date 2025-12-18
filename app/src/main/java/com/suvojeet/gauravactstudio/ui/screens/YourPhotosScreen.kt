@@ -81,6 +81,7 @@ fun YourPhotosScreen(
     val context = LocalContext.current
     val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
     var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
 
     LaunchedEffect(uiState.showSuccessDialog) {
         if (uiState.showSuccessDialog) {
