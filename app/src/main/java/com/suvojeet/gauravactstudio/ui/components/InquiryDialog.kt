@@ -214,6 +214,13 @@ fun BookingDialog(
         }
     }
 
+    val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
+    LaunchedEffect(isSuccess) {
+        if (isSuccess) {
+            haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
+        }
+    }
+
     ModalBottomSheet(
         onDismissRequest = { if (!isSubmitting) onDismiss() },
         sheetState = sheetState,
@@ -690,12 +697,7 @@ fun BookingSuccessReceipt(
                 .background(Color(0xFF4CAF50).copy(alpha = 0.1f)),
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                imageVector = Icons.Filled.CheckCircle,
-                contentDescription = null,
-                modifier = Modifier.size(48.dp),
-                tint = Color(0xFF4CAF50)
-            )
+            AnimatedCheckmark(modifier = Modifier.size(48.dp))
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -828,5 +830,44 @@ private fun FormField(
         }
         
         content()
+    }
+}
+
+@Composable
+fun AnimatedCheckmark(modifier: Modifier = Modifier) {
+    val pathProgress = remember { androidx.compose.animation.core.Animatable(0f) }
+    
+    LaunchedEffect(Unit) {
+        pathProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 600, easing = androidx.compose.animation.core.FastOutSlowInEasing)
+        )
+    }
+
+    androidx.compose.foundation.Canvas(modifier = modifier) {
+        val width = size.width
+        val height = size.height
+        
+        val path = androidx.compose.ui.graphics.Path().apply {
+            moveTo(width * 0.2f, height * 0.5f)
+            lineTo(width * 0.45f, height * 0.7f)
+            lineTo(width * 0.8f, height * 0.3f)
+        }
+        
+        val pathMeasure = androidx.compose.ui.graphics.PathMeasure()
+        pathMeasure.setPath(path, false)
+        
+        val destinationPath = androidx.compose.ui.graphics.Path()
+        pathMeasure.getSegment(0f, pathProgress.value * pathMeasure.length, destinationPath)
+        
+        drawPath(
+            path = destinationPath,
+            color = Color(0xFF4CAF50),
+            style = androidx.compose.ui.graphics.drawscope.Stroke(
+                width = 6.dp.toPx(),
+                cap = androidx.compose.ui.graphics.StrokeCap.Round,
+                join = androidx.compose.ui.graphics.StrokeJoin.Round
+            )
+        )
     }
 }

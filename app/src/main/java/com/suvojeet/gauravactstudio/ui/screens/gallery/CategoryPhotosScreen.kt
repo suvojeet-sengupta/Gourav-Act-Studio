@@ -260,6 +260,36 @@ fun PortfolioCard(item: PortfolioItem, navController: NavController, isCategory:
             } else {
                 // Heart Icon for Photos
                 var isLiked by remember { mutableStateOf(false) }
+                val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
+                
+                // Animation for the heart burst
+                val scale by androidx.compose.animation.core.animateFloatAsState(
+                    targetValue = if (isLiked) 1.3f else 1.0f,
+                    animationSpec = androidx.compose.animation.core.spring(
+                        dampingRatio = androidx.compose.animation.core.Spring.DampingRatioMediumBouncy,
+                        stiffness = androidx.compose.animation.core.Spring.StiffnessLow
+                    ),
+                    label = "HeartScale"
+                )
+
+                // Secondary animation to return to 1.0f after burst
+                var animatedScale by remember { mutableStateOf(1f) }
+                LaunchedEffect(isLiked) {
+                    if (isLiked) {
+                        animatedScale = 1.3f
+                        kotlinx.coroutines.delay(100)
+                        animatedScale = 1f
+                    }
+                }
+
+                val finalScale by androidx.compose.animation.core.animateFloatAsState(
+                    targetValue = animatedScale,
+                    animationSpec = androidx.compose.animation.core.spring(
+                        dampingRatio = androidx.compose.animation.core.Spring.DampingRatioHighBouncy,
+                        stiffness = androidx.compose.animation.core.Spring.StiffnessMedium
+                    ),
+                    label = "FinalHeartScale"
+                )
                 
                 Box(
                     modifier = Modifier
@@ -268,10 +298,14 @@ fun PortfolioCard(item: PortfolioItem, navController: NavController, isCategory:
                 ) {
                     Row {
                         IconButton(
-                            onClick = { isLiked = !isLiked },
+                            onClick = { 
+                                isLiked = !isLiked
+                                haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
+                            },
                             modifier = Modifier
                                 .size(32.dp)
                                 .background(Color.Black.copy(alpha = 0.3f), CircleShape)
+                                .androidx.compose.ui.draw.scale(finalScale)
                         ) {
                             Icon(
                                 imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
