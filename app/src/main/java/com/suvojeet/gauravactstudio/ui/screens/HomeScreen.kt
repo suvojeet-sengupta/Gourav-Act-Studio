@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,7 +20,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,6 +49,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 
 @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -71,288 +72,457 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFFAFAFA),
-                        Color(0xFFFFFBFE),
-                        Color(0xFFF5F5F7)
-                    )
-                )
-            )
+            .background(Color(0xFFF4F5F9)) // Slightly grey background like apps
     ) {
-        // Enhanced decorative background
-        LightDecorativeBackground(scrollState.value)
+        // LightDecorativeBackground(scrollState.value) // Optional: Keep or remove for cleaner look
 
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
-                .padding(horizontal = 20.dp, vertical = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Hero Section with modern design
-            HeroSection(isVisible, navController)
+            // 1. Top Bar & Search Section
+            TopHeaderSection()
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            SearchSection()
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            // Quick Stats with Modern Cards
-            AnimatedContent(isVisible, delay = 160) {
-                ModernQuickStatsSection()
+            // 2. Categories ("What's on your mind?")
+            AnimatedContent(isVisible, delay = 50) {
+                CategorySection(navController)
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            // Features with modern design
-AnimatedContent(isVisible, delay = 80) {
-                ModernFeaturesSection(isVisible, navController)
+            // 3. Hero / Banners
+            AnimatedContent(isVisible, delay = 100) {
+                PromoBannerSection(navController)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-AnimatedContent(isVisible, delay = 240) {
-                ModernAddressSection()
+            // 4. Quick Stats
+            AnimatedContent(isVisible, delay = 150) {
+                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                     Text(
+                        text = stringResource(R.string.home_studio_highlights),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1F2937),
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                    ModernQuickStatsSection()
+                }
             }
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 5. Popular Services (Horizontal Scroll)
+            AnimatedContent(isVisible, delay = 200) {
+                PopularServicesSection(navController)
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 6. Address / Footer
+            AnimatedContent(isVisible, delay = 250) {
+                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    ModernAddressSection()
+                 }
+            }
+
+            Spacer(modifier = Modifier.height(100.dp)) // Bottom padding for navigation bar
         }
     }
 }
 
 @Composable
-fun HeroSection(isVisible: Boolean, navController: NavController) {
+fun TopHeaderSection() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Filled.LocationOn,
+            contentDescription = "Location",
+            tint = Color(0xFFEC4899),
+            modifier = Modifier.size(28.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Gaurav Act Studio",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1F2937)
+                )
+                Icon(
+                    imageVector = Icons.Filled.KeyboardArrowDown,
+                    contentDescription = null,
+                    tint = Color(0xFF1F2937)
+                )
+            }
+            Text(
+                text = stringResource(R.string.home_location_label),
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFF6B7280),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        
+        // Profile or Menu Icon
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(Color(0xFFE5E7EB)),
+            contentAlignment = Alignment.Center
+        ) {
+             Image(
+                painter = painterResource(id = R.drawable.gourav_photographer),
+                contentDescription = "Profile",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        }
+    }
+}
+
+@Composable
+fun SearchSection() {
+    var text by remember { mutableStateOf("") }
+    
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .shadow(4.dp, RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp),
+        color = Color.White
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Search,
+                contentDescription = "Search",
+                tint = Color(0xFFEC4899)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = stringResource(R.string.home_search_placeholder),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF9CA3AF)
+            )
+             Spacer(modifier = Modifier.weight(1f))
+             Icon(
+                imageVector = Icons.Filled.Mic,
+                contentDescription = "Voice Search",
+                tint = Color(0xFFEC4899)
+            )
+        }
+    }
+}
+
+@Composable
+fun CategorySection(navController: NavController) {
+    Column {
+        Text(
+            text = stringResource(R.string.home_category_title),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF1F2937),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+        
+        Row(
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            CategoryItem("Wedding", Icons.Filled.Favorite, Color(0xFFFFE4E6), Color(0xFFEC4899))
+            CategoryItem("Events", Icons.Filled.Event, Color(0xFFE0E7FF), Color(0xFF6366F1))
+            CategoryItem("Portraits", Icons.Filled.Face, Color(0xFFDCFCE7), Color(0xFF10B981))
+            CategoryItem("Videos", Icons.Filled.Videocam, Color(0xFFFEF3C7), Color(0xFFF59E0B))
+            CategoryItem("Pre-Wed", Icons.Filled.FavoriteBorder, Color(0xFFF3E8FF), Color(0xFFA855F7))
+        }
+    }
+}
+
+@Composable
+fun CategoryItem(
+    name: String, 
+    icon: ImageVector, 
+    bgColor: Color, 
+    iconColor: Color
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.width(72.dp)
     ) {
-        // Logo with glow effect
-        AnimatedContent(isVisible) {
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .clip(CircleShape)
+                .background(bgColor)
+                .clickable { /* Handle click */ },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = name,
+                tint = iconColor,
+                modifier = Modifier.size(32.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = name,
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF4B5563),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun PromoBannerSection(navController: NavController) {
+    // A simplified horizontal scroll for banners
+    Row(
+        modifier = Modifier
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // Banner 1
+        PromoBannerCard(
+            title = stringResource(R.string.home_banner_1_title),
+            subtitle = stringResource(R.string.home_banner_1_subtitle),
+            gradientColors = listOf(Color(0xFFEC4899), Color(0xFFF43F5E)),
+            onClick = { navController.navigate(Screen.Services.route) }
+        )
+        
+        // Banner 2
+        PromoBannerCard(
+            title = stringResource(R.string.home_banner_2_title),
+            subtitle = stringResource(R.string.home_banner_2_subtitle),
+            gradientColors = listOf(Color(0xFF8B5CF6), Color(0xFF6366F1)),
+             onClick = { navController.navigate(Screen.Services.route) }
+        )
+    }
+}
+
+@Composable
+fun PromoBannerCard(
+    title: String,
+    subtitle: String,
+    gradientColors: List<Color>,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .width(280.dp)
+            .height(140.dp)
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Brush.horizontalGradient(gradientColors))
+        ) {
+            // Decorative circles
             Box(
                 modifier = Modifier
-                    .shadow(
-                        elevation = 24.dp,
-                        shape = CircleShape,
-                        ambientColor = Color(0xFFEC4899).copy(alpha = 0.3f),
-                        spotColor = Color(0xFF8B5CF6).copy(alpha = 0.3f)
-                    )
+                    .offset(x = 200.dp, y = (-20).dp)
+                    .size(120.dp)
+                    .clip(CircleShape)
+                    .background(Color.White.copy(alpha = 0.1f))
+            )
+            Box(
+                modifier = Modifier
+                    .offset(x = 240.dp, y = 80.dp)
+                    .size(80.dp)
+                    .clip(CircleShape)
+                    .background(Color.White.copy(alpha = 0.1f))
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.Center
             ) {
-                AppLogo()
-            }
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Main Photographer Image and Studio Name
-        AnimatedContent(isVisible, delay = 20) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = painterResource(id = R.drawable.gourav_photographer),
-                    contentDescription = "Gaurav, Main Photographer",
-                    modifier = Modifier
-                        .size(120.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Gaurav Act Digital Studio",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        AnimatedContent(isVisible, delay = 40) {
-            Text(
-                text = stringResource(R.string.home_hero_title),
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    fontSize = 26.sp, // Changed font size to 26.sp
-                    letterSpacing = 0.sp // Changed letter spacing to 0.sp
-                ),
-                fontWeight = FontWeight.Bold, // Changed to FontWeight.Bold
-                color = Color(0xFF1A1A1A),
-                textAlign = TextAlign.Center,
-
-                // --- THE FIX ---
-                // Force the Text to take the full width, allowing wrap
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp), // Added horizontal padding
-
-                maxLines = 2, // Allow wrapping to 2 lines
-                softWrap = true // Enable soft wrapping
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        AnimatedContent(isVisible, delay = 200) {
-            Text(
-                text = stringResource(R.string.home_hero_subtitle),
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontSize = 16.sp,
-                    lineHeight = 24.sp
-                ),
-                color = Color(0xFF666666),
-                textAlign = TextAlign.Center
-            )
-        }
-
-        Spacer(modifier = Modifier.height(48.dp))
-
-        AnimatedContent(isVisible, delay = 120) {
-            val interactionSource = remember { MutableInteractionSource() }
-            val isPressed by interactionSource.collectIsPressedAsState()
-            val scale by animateFloatAsState(
-                targetValue = if (isPressed) 0.95f else 1f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                ),
-                label = "Button Scale"
-            )
-            val animatedColor1 by animateColorAsState(
-                targetValue = if (isPressed) Color(0xFF8B5CF6) else Color(0xFFEC4899),
-                animationSpec = tween(durationMillis = 200),
-                label = "Color1 Animation"
-            )
-            val animatedColor2 by animateColorAsState(
-                targetValue = if (isPressed) Color(0xFFEC4899) else Color(0xFF8B5CF6),
-                animationSpec = tween(durationMillis = 200),
-                label = "Color2 Animation"
-            )
-
-            Button(
-                onClick = {
-                    navController.navigate(Screen.Services.route)
-                },
-                interactionSource = interactionSource,
-                modifier = Modifier
-                    .height(64.dp)
-                    .fillMaxWidth(0.85f)
-                    .scale(scale)
-                    .shadow(
-                        elevation = 20.dp,
-                        shape = RoundedCornerShape(32.dp),
-                        ambientColor = Color(0xFFEC4899).copy(alpha = 0.4f),
-                        spotColor = Color(0xFF8B5CF6).copy(alpha = 0.4f)
-                    ),
-                shape = RoundedCornerShape(32.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                contentPadding = PaddingValues(0.dp)
-            ) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White.copy(alpha = 0.9f)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(animatedColor1, animatedColor2)
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color.White)
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.PhotoCamera,
-                            contentDescription = null,
-                            modifier = Modifier.size(28.dp),
-                            tint = Color.White
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            text = stringResource(R.string.home_explore_services),
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            letterSpacing = 0.5.sp
-                        )
-                    }
+                    Text(
+                        text = stringResource(R.string.home_book_now),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = gradientColors[0]
+                    )
                 }
             }
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(24.dp))
+@Composable
+fun PopularServicesSection(navController: NavController) {
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.home_popular_services_title),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1F2937)
+            )
+            TextButton(onClick = { navController.navigate(Screen.Services.route) }) {
+                Text(
+                    text = stringResource(R.string.home_see_all),
+                    color = Color(0xFFEC4899),
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
 
-        AnimatedContent(isVisible, delay = 160) {
-            val interactionSource = remember { MutableInteractionSource() }
-            val isPressed by interactionSource.collectIsPressedAsState()
-            val scale by animateFloatAsState(
-                targetValue = if (isPressed) 0.95f else 1f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                ),
-                label = "Button Scale"
-            )
-            val animatedColor1 by animateColorAsState(
-                targetValue = if (isPressed) Color(0xFF10B981) else Color(0xFF06B6D4),
-                animationSpec = tween(durationMillis = 200),
-                label = "Color1 Animation"
-            )
-            val animatedColor2 by animateColorAsState(
-                targetValue = if (isPressed) Color(0xFF06B6D4) else Color(0xFF10B981),
-                animationSpec = tween(durationMillis = 200),
-                label = "Color2 Animation"
-            )
+        Spacer(modifier = Modifier.height(8.dp))
 
-            Button(
-                onClick = {
-                    navController.navigate(Screen.YourPhotos.route)
-                },
-                interactionSource = interactionSource,
+        // Horizontal List of Vertical Cards
+        Row(
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            PopularServiceCard(
+                title = stringResource(R.string.home_popular_service_1_title),
+                price = stringResource(R.string.home_popular_service_1_price),
+                rating = "4.8",
+                imageColor = Color(0xFFFFE4E6),
+                icon = Icons.Filled.CameraAlt
+            )
+            PopularServiceCard(
+                title = stringResource(R.string.home_popular_service_2_title),
+                price = stringResource(R.string.home_popular_service_2_price),
+                rating = "4.9",
+                imageColor = Color(0xFFE0E7FF),
+                icon = Icons.Filled.Videocam
+            )
+             PopularServiceCard(
+                title = stringResource(R.string.home_popular_service_3_title),
+                price = stringResource(R.string.home_popular_service_3_price),
+                rating = "5.0",
+                imageColor = Color(0xFFDCFCE7),
+                icon = Icons.Filled.Flight
+            )
+        }
+    }
+}
+
+@Composable
+fun PopularServiceCard(
+    title: String,
+    price: String,
+    rating: String,
+    imageColor: Color,
+    icon: ImageVector
+) {
+    Card(
+        modifier = Modifier
+            .width(160.dp)
+            .shadow(2.dp, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Column {
+            // Placeholder Image Area
+            Box(
                 modifier = Modifier
-                    .height(64.dp)
-                    .fillMaxWidth(0.85f)
-                    .scale(scale)
-                    .shadow(
-                        elevation = 20.dp,
-                        shape = RoundedCornerShape(32.dp),
-                        ambientColor = Color(0xFF10B981).copy(alpha = 0.4f),
-                        spotColor = Color(0xFF06B6D4).copy(alpha = 0.4f)
-                    ),
-                shape = RoundedCornerShape(32.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                contentPadding = PaddingValues(0.dp)
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .background(imageColor),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = Color.Black.copy(alpha = 0.1f),
+                    modifier = Modifier.size(48.dp)
+                )
+            }
+            
+            Column(modifier = Modifier.padding(12.dp)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1F2937),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = price,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFF6B7280)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(animatedColor1, animatedColor2)
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(Color(0xFF22C55E))
+                        .padding(horizontal = 4.dp, vertical = 2.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Photo,
-                            contentDescription = null,
-                            modifier = Modifier.size(28.dp),
-                            tint = Color.White
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            text = stringResource(R.string.home_feature_your_photos_title),
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            letterSpacing = 0.5.sp
-                        )
-                    }
+                    Text(
+                        text = rating,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(10.dp)
+                    )
                 }
             }
         }
@@ -400,11 +570,11 @@ fun ModernStatCard(
     Card(
         modifier = modifier
             .shadow(
-                elevation = 12.dp,
-                shape = RoundedCornerShape(24.dp),
+                elevation = 4.dp, // Reduced elevation for cleaner look
+                shape = RoundedCornerShape(16.dp), // Reduced corner radius
                 ambientColor = gradientColors[0].copy(alpha = 0.25f)
             ),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
@@ -424,13 +594,13 @@ fun ModernStatCard(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(40.dp)
                         .clip(CircleShape)
                         .background(
                             brush = Brush.linearGradient(gradientColors)
@@ -441,175 +611,24 @@ fun ModernStatCard(
                         imageVector = icon,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(20.dp)
                     )
                 }
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = number,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.ExtraBold,
                     color = Color(0xFF1A1A1A)
                 )
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
                     color = Color(0xFF666666),
                     textAlign = TextAlign.Center,
                     maxLines = 2
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun ModernFeaturesSection(isVisible: Boolean, navController: NavController) { // Add NavController
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .shadow(
-                elevation = 16.dp,
-                shape = RoundedCornerShape(28.dp),
-                ambientColor = Color(0xFF8B5CF6).copy(alpha = 0.15f)
-            ),
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        )
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFF8B5CF6).copy(alpha = 0.05f),
-                            Color.Transparent
-                        )
-                    )
-                )
-        ) {
-            Column(
-                modifier = Modifier.padding(24.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(
-                                brush = Brush.linearGradient(
-                                    colors = listOf(
-                                        Color(0xFFEC4899),
-                                        Color(0xFF8B5CF6)
-                                    )
-                                )
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.AutoAwesome,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = stringResource(R.string.home_features_title),
-                        style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp),
-                        fontWeight = FontWeight.ExtraBold,
-                        color = Color(0xFF1A1A1A)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                AnimatedContent(isVisible, delay = 600) {
-                    ModernFeatureItem(
-                        icon = Icons.Filled.HighQuality,
-                        title = stringResource(R.string.home_feature_quality_title),
-                        description = stringResource(R.string.home_feature_quality_description),
-                        accentColor = Color(0xFFEC4899)
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-
-                AnimatedContent(isVisible, delay = 280) {
-                    ModernFeatureItem(
-                        icon = Icons.Filled.Speed,
-                        title = stringResource(R.string.home_feature_delivery_title),
-                        description = stringResource(R.string.home_feature_delivery_description),
-                        accentColor = Color(0xFF8B5CF6)
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-
-                AnimatedContent(isVisible, delay = 320) {
-                    ModernFeatureItem(
-                        icon = Icons.Filled.PriceCheck,
-                        title = stringResource(R.string.home_feature_packages_title),
-                        description = stringResource(R.string.home_feature_packages_description),
-                        accentColor = Color(0xFF06B6D4)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ModernFeatureItem(
-    icon: ImageVector,
-    title: String,
-    description: String,
-    accentColor: Color,
-    onClick: (() -> Unit)? = null
-) {
-    Row(
-        verticalAlignment = Alignment.Top,
-        modifier = Modifier
-            .fillMaxWidth()
-            .let { if (onClick != null) it.clickable(onClick = onClick) else it }
-    ) {
-        Box(
-            modifier = Modifier
-                .size(52.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(accentColor.copy(alpha = 0.12f))
-                .padding(2.dp)
-                .clip(RoundedCornerShape(14.dp))
-                .background(Color.White),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = accentColor,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF1A1A1A)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    lineHeight = 20.sp
-                ),
-                color = Color(0xFF666666)
-            )
         }
     }
 }
@@ -624,11 +643,11 @@ fun ModernAddressSection() {
         modifier = Modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 16.dp,
-                shape = RoundedCornerShape(28.dp),
+                elevation = 8.dp,
+                shape = RoundedCornerShape(20.dp),
                 ambientColor = Color(0xFFEC4899).copy(alpha = 0.15f)
             ),
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
@@ -646,163 +665,77 @@ fun ModernAddressSection() {
                 )
         ) {
             Column(
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier.padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(56.dp)
-                        .clip(CircleShape)
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFFEC4899),
-                                    Color(0xFFF97316)
-                                )
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.LocationOn,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(28.dp)
+                // Header with icon
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                     Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFFEC4899).copy(alpha = 0.1f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.LocationOn,
+                            contentDescription = null,
+                            tint = Color(0xFFEC4899),
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(R.string.home_visit_studio_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1A1A1A)
                     )
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Our Studio Location",
-                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp),
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color(0xFF1A1A1A)
-                )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
                     text = "Village nagla dhimar, Etah road near bhondela politecnic college, tundla firozabad (up), Pin code 283204",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        lineHeight = 22.sp
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        lineHeight = 20.sp
                     ),
                     textAlign = TextAlign.Center,
                     color = Color(0xFF666666)
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
-
-                val interactionSource = remember { MutableInteractionSource() }
-                val isPressed by interactionSource.collectIsPressedAsState()
-                val scale by animateFloatAsState(
-                    targetValue = if (isPressed) 0.95f else 1f,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    ),
-                    label = "Button Scale"
-                )
-                val animatedColor1 by animateColorAsState(
-                    targetValue = if (isPressed) Color(0xFFF97316) else Color(0xFFEC4899),
-                    animationSpec = tween(durationMillis = 200),
-                    label = "Color1 Animation"
-                )
-                val animatedColor2 by animateColorAsState(
-                    targetValue = if (isPressed) Color(0xFFEC4899) else Color(0xFFF97316),
-                    animationSpec = tween(durationMillis = 200),
-                    label = "Color2 Animation"
-                )
-
-                Button(
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
-                        context.startActivity(intent)
-                    },
-                    interactionSource = interactionSource,
-                    modifier = Modifier
-                        .height(56.dp)
-                        .fillMaxWidth()
-                        .scale(scale)
-                        .shadow(
-                            elevation = 12.dp,
-                            shape = RoundedCornerShape(28.dp),
-                            ambientColor = Color(0xFFEC4899).copy(alpha = 0.3f)
-                        ),
-                    shape = RoundedCornerShape(28.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent
-                    ),
-                    contentPadding = PaddingValues(0.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(animatedColor1, animatedColor2)
-                                )
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Map,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(
-                                text = "View on Google Maps",
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                                fontSize = 16.sp
-                            )
-                        }
-                    }
-                }
-
                 Spacer(modifier = Modifier.height(16.dp))
 
-                OutlinedButton(
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(reviewUrl))
-                        context.startActivity(intent)
-                    },
-                    modifier = Modifier
-                        .height(56.dp)
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(28.dp),
-                    border = BorderStroke(1.5.dp, Color(0xFF06B6D4))
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Button(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl))
+                            context.startActivity(intent)
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(44.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEC4899))
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.Star,
-                            contentDescription = null,
-                            tint = Color(0xFF06B6D4)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = "Rate us on Google Maps",
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF06B6D4),
-                            fontSize = 16.sp
-                        )
+                        Text(stringResource(R.string.home_direction), fontSize = 14.sp)
+                    }
+                    
+                    OutlinedButton(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(reviewUrl))
+                            context.startActivity(intent)
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(44.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        border = BorderStroke(1.dp, Color(0xFF06B6D4))
+                    ) {
+                        Text(stringResource(R.string.home_rate_us), color = Color(0xFF06B6D4), fontSize = 14.sp)
                     }
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    GauravActStudioTheme {
-        HomeScreen(navController = rememberNavController())
     }
 }
