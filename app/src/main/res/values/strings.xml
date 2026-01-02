@@ -237,4 +237,9 @@
     <string name="services_category_wedding">Wedding</string>
     <string name="services_category_events">Events</string>
     <string name="services_category_corporate">Corporate</string>
+    <string name="pricing_header_title">Pricing Plans</string>
+    <string name="pricing_category_all">All</string>
+    <string name="pricing_category_wedding">Wedding</string>
+    <string name="pricing_category_events">Events</string>
+    <string name="pricing_category_corporate">Corporate</string>
 </resources>
