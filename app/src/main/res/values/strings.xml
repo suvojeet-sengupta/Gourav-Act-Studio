@@ -230,4 +230,11 @@
     <string name="home_rate_us">Rate Us</string>
     <string name="home_book_now">Book Now</string>
     <string name="home_studio_highlights">Studio Highlights</string>
+    <string name="services_header_title">Our Services</string>
+    <string name="services_search_placeholder">Search for services...</string>
+    <string name="services_action_check_prices">Check Prices</string>
+    <string name="services_category_all">All</string>
+    <string name="services_category_wedding">Wedding</string>
+    <string name="services_category_events">Events</string>
+    <string name="services_category_corporate">Corporate</string>
 </resources>
