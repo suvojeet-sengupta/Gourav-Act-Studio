@@ -7,17 +7,11 @@ import android.location.Geocoder
 import android.location.Location
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -27,6 +21,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -56,8 +52,8 @@ import java.util.*
 fun BookingDialog(
     packageName: String,
     isSubmitting: Boolean,
-    isSuccess: Boolean = false, // New parameter
-    bookingRequestNumber: String? = null, // New parameter
+    isSuccess: Boolean = false,
+    bookingRequestNumber: String? = null,
     onDismiss: () -> Unit,
     onSubmit: (
         name: String,
@@ -86,11 +82,9 @@ fun BookingDialog(
     val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    // Date Picker State
+    // Date/Time States
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
-
-    // Time Picker State
     var showTimePicker by remember { mutableStateOf(false) }
     val timePickerState = rememberTimePickerState()
 
@@ -98,144 +92,85 @@ fun BookingDialog(
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
     var hasLocationPermission by remember {
         mutableStateOf(
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
         )
     }
     val locationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            hasLocationPermission = isGranted
-        }
+        onResult = { hasLocationPermission = it }
     )
 
     LaunchedEffect(hasLocationPermission) {
         if (hasLocationPermission) {
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { loc: Location? ->
-                    if (loc != null) {
-                        val geocoder = Geocoder(context, Locale.getDefault())
-                        try {
-                            val addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1)
-                            if (addresses != null && addresses.isNotEmpty()) {
-                                val address = addresses[0]
-                                val city = address.locality
-                                val state = address.adminArea
-                                if(city != null && state != null){
-                                    location = "$city, $state"
-                                } else {
-                                    location = "Location not found"
-                                }
-                            }
-                        } catch (e: IOException) {
-                            location = "Could not get location"
+            fusedLocationClient.lastLocation.addOnSuccessListener { loc ->
+                if (loc != null) {
+                    val geocoder = Geocoder(context, Locale.getDefault())
+                    try {
+                        val addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1)
+                        if (!addresses.isNullOrEmpty()) {
+                            val address = addresses[0]
+                            location = "${address.locality ?: ""}, ${address.adminArea ?: ""}".trim(',',' ')
                         }
-                    }
+                    } catch (e: IOException) {}
                 }
+            }
         } else {
             locationPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
         }
     }
 
-    // Validation states
+    // Validation
     var nameError by remember { mutableStateOf(false) }
     var phoneError by remember { mutableStateOf(false) }
-    var phoneLengthError by remember { mutableStateOf(false) }
     var eventTypeError by remember { mutableStateOf(false) }
-    var otherEventTypeRequiredError by remember { mutableStateOf(false) }
     var dateError by remember { mutableStateOf(false) }
-    var invalidDateError by remember { mutableStateOf(false) }
-    var eventTimeError by remember { mutableStateOf(false) }
-    var eventAddressError by remember { mutableStateOf(false) }
 
-    val validateForm: () -> Boolean = {
+    val validate = {
         nameError = name.isBlank()
-        phoneError = phone.isBlank()
-        phoneLengthError = phone.length != 10
+        phoneError = phone.length != 10
         eventTypeError = eventType.isBlank()
-        otherEventTypeRequiredError = eventType == "Other" && otherEventType.isBlank()
         dateError = date.isBlank()
-        eventTimeError = eventTime.isBlank()
-        eventAddressError = eventAddress.isBlank()
-
-        !nameError && !phoneError && !phoneLengthError && !eventTypeError && !otherEventTypeRequiredError && !dateError && !invalidDateError && !eventTimeError && !eventAddressError
+        !nameError && !phoneError && !eventTypeError && !dateError
     }
 
     if (showDatePicker) {
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDatePicker = false
-                        datePickerState.selectedDateMillis?.let { millis ->
-                            val localDate = Instant.ofEpochMilli(millis).atZone(ZoneId.of("UTC")).toLocalDate()
-                            val today = LocalDate.now(ZoneId.systemDefault())
-                            if (localDate < today) {
-                                invalidDateError = true
-                                date = ""
-                            } else {
-                                invalidDateError = false
-                                date = "${localDate.dayOfMonth}/${localDate.monthValue}/${localDate.year}"
-                                dateError = false
-                            }
-                        }
+                TextButton(onClick = {
+                    showDatePicker = false
+                    datePickerState.selectedDateMillis?.let { millis ->
+                        val localDate = Instant.ofEpochMilli(millis).atZone(ZoneId.of("UTC")).toLocalDate()
+                        date = "${localDate.dayOfMonth}/${localDate.monthValue}/${localDate.year}"
+                        dateError = false
                     }
-                ) { Text("OK") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
+                }) { Text("OK") }
             }
-        ) {
-            DatePicker(state = datePickerState)
-        }
+        ) { DatePicker(state = datePickerState) }
     }
 
     if (showTimePicker) {
         TimePickerDialog(
             onDismissRequest = { showTimePicker = false },
             confirmButton = {
-                TextButton(
-                    onClick = {
-                        showTimePicker = false
-                        eventTime = "${timePickerState.hour}:${timePickerState.minute}"
-                        eventTimeError = false
-                    }
-                ) { Text("OK") }
+                TextButton(onClick = {
+                    showTimePicker = false
+                    eventTime = String.format("%02d:%02d", timePickerState.hour, timePickerState.minute)
+                }) { Text("OK") }
             },
-            dismissButton = {
-                TextButton(onClick = { showTimePicker = false }) { Text("Cancel") }
-            },
-            title = { Text("Select Event Time") }
-        ) {
-            TimePicker(state = timePickerState)
-        }
-    }
-
-    val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
-    LaunchedEffect(isSuccess) {
-        if (isSuccess) {
-            haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
-        }
+            title = { Text("Select time") },
+            // Fixed: Title is a lambda in Material3 TimePickerDialog
+            content = { TimePicker(state = timePickerState) }
+        )
     }
 
     ModalBottomSheet(
         onDismissRequest = { if (!isSubmitting) onDismiss() },
         sheetState = sheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() },
-        containerColor = Color.White,
-        contentWindowInsets = { WindowInsets(0, 0, 0, 0) } // Allow full screen height use
+        containerColor = Color.White
     ) {
-        AnimatedContent(
-            targetState = isSuccess,
-            label = "Dialog Content Switch",
-            transitionSpec = {
-                fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 0.9f) togetherWith
-                        fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 0.9f)
-            }
-        ) { success ->
+        AnimatedContent(targetState = isSuccess, label = "SuccessTransition") { success ->
             if (success) {
                 BookingSuccessReceipt(
                     bookingRef = bookingRequestNumber ?: "N/A",
@@ -248,423 +183,135 @@ fun BookingDialog(
                     onDone = onDismiss
                 )
             } else {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState())
-                            .padding(horizontal = 24.dp)
-                            .padding(bottom = 100.dp) // Extra padding for sticky bottom bar
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 100.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.booking_header_title),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1F2937),
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                    Text(
+                        text = "Booking for: $packageName",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(0xFFEC4899),
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(bottom = 24.dp)
+                    )
+
+                    // Personal Info Section
+                    BookingSectionHeader(stringResource(R.string.booking_personal_info))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFF9FAFB)),
+                        shape = RoundedCornerShape(12.dp)
                     ) {
-                        // Header
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(bottom = 24.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clip(CircleShape)
-                                    .background(
-                                        brush = Brush.linearGradient(
-                                            colors = listOf(Color(0xFF6366F1), Color(0xFF8B5CF6))
-                                        )
-                                    ),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.EditCalendar,
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                            
-                            Spacer(modifier = Modifier.width(16.dp))
-                            
-                            Column {
-                                Text(
-                                    text = stringResource(R.string.booking_send_request),
-                                    style = MaterialTheme.typography.titleLarge,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                                Text(
-                                    text = packageName,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-
-                        // Personal Details Card
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-                        ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(
-                                    text = "Your Details",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(bottom = 16.dp)
-                                )
-                                // Name Field
-                                FormField(
-                                    icon = Icons.Filled.Person,
-                                    label = stringResource(R.string.booking_full_name_label)
-                                ) {
-                                    OutlinedTextField(
-                                        value = name,
-                                        onValueChange = { name = it; nameError = false },
-                                        placeholder = { Text(stringResource(R.string.booking_enter_full_name_placeholder)) },
-                                        modifier = Modifier.fillMaxWidth(),
-                                        enabled = !isSubmitting,
-                                        shape = RoundedCornerShape(12.dp),
-                                        colors = OutlinedTextFieldDefaults.colors(
-                                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                            unfocusedBorderColor = Color(0xFFE0E0E0)
-                                        ),
-                                        singleLine = true,
-                                        isError = nameError,
-                                        supportingText = {
-                                            if (nameError) {
-                                                Text(stringResource(R.string.booking_name_empty_error), color = MaterialTheme.colorScheme.error)
-                                            }
-                                        }
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                // Phone Field
-                                FormField(
-                                    icon = Icons.Filled.Phone,
-                                    label = stringResource(R.string.booking_phone_number_label)
-                                ) {
-                                    OutlinedTextField(
-                                        value = phone,
-                                        onValueChange = {
-                                            if (it.length <= 10) {
-                                                phone = it
-                                                phoneError = false
-                                                phoneLengthError = false
-                                            } else {
-                                                phoneLengthError = true
-                                            }
-                                        },
-                                        placeholder = { Text(stringResource(R.string.booking_enter_phone_placeholder)) },
-                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                                        modifier = Modifier.fillMaxWidth(),
-                                        enabled = !isSubmitting,
-                                        shape = RoundedCornerShape(12.dp),
-                                        colors = OutlinedTextFieldDefaults.colors(
-                                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                            unfocusedBorderColor = Color(0xFFE0E0E0)
-                                        ),
-                                        singleLine = true,
-                                        isError = phoneError || phoneLengthError,
-                                        supportingText = {
-                                            if (phoneError) {
-                                                Text(stringResource(R.string.booking_phone_empty_error), color = MaterialTheme.colorScheme.error)
-                                            } else if (phoneLengthError) {
-                                                Text(stringResource(R.string.booking_phone_length_error), color = MaterialTheme.colorScheme.error)
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        // Event Details Card
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-                        ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(
-                                    text = "Event Details",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(bottom = 16.dp)
-                                )
-                                // Event Type Field
-                                FormField(
-                                    icon = Icons.Filled.Event,
-                                    label = stringResource(R.string.booking_event_type_label)
-                                ) {
-                                    ExposedDropdownMenuBox(
-                                        expanded = expanded,
-                                        onExpandedChange = { if (!isSubmitting) expanded = !expanded }
-                                    ) {
-                                        OutlinedTextField(
-                                            value = eventType,
-                                            onValueChange = {},
-                                            readOnly = true,
-                                            placeholder = { Text(stringResource(R.string.booking_select_event_type_placeholder)) },
-                                            trailingIcon = {
-                                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                                            },
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .menuAnchor(),
-                                            enabled = !isSubmitting,
-                                            shape = RoundedCornerShape(12.dp),
-                                            colors = OutlinedTextFieldDefaults.colors(
-                                                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                                unfocusedBorderColor = Color(0xFFE0E0E0)
-                                            ),
-                                            isError = eventTypeError,
-                                            supportingText = {
-                                                if (eventTypeError) {
-                                                    Text(stringResource(R.string.booking_event_type_empty_error), color = MaterialTheme.colorScheme.error)
-                                                }
-                                            }
-                                        )
-                                        ExposedDropdownMenu(
-                                            expanded = expanded,
-                                            onDismissRequest = { expanded = false },
-                                            modifier = Modifier.background(Color.White)
-                                        ) {
-                                            eventTypes.forEach { selectionOption ->
-                                                DropdownMenuItem(
-                                                    text = { Text(selectionOption) },
-                                                    onClick = {
-                                                        eventType = selectionOption
-                                                        expanded = false
-                                                    }
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-
-                                // Other Event Type (conditional)
-                                AnimatedVisibility(
-                                    visible = eventType == "Other",
-                                    enter = fadeIn() + scaleIn(),
-                                    exit = fadeOut() + scaleOut()
-                                ) {
-                                    Column {
-                                        Spacer(modifier = Modifier.height(16.dp))
-                                        FormField(
-                                            icon = Icons.Filled.Edit,
-                                            label = stringResource(R.string.booking_specify_event_type_label)
-                                        ) {
-                                            OutlinedTextField(
-                                                value = otherEventType,
-                                                onValueChange = { otherEventType = it; otherEventTypeRequiredError = false },
-                                                placeholder = { Text(stringResource(R.string.booking_specify_placeholder)) },
-                                                modifier = Modifier.fillMaxWidth(),
-                                                enabled = !isSubmitting,
-                                                shape = RoundedCornerShape(12.dp),
-                                                colors = OutlinedTextFieldDefaults.colors(
-                                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                                    unfocusedBorderColor = Color(0xFFE0E0E0)
-                                                ),
-                                                singleLine = true,
-                                                isError = otherEventTypeRequiredError,
-                                                supportingText = {
-                                                    if (otherEventTypeRequiredError) {
-                                                        Text(stringResource(R.string.booking_specify_event_type_error), color = MaterialTheme.colorScheme.error)
-                                                    }
-                                                }
-                                            )
-                                        }
-                                    }
-                                }
-
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                // Date & Time Row
-                                Row(modifier = Modifier.fillMaxWidth()) {
-                                    Box(modifier = Modifier.weight(1f)) {
-                                        FormField(
-                                            icon = Icons.Filled.DateRange,
-                                            label = "Date"
-                                        ) {
-                                            Box(modifier = Modifier.fillMaxWidth()) {
-                                                OutlinedTextField(
-                                                    value = date,
-                                                    onValueChange = { date = it; dateError = false },
-                                                    readOnly = true,
-                                                    placeholder = { Text("Select") },
-                                                    modifier = Modifier.fillMaxWidth(),
-                                                    enabled = !isSubmitting,
-                                                    shape = RoundedCornerShape(12.dp),
-                                                    colors = OutlinedTextFieldDefaults.colors(
-                                                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                                        unfocusedBorderColor = Color(0xFFE0E0E0)
-                                                    ),
-                                                    isError = dateError || invalidDateError,
-                                                    supportingText = {
-                                                        if (dateError) Text("Required", color = MaterialTheme.colorScheme.error)
-                                                    }
-                                                )
-                                                Box(
-                                                    modifier = Modifier
-                                                        .matchParentSize()
-                                                        .clickable(enabled = !isSubmitting) { showDatePicker = true }
-                                                )
-                                            }
-                                        }
-                                    }
-                                    
-                                    Spacer(modifier = Modifier.width(12.dp))
-                                    
-                                    Box(modifier = Modifier.weight(1f)) {
-                                        FormField(
-                                            icon = Icons.Filled.Schedule,
-                                            label = "Time"
-                                        ) {
-                                            Box(modifier = Modifier.fillMaxWidth()) {
-                                                OutlinedTextField(
-                                                    value = eventTime,
-                                                    onValueChange = { eventTime = it; eventTimeError = false },
-                                                    readOnly = true,
-                                                    placeholder = { Text("Select") },
-                                                    modifier = Modifier.fillMaxWidth(),
-                                                    enabled = !isSubmitting,
-                                                    shape = RoundedCornerShape(12.dp),
-                                                    colors = OutlinedTextFieldDefaults.colors(
-                                                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                                        unfocusedBorderColor = Color(0xFFE0E0E0)
-                                                    ),
-                                                    isError = eventTimeError,
-                                                    supportingText = {
-                                                        if (eventTimeError) Text("Required", color = MaterialTheme.colorScheme.error)
-                                                    }
-                                                )
-                                                Box(
-                                                    modifier = Modifier
-                                                        .matchParentSize()
-                                                        .clickable(enabled = !isSubmitting) { showTimePicker = true }
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                // Event Address Field
-                                FormField(
-                                    icon = Icons.Filled.LocationOn,
-                                    label = "Event Address"
-                                ) {
-                                    OutlinedTextField(
-                                        value = eventAddress,
-                                        onValueChange = { eventAddress = it; eventAddressError = false },
-                                        placeholder = { Text("Enter event address") },
-                                        modifier = Modifier.fillMaxWidth(),
-                                        enabled = !isSubmitting,
-                                        shape = RoundedCornerShape(12.dp),
-                                        colors = OutlinedTextFieldDefaults.colors(
-                                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                            unfocusedBorderColor = Color(0xFFE0E0E0)
-                                        ),
-                                        singleLine = true,
-                                        isError = eventAddressError,
-                                        supportingText = {
-                                            if (eventAddressError) {
-                                                Text("Event address cannot be empty", color = MaterialTheme.colorScheme.error)
-                                            }
-                                        }
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                // Notes Field
-                                FormField(
-                                    icon = Icons.Filled.Notes,
-                                    label = stringResource(R.string.booking_additional_requirements_label)
-                                ) {
-                                    OutlinedTextField(
-                                        value = notes,
-                                        onValueChange = { notes = it },
-                                        placeholder = { Text(stringResource(R.string.booking_notes_placeholder)) },
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(100.dp),
-                                        maxLines = 4,
-                                        enabled = !isSubmitting,
-                                        shape = RoundedCornerShape(12.dp),
-                                        colors = OutlinedTextFieldDefaults.colors(
-                                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                            unfocusedBorderColor = Color(0xFFE0E0E0)
-                                        )
-                                    )
-                                }
-                            }
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            ModernTextField(
+                                value = name,
+                                onValueChange = { name = it; nameError = false },
+                                label = stringResource(R.string.booking_full_name_label),
+                                isError = nameError,
+                                icon = Icons.Outlined.Person
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            ModernTextField(
+                                value = phone,
+                                onValueChange = { if(it.length <= 10) phone = it; phoneError = false },
+                                label = stringResource(R.string.booking_phone_number_label),
+                                isError = phoneError,
+                                icon = Icons.Outlined.Phone,
+                                keyboardType = KeyboardType.Phone
+                            )
                         }
                     }
-                    
-                    // Sticky Bottom Bar
-                    Surface(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .fillMaxWidth(),
-                        shadowElevation = 16.dp,
-                        color = Color.White
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    // Event Details Section
+                    BookingSectionHeader(stringResource(R.string.booking_event_info))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFF9FAFB)),
+                        shape = RoundedCornerShape(12.dp)
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .padding(bottom = 16.dp) // Extra bottom padding for gestures
-                        ) {
-                            Button(
-                                onClick = {
-                                    if (validateForm()) {
-                                        onSubmit(name, phone, eventType, otherEventType, date, eventTime, eventAddress, notes, location)
-                                    }
-                                },
-                                enabled = !isSubmitting,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(56.dp),
-                                shape = RoundedCornerShape(16.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.primary,
-                                    disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
-                                ),
-                                elevation = ButtonDefaults.buttonElevation(
-                                    defaultElevation = 6.dp
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            // Event Type Dropdown (Simplified display)
+                            Box(modifier = Modifier.fillMaxWidth().clickable { expanded = true }) {
+                                ModernTextField(
+                                    value = eventType,
+                                    onValueChange = {},
+                                    label = stringResource(R.string.booking_event_type_label),
+                                    isError = eventTypeError,
+                                    icon = Icons.Outlined.Event,
+                                    readOnly = true,
+                                    trailingIcon = { Icon(Icons.Filled.ArrowDropDown, null) }
                                 )
-                            ) {
-                                if (isSubmitting) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.size(24.dp),
-                                        color = Color.White,
-                                        strokeWidth = 2.dp
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(
-                                        text = stringResource(R.string.booking_sending),
-                                        fontWeight = FontWeight.SemiBold,
-                                        fontSize = 16.sp
-                                    )
-                                } else {
-                                    Icon(
-                                        imageVector = Icons.Filled.Send,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(
-                                        text = stringResource(R.string.booking_submit),
-                                        fontWeight = FontWeight.SemiBold,
-                                        fontSize = 16.sp
-                                    )
+                                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                                    eventTypes.forEach { type ->
+                                        DropdownMenuItem(text = { Text(type) }, onClick = { eventType = type; expanded = false; eventTypeError = false })
+                                    }
                                 }
                             }
+                            
+                            if(eventType == "Other") {
+                                 Spacer(modifier = Modifier.height(16.dp))
+                                 ModernTextField(
+                                    value = otherEventType,
+                                    onValueChange = { otherEventType = it },
+                                    label = "Specify Event",
+                                    icon = Icons.Outlined.Edit
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                Box(modifier = Modifier.weight(1f).clickable { showDatePicker = true }) {
+                                    ModernTextField(value = date, onValueChange = {}, label = "Date", icon = Icons.Outlined.CalendarToday, readOnly = true, isError = dateError)
+                                }
+                                Box(modifier = Modifier.weight(1f).clickable { showTimePicker = true }) {
+                                    ModernTextField(value = eventTime, onValueChange = {}, label = "Time", icon = Icons.Outlined.AccessTime, readOnly = true)
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            ModernTextField(
+                                value = eventAddress,
+                                onValueChange = { eventAddress = it },
+                                label = "Venue Address",
+                                icon = Icons.Outlined.LocationOn
+                            )
                         }
+                    }
+                }
+            }
+        }
+
+        // Sticky Submit Button
+        if(!isSuccess) {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = Color.White,
+                shadowElevation = 16.dp
+            ) {
+                Box(modifier = Modifier.padding(16.dp)) {
+                    Button(
+                        onClick = { if(validate()) onSubmit(name, phone, eventType, otherEventType, date, eventTime, eventAddress, notes, location) },
+                        modifier = Modifier.fillMaxWidth().height(56.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1F2937)),
+                        enabled = !isSubmitting
+                    ) {
+                        if(isSubmitting) CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                        else Text(stringResource(R.string.booking_submit), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     }
                 }
             }
@@ -672,6 +319,52 @@ fun BookingDialog(
     }
 }
 
+@Composable
+fun BookingSectionHeader(title: String) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.labelLarge,
+        fontWeight = FontWeight.Bold,
+        color = Color(0xFF6B7280),
+        modifier = Modifier.padding(bottom = 12.dp, start = 4.dp)
+    )
+}
+
+@Composable
+fun ModernTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    icon: ImageVector, // Fixed: removed full qualification
+    isError: Boolean = false,
+    readOnly: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    trailingIcon: @Composable (() -> Unit)? = null
+) {
+    Column {
+        Text(text = label, style = MaterialTheme.typography.labelSmall, color = Color(0xFF374151), fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(bottom = 4.dp))
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier.fillMaxWidth(),
+            prefix = { Icon(icon, null, modifier = Modifier.size(18.dp), tint = Color(0xFF9CA3AF)); Spacer(Modifier.width(8.dp)) },
+            shape = RoundedCornerShape(10.dp),
+            readOnly = readOnly,
+            isError = isError,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            colors = OutlinedTextFieldDefaults.colors( // Fixed colors
+                focusedBorderColor = Color(0xFFEC4899),
+                unfocusedBorderColor = Color(0xFFE5E7EB),
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White
+            ),
+            trailingIcon = trailingIcon,
+            singleLine = true
+        )
+    }
+}
+
+// Keep Success Receipt and other helpers...
 @Composable
 fun BookingSuccessReceipt(
     bookingRef: String,
@@ -684,190 +377,42 @@ fun BookingSuccessReceipt(
     onDone: () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 32.dp),
+        modifier = Modifier.fillMaxWidth().padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Success Icon
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .clip(CircleShape)
-                .background(Color(0xFF4CAF50).copy(alpha = 0.1f)),
-            contentAlignment = Alignment.Center
-        ) {
-            AnimatedCheckmark(modifier = Modifier.size(48.dp))
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "Booking Confirmed!",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "We have received your inquiry.",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Receipt Card
+        Icon(Icons.Filled.CheckCircle, null, tint = Color(0xFF10B981), modifier = Modifier.size(64.dp))
+        Spacer(Modifier.height(16.dp))
+        Text("Request Sent!", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text("Reference: $bookingRef", style = MaterialTheme.typography.bodyMedium, color = Color(0xFF6B7280))
+        
+        Spacer(Modifier.height(24.dp))
+        
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            border = BorderStroke(1.dp, Color.LightGray.copy(alpha = 0.5f))
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFF3F4F6))
         ) {
-            Column(modifier = Modifier.padding(20.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Reference No.",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = bookingRef,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-                
-                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-                
+            Column(modifier = Modifier.padding(16.dp)) {
                 ReceiptRow("Name", name)
-                ReceiptRow("Phone", phone)
-                ReceiptRow("Event Type", eventType)
-                ReceiptRow("Date & Time", "$date at $time")
-                if (location.isNotEmpty() && location != "Unknown location") {
-                    ReceiptRow("Location", location)
-                }
+                ReceiptRow("Event", eventType)
+                ReceiptRow("Date", "$date at $time")
             }
         }
-
-        Spacer(modifier = Modifier.weight(1f))
-        Spacer(modifier = Modifier.height(32.dp))
-
+        
+        Spacer(Modifier.height(32.dp))
         Button(
             onClick = onDone,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary
-            )
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            shape = RoundedCornerShape(12.dp)
         ) {
-            Text(
-                text = "Done",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
+            Text("Done", fontWeight = FontWeight.Bold)
         }
     }
 }
 
 @Composable
 fun ReceiptRow(label: String, value: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-    }
-}
-
-@Composable
-private fun FormField(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    label: String,
-    content: @Composable () -> Unit
-) {
-    Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(bottom = 6.dp)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(16.dp)
-            )
-            
-            Spacer(modifier = Modifier.width(8.dp))
-            
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        
-        content()
-    }
-}
-
-@Composable
-fun AnimatedCheckmark(modifier: Modifier = Modifier) {
-    val pathProgress = remember { androidx.compose.animation.core.Animatable(0f) }
-    
-    LaunchedEffect(Unit) {
-        pathProgress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 600, easing = androidx.compose.animation.core.FastOutSlowInEasing)
-        )
-    }
-
-    androidx.compose.foundation.Canvas(modifier = modifier) {
-        val width = size.width
-        val height = size.height
-        
-        val path = androidx.compose.ui.graphics.Path().apply {
-            moveTo(width * 0.2f, height * 0.5f)
-            lineTo(width * 0.45f, height * 0.7f)
-            lineTo(width * 0.8f, height * 0.3f)
-        }
-        
-        val pathMeasure = androidx.compose.ui.graphics.PathMeasure()
-        pathMeasure.setPath(path, false)
-        
-        val destinationPath = androidx.compose.ui.graphics.Path()
-        pathMeasure.getSegment(0f, pathProgress.value * pathMeasure.length, destinationPath)
-        
-        drawPath(
-            path = destinationPath,
-            color = Color(0xFF4CAF50),
-            style = androidx.compose.ui.graphics.drawscope.Stroke(
-                width = 6.dp.toPx(),
-                cap = androidx.compose.ui.graphics.StrokeCap.Round,
-                join = androidx.compose.ui.graphics.StrokeJoin.Round
-            )
-        )
+    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(label, color = Color(0xFF6B7280))
+        Text(value, fontWeight = FontWeight.SemiBold)
     }
 }

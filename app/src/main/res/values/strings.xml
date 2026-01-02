@@ -242,4 +242,11 @@
     <string name="pricing_category_wedding">Wedding</string>
     <string name="pricing_category_events">Events</string>
     <string name="pricing_category_corporate">Corporate</string>
+    <string name="about_header_title">Studio Profile</string>
+    <string name="about_section_info">Information</string>
+    <string name="about_section_contact">Contact &amp; Social</string>
+    <string name="gallery_header_title">Media Gallery</string>
+    <string name="booking_header_title">Request Booking</string>
+    <string name="booking_personal_info">Personal Info</string>
+    <string name="booking_event_info">Event Details</string>
 </resources>
