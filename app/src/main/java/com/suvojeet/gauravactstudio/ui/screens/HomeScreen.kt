@@ -696,6 +696,17 @@ fun ModernAddressSection() {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
+                    text = "Shop at Nagla Beech, Opposite Police Chowki",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    textAlign = TextAlign.Center,
+                    color = Color(0xFF1F2937)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
                     text = "Village nagla dhimar, Etah road near bhondela politecnic college, tundla firozabad (up), Pin code 283204",
                     style = MaterialTheme.typography.bodySmall.copy(
                         lineHeight = 20.sp
