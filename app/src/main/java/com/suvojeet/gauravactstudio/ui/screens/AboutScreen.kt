@@ -213,9 +213,9 @@ fun AboutScreen(navController: NavController) {
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1F2937))
                 ) {
-                    Icon(Icons.Filled.Settings, contentDescription = null)
+                    Icon(Icons.Filled.Settings, contentDescription = null, tint = Color.White)
                     Spacer(modifier = Modifier.width(12.dp))
-                    Text("App Settings", fontWeight = FontWeight.Bold)
+                    Text("App Settings", fontWeight = FontWeight.Bold, color = Color.White)
                 }
 
                 Spacer(modifier = Modifier.height(100.dp))
@@ -286,7 +286,7 @@ fun AboutDetailsContent(onClose: () -> Unit) {
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1F2937))
         ) {
-            Text("Close")
+            Text("Close", color = Color.White)
         }
     }
 }

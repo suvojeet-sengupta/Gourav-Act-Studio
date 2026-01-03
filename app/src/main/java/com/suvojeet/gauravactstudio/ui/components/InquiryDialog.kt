@@ -188,7 +188,7 @@ fun BookingDialog(
                                 enabled = !isSubmitting
                             ) {
                                 if(isSubmitting) CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
-                                else Text(stringResource(R.string.booking_submit), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                else Text(stringResource(R.string.booking_submit), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
                             }
                         }
                     }
