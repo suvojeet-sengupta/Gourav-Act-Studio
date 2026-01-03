@@ -11,6 +11,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.draw.shadow
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -115,7 +118,8 @@ fun BottomNavigationBar(navController: NavHostController) {
                             launchSingleTop = true
                             restoreState = true
                         }
-                    }
+                    },
+                    modifier = Modifier.weight(1f)
                 )
             }
         }
@@ -126,7 +130,8 @@ fun BottomNavigationBar(navController: NavHostController) {
 fun BottomNavItemContent(
     item: BottomNavItem,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     // Animate color for smooth transition
     val activeColor = Color(0xFFEC4899) // Pink to match Home theme
@@ -146,7 +151,7 @@ fun BottomNavItemContent(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .selectable(
                 selected = isSelected,
                 onClick = onClick,
@@ -154,7 +159,6 @@ fun BottomNavItemContent(
                 indication = null // Remove ripple for cleaner look, or keep it if preferred
             )
             .padding(8.dp)
-            .weight(1f) // Distribute click area evenly
     ) {
         // Icon Box
         Box(
