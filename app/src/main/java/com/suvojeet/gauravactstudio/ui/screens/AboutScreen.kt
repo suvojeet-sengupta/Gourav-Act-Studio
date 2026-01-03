@@ -35,14 +35,26 @@ import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(navController: NavController) {
     val context = LocalContext.current
     var isVisible by remember { mutableStateOf(false) }
+    var showAboutDetails by remember { mutableStateOf(false) }
     
     LaunchedEffect(Unit) {
         delay(40)
         isVisible = true
+    }
+
+    if (showAboutDetails) {
+        ModalBottomSheet(
+            onDismissRequest = { showAboutDetails = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = Color.White
+        ) {
+            AboutDetailsContent(onClose = { showAboutDetails = false })
+        }
     }
 
     Box(
@@ -119,7 +131,7 @@ fun AboutScreen(navController: NavController) {
                     icon = Icons.Outlined.Info,
                     title = stringResource(R.string.about_us_title),
                     subtitle = stringResource(R.string.about_studio_description),
-                    onClick = {}
+                    onClick = { showAboutDetails = true }
                 )
                 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -209,6 +221,81 @@ fun AboutScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(100.dp))
             }
         }
+    }
+}
+
+@Composable
+fun AboutDetailsContent(onClose: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+            .padding(bottom = 50.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Text(
+            text = "About Gaurav Act Studio",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF1F2937),
+            modifier = Modifier.padding(bottom = 16.dp, top = 8.dp)
+        )
+
+        Text(
+            text = "Capture your life's most precious moments with Gaurav Act Studio, your professional partner for stunning photography and videography. Whether it's a grand wedding, a special birthday, or a corporate event, our passionate team is dedicated to transforming your vision into timeless art.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color(0xFF4B5563),
+            lineHeight = 24.sp
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        Text(
+            text = "Why Choose Us?",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFEC4899)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        BulletPoint("Creative Excellence: We bring a unique and passionate approach to every project.")
+        BulletPoint("Premium Quality: High-resolution photography and cinematic 4K videography using state-of-the-art equipment.")
+        BulletPoint("Fast & Reliable: Quick turnaround time without compromising on quality.")
+        BulletPoint("Affordable & Flexible: Flexible pricing packages and custom options to suit every budget.")
+
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        Text(
+            text = "Our Services",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFEC4899)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        BulletPoint("Weddings & Pre-Wedding Shoots")
+        BulletPoint("Birthdays & Ring Ceremonies")
+        BulletPoint("Maternity & Baby Shoots")
+        BulletPoint("Corporate & Business Events")
+        BulletPoint("Fashion Portfolios")
+        BulletPoint("Custom Wedding Card Design")
+
+        Spacer(modifier = Modifier.height(32.dp))
+        
+        Button(
+            onClick = onClose,
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1F2937))
+        ) {
+            Text("Close")
+        }
+    }
+}
+
+@Composable
+fun BulletPoint(text: String) {
+    Row(modifier = Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.Top) {
+        Text("•", style = MaterialTheme.typography.titleMedium, color = Color(0xFFEC4899), modifier = Modifier.padding(end = 8.dp))
+        Text(text, style = MaterialTheme.typography.bodyMedium, color = Color(0xFF4B5563), lineHeight = 20.sp)
     }
 }
 
