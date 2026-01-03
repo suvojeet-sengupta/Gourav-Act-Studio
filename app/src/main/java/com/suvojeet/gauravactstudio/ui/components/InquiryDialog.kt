@@ -170,163 +170,170 @@ fun BookingDialog(
         dragHandle = { BottomSheetDefaults.DragHandle() },
         containerColor = Color.White
     ) {
-        AnimatedContent(targetState = isSuccess, label = "SuccessTransition") { success ->
-            if (success) {
-                BookingSuccessReceipt(
-                    bookingRef = bookingRequestNumber ?: "N/A",
-                    name = name,
-                    phone = phone,
-                    eventType = if (eventType == "Other") otherEventType else eventType,
-                    date = date,
-                    time = eventTime,
-                    location = location,
-                    onDone = onDismiss
-                )
-            } else {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 100.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.booking_header_title),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1F2937),
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                    Text(
-                        text = "Booking for: $packageName",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFFEC4899),
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(bottom = 24.dp)
-                    )
-
-                    // Personal Info Section
-                    BookingSectionHeader(stringResource(R.string.booking_personal_info))
-                    Card(
+        Scaffold(
+            containerColor = Color.Transparent,
+            bottomBar = {
+                if (!isSuccess) {
+                    Surface(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFF9FAFB)),
-                        shape = RoundedCornerShape(12.dp)
+                        color = Color.White,
+                        shadowElevation = 16.dp
                     ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            ModernTextField(
-                                value = name,
-                                onValueChange = { name = it; nameError = false },
-                                label = stringResource(R.string.booking_full_name_label),
-                                isError = nameError,
-                                icon = Icons.Outlined.Person
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            ModernTextField(
-                                value = phone,
-                                onValueChange = { if(it.length <= 10) phone = it; phoneError = false },
-                                label = stringResource(R.string.booking_phone_number_label),
-                                isError = phoneError,
-                                icon = Icons.Outlined.Phone,
-                                keyboardType = KeyboardType.Phone
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // Event Details Section
-                    BookingSectionHeader(stringResource(R.string.booking_event_info))
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFF9FAFB)),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            // Event Type Dropdown (Simplified display)
-                            Box(modifier = Modifier.fillMaxWidth()) {
-                                ModernTextField(
-                                    value = eventType,
-                                    onValueChange = {},
-                                    label = stringResource(R.string.booking_event_type_label),
-                                    isError = eventTypeError,
-                                    icon = Icons.Outlined.Event,
-                                    readOnly = true,
-                                    trailingIcon = { Icon(Icons.Filled.ArrowDropDown, null) }
-                                )
-                                Box(
-                                    modifier = Modifier
-                                        .matchParentSize()
-                                        .clickable { expanded = true }
-                                )
-                                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                                    eventTypes.forEach { type ->
-                                        DropdownMenuItem(text = { Text(type) }, onClick = { eventType = type; expanded = false; eventTypeError = false })
-                                    }
-                                }
+                        Box(modifier = Modifier.padding(16.dp)) {
+                            Button(
+                                onClick = { if(validate()) onSubmit(name, phone, eventType, otherEventType, date, eventTime, eventAddress, notes, location) },
+                                modifier = Modifier.fillMaxWidth().height(56.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1F2937)),
+                                enabled = !isSubmitting
+                            ) {
+                                if(isSubmitting) CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                                else Text(stringResource(R.string.booking_submit), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             }
-                            
-                            if(eventType == "Other") {
-                                 Spacer(modifier = Modifier.height(16.dp))
-                                 ModernTextField(
-                                    value = otherEventType,
-                                    onValueChange = { otherEventType = it },
-                                    label = "Specify Event",
-                                    icon = Icons.Outlined.Edit
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Box(modifier = Modifier.weight(1f)) {
-                                    ModernTextField(value = date, onValueChange = {}, label = "Date", icon = Icons.Outlined.CalendarToday, readOnly = true, isError = dateError)
-                                    Box(
-                                        modifier = Modifier
-                                            .matchParentSize()
-                                            .clickable { showDatePicker = true }
-                                    )
-                                }
-                                Box(modifier = Modifier.weight(1f)) {
-                                    ModernTextField(value = eventTime, onValueChange = {}, label = "Time", icon = Icons.Outlined.AccessTime, readOnly = true)
-                                    Box(
-                                        modifier = Modifier
-                                            .matchParentSize()
-                                            .clickable { showTimePicker = true }
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            ModernTextField(
-                                value = eventAddress,
-                                onValueChange = { eventAddress = it },
-                                label = "Venue Address",
-                                icon = Icons.Outlined.LocationOn
-                            )
                         }
                     }
                 }
             }
-        }
-
-        // Sticky Submit Button
-        if(!isSuccess) {
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = Color.White,
-                shadowElevation = 16.dp
-            ) {
-                Box(modifier = Modifier.padding(16.dp)) {
-                    Button(
-                        onClick = { if(validate()) onSubmit(name, phone, eventType, otherEventType, date, eventTime, eventAddress, notes, location) },
-                        modifier = Modifier.fillMaxWidth().height(56.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1F2937)),
-                        enabled = !isSubmitting
+        ) { innerPadding ->
+            AnimatedContent(
+                targetState = isSuccess, 
+                label = "SuccessTransition",
+                modifier = Modifier.padding(innerPadding)
+            ) { success ->
+                if (success) {
+                    BookingSuccessReceipt(
+                        bookingRef = bookingRequestNumber ?: "N/A",
+                        name = name,
+                        phone = phone,
+                        eventType = if (eventType == "Other") otherEventType else eventType,
+                        date = date,
+                        time = eventTime,
+                        location = location,
+                        onDone = onDismiss
+                    )
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState())
+                            .padding(horizontal = 16.dp)
                     ) {
-                        if(isSubmitting) CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
-                        else Text(stringResource(R.string.booking_submit), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text(
+                            text = stringResource(R.string.booking_header_title),
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF1F2937),
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                        Text(
+                            text = "Booking for: $packageName",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFFEC4899),
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(bottom = 24.dp)
+                        )
+
+                        // Personal Info Section
+                        BookingSectionHeader(stringResource(R.string.booking_personal_info))
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFF9FAFB)),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                ModernTextField(
+                                    value = name,
+                                    onValueChange = { name = it; nameError = false },
+                                    label = stringResource(R.string.booking_full_name_label),
+                                    isError = nameError,
+                                    icon = Icons.Outlined.Person
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                ModernTextField(
+                                    value = phone,
+                                    onValueChange = { if(it.length <= 10) phone = it; phoneError = false },
+                                    label = stringResource(R.string.booking_phone_number_label),
+                                    isError = phoneError,
+                                    icon = Icons.Outlined.Phone,
+                                    keyboardType = KeyboardType.Phone
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        // Event Details Section
+                        BookingSectionHeader(stringResource(R.string.booking_event_info))
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFF9FAFB)),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                // Event Type Dropdown (Simplified display)
+                                Box(modifier = Modifier.fillMaxWidth()) {
+                                    ModernTextField(
+                                        value = eventType,
+                                        onValueChange = {},
+                                        label = stringResource(R.string.booking_event_type_label),
+                                        isError = eventTypeError,
+                                        icon = Icons.Outlined.Event,
+                                        readOnly = true,
+                                        trailingIcon = { Icon(Icons.Filled.ArrowDropDown, null) }
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .matchParentSize()
+                                            .clickable { expanded = true }
+                                    )
+                                    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                                        eventTypes.forEach { type ->
+                                            DropdownMenuItem(text = { Text(type) }, onClick = { eventType = type; expanded = false; eventTypeError = false })
+                                        }
+                                    }
+                                }
+                                
+                                if(eventType == "Other") {
+                                     Spacer(modifier = Modifier.height(16.dp))
+                                     ModernTextField(
+                                        value = otherEventType,
+                                        onValueChange = { otherEventType = it },
+                                        label = "Specify Event",
+                                        icon = Icons.Outlined.Edit
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.height(16.dp))
+
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    Box(modifier = Modifier.weight(1f)) {
+                                        ModernTextField(value = date, onValueChange = {}, label = "Date", icon = Icons.Outlined.CalendarToday, readOnly = true, isError = dateError)
+                                        Box(
+                                            modifier = Modifier
+                                                .matchParentSize()
+                                                .clickable { showDatePicker = true }
+                                        )
+                                    }
+                                    Box(modifier = Modifier.weight(1f)) {
+                                        ModernTextField(value = eventTime, onValueChange = {}, label = "Time", icon = Icons.Outlined.AccessTime, readOnly = true)
+                                        Box(
+                                            modifier = Modifier
+                                                .matchParentSize()
+                                                .clickable { showTimePicker = true }
+                                        )
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.height(16.dp))
+
+                                ModernTextField(
+                                    value = eventAddress,
+                                    onValueChange = { eventAddress = it },
+                                    label = "Venue Address",
+                                    icon = Icons.Outlined.LocationOn
+                                )
+                            }
+                        }
                     }
                 }
             }
