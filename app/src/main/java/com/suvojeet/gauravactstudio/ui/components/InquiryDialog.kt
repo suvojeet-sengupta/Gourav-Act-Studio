@@ -243,7 +243,7 @@ fun BookingDialog(
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             // Event Type Dropdown (Simplified display)
-                            Box(modifier = Modifier.fillMaxWidth().clickable { expanded = true }) {
+                            Box(modifier = Modifier.fillMaxWidth()) {
                                 ModernTextField(
                                     value = eventType,
                                     onValueChange = {},
@@ -252,6 +252,11 @@ fun BookingDialog(
                                     icon = Icons.Outlined.Event,
                                     readOnly = true,
                                     trailingIcon = { Icon(Icons.Filled.ArrowDropDown, null) }
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .matchParentSize()
+                                        .clickable { expanded = true }
                                 )
                                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                                     eventTypes.forEach { type ->
@@ -273,11 +278,21 @@ fun BookingDialog(
                             Spacer(modifier = Modifier.height(16.dp))
 
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Box(modifier = Modifier.weight(1f).clickable { showDatePicker = true }) {
+                                Box(modifier = Modifier.weight(1f)) {
                                     ModernTextField(value = date, onValueChange = {}, label = "Date", icon = Icons.Outlined.CalendarToday, readOnly = true, isError = dateError)
+                                    Box(
+                                        modifier = Modifier
+                                            .matchParentSize()
+                                            .clickable { showDatePicker = true }
+                                    )
                                 }
-                                Box(modifier = Modifier.weight(1f).clickable { showTimePicker = true }) {
+                                Box(modifier = Modifier.weight(1f)) {
                                     ModernTextField(value = eventTime, onValueChange = {}, label = "Time", icon = Icons.Outlined.AccessTime, readOnly = true)
+                                    Box(
+                                        modifier = Modifier
+                                            .matchParentSize()
+                                            .clickable { showTimePicker = true }
+                                    )
                                 }
                             }
 
