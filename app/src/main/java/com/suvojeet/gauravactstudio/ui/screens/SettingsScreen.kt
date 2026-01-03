@@ -58,15 +58,7 @@ fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFFAFAFA),
-                        Color(0xFFFFFBFE),
-                        Color(0xFFF5F5F7)
-                    )
-                )
-            )
+            .background(Color(0xFFF4F5F9))
     ) {
         val scrollState = rememberScrollState()
         LightDecorativeBackground(scrollState.value)
@@ -178,11 +170,11 @@ fun ModernSettingsItem(
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .shadow(
-                elevation = 16.dp,
-                shape = RoundedCornerShape(28.dp),
-                ambientColor = gradientColors[0].copy(alpha = 0.2f)
+                elevation = 4.dp,
+                shape = RoundedCornerShape(16.dp),
+                ambientColor = gradientColors[0].copy(alpha = 0.25f)
             ),
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
@@ -191,8 +183,8 @@ fun ModernSettingsItem(
         ) {
             Box(
                 modifier = Modifier
-                    .size(56.dp)
-                    .clip(RoundedCornerShape(18.dp))
+                    .size(48.dp)
+                    .clip(CircleShape)
                     .background(brush = Brush.linearGradient(gradientColors)),
                 contentAlignment = Alignment.Center
             ) {
