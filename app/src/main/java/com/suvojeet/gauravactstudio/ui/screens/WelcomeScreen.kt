@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
@@ -241,53 +242,28 @@ fun WelcomeDecorativeBackground() {
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Gradient orb 1 - Pink
+        // Gradient orb 1 - Pink (Top Left)
         Box(
             modifier = Modifier
                 .size(400.dp)
-                .offset(x = (100 + offsetX1).dp, y = (-100 + offsetY1).dp)
-                .blur(120.dp)
-                .clip(CircleShape)
+                .offset(x = (-50 + offsetX1).dp, y = (-100 + offsetY1).dp)
+                .blur(100.dp)
                 .background(
                     brush = Brush.radialGradient(
-                        colors = listOf(
-                            Color(0x45EC4899),
-                            Color(0x00EC4899)
-                        )
+                        colors = listOf(Color(0xFFEC4899).copy(alpha = 0.2f), Color.Transparent)
                     )
                 )
         )
 
-        // Gradient orb 2 - Purple
+        // Gradient orb 2 - Purple (Bottom Right)
         Box(
             modifier = Modifier
                 .size(450.dp)
-                .offset(x = (-180 - offsetX1).dp, y = (400 - offsetY1).dp)
-                .blur(130.dp)
-                .clip(CircleShape)
+                .offset(x = 100.dp, y = 400.dp)
+                .blur(120.dp)
                 .background(
                     brush = Brush.radialGradient(
-                        colors = listOf(
-                            Color(0x408B5CF6),
-                            Color(0x008B5CF6)
-                        )
-                    )
-                )
-        )
-
-        // Gradient orb 3 - Orange
-        Box(
-            modifier = Modifier
-                .size(350.dp)
-                .offset(x = 150.dp, y = (600 + offsetY1).dp)
-                .blur(100.dp)
-                .clip(CircleShape)
-                .background(
-                    brush = Brush.radialGradient(
-                        colors = listOf(
-                            Color(0x30F97316),
-                            Color(0x00F97316)
-                        )
+                        colors = listOf(Color(0xFF8B5CF6).copy(alpha = 0.15f), Color.Transparent)
                     )
                 )
         )
@@ -303,101 +279,58 @@ fun LanguageSelectionCard(
         modifier = Modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 20.dp,
-                shape = RoundedCornerShape(32.dp),
-                ambientColor = Color(0xFF8B5CF6).copy(alpha = 0.2f)
+                elevation = 16.dp, // High elevation for floating effect
+                shape = RoundedCornerShape(28.dp),
+                ambientColor = Color.Black.copy(alpha = 0.1f),
+                spotColor = Color.Black.copy(alpha = 0.1f)
             ),
-        shape = RoundedCornerShape(32.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        )
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFF8B5CF6).copy(alpha = 0.06f),
-                            Color.Transparent
-                        )
-                    )
-                )
+        Column(
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier.padding(28.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            // Header
+            Text(
+                text = "Choose Language",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1F2937)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "भाषा चुनें",
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color(0xFF6B7280)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Language Options
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Icon
-                Box(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clip(CircleShape)
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFFEC4899),
-                                    Color(0xFF8B5CF6)
-                                )
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Language,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Text(
-                    text = "Choose Your Language",
-                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp),
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color(0xFF1A1A1A),
-                    textAlign = TextAlign.Center
+                LanguageButton(
+                    modifier = Modifier.weight(1f),
+                    language = "en",
+                    label = "English",
+                    flag = "🇬🇧",
+                    isSelected = selectedLanguage == "en",
+                    onClick = { onLanguageSelected("en") },
+                    primaryColor = Color(0xFFEC4899)
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "अपनी भाषा चुनें",
-                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp),
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF666666),
-                    textAlign = TextAlign.Center
+                LanguageButton(
+                    modifier = Modifier.weight(1f),
+                    language = "hi",
+                    label = "हिन्दी",
+                    flag = "🇮🇳",
+                    isSelected = selectedLanguage == "hi",
+                    onClick = { onLanguageSelected("hi") },
+                    primaryColor = Color(0xFF8B5CF6)
                 )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Language Options
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    LanguageButton(
-                        modifier = Modifier.weight(1f),
-                        language = "en",
-                        label = "English",
-                        flag = "🇬🇧",
-                        isSelected = selectedLanguage == "en",
-                        onClick = { onLanguageSelected("en") },
-                        gradientColors = listOf(Color(0xFFEC4899), Color(0xFF8B5CF6))
-                    )
-
-                    LanguageButton(
-                        modifier = Modifier.weight(1f),
-                        language = "hi",
-                        label = "हिन्दी",
-                        flag = "🇮🇳",
-                        isSelected = selectedLanguage == "hi",
-                        onClick = { onLanguageSelected("hi") },
-                        gradientColors = listOf(Color(0xFF8B5CF6), Color(0xFF06B6D4))
-                    )
-                }
             }
         }
     }
@@ -411,85 +344,40 @@ fun LanguageButton(
     flag: String,
     isSelected: Boolean,
     onClick: () -> Unit,
-    gradientColors: List<Color>
+    primaryColor: Color
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.92f else if (isSelected) 1.02f else 1f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
-        label = "Button Scale"
+    val borderColor by animateColorAsState(
+        targetValue = if (isSelected) primaryColor else Color.Transparent,
+        label = "border"
+    )
+    
+    val containerColor by animateColorAsState(
+        targetValue = if (isSelected) primaryColor.copy(alpha = 0.05f) else Color(0xFFF9FAFB),
+        label = "container"
     )
 
     Card(
         onClick = onClick,
         modifier = modifier
             .aspectRatio(1f)
-            .scale(scale)
-            .shadow(
-                elevation = if (isSelected) 16.dp else 8.dp,
-                shape = RoundedCornerShape(24.dp),
-                ambientColor = gradientColors[0].copy(alpha = 0.3f)
-            ),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) Color.White else Color(0xFFFAFAFA)
-        ),
-        interactionSource = interactionSource
+            .border(2.dp, borderColor, RoundedCornerShape(20.dp)),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .then(
-                    if (isSelected) {
-                        Modifier.background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    gradientColors[0].copy(alpha = 0.1f),
-                                    Color.Transparent
-                                )
-                            )
-                        )
-                    } else Modifier
-                )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                // Flag emoji
-                Text(
-                    text = flag,
-                    fontSize = 40.sp
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = if (isSelected) Color(0xFF1A1A1A) else Color(0xFF666666)
-                )
-
-                if (isSelected) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .clip(CircleShape)
-                            .background(
-                                brush = Brush.linearGradient(gradientColors)
-                            )
-                    )
-                }
-            }
+            Text(text = flag, fontSize = 32.sp)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = label,
+                fontSize = 16.sp,
+                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                color = if (isSelected) primaryColor else Color(0xFF4B5563)
+            )
         }
     }
 }
@@ -500,110 +388,64 @@ fun PermissionStatusCard(onGrantPermission: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 12.dp,
-                shape = RoundedCornerShape(24.dp),
-                ambientColor = Color(0xFFF97316).copy(alpha = 0.2f)
+                elevation = 16.dp, 
+                shape = RoundedCornerShape(28.dp),
+                ambientColor = Color.Black.copy(alpha = 0.1f),
+                spotColor = Color.Black.copy(alpha = 0.1f)
             ),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFFFF7ED)
-        )
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Info,
-                    contentDescription = null,
-                    tint = Color(0xFFF97316),
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Location Permission Required",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1A1A1A)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "We need location access to show you nearby studios and services",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    lineHeight = 18.sp
-                ),
-                color = Color(0xFF666666),
-                textAlign = TextAlign.Center
+            Icon(
+                imageVector = Icons.Filled.LocationOn,
+                contentDescription = null,
+                tint = Color(0xFFEC4899),
+                modifier = Modifier.size(48.dp)
             )
-
+            
             Spacer(modifier = Modifier.height(16.dp))
-
-            val interactionSource = remember { MutableInteractionSource() }
-            val isPressed by interactionSource.collectIsPressedAsState()
-            val scale by animateFloatAsState(
-                targetValue = if (isPressed) 0.95f else 1f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                ),
-                label = "Button Scale"
+            
+            Text(
+                text = "Enable Location",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1F2937)
             )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Text(
+                text = "To show you the best studios and services near you.",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                color = Color(0xFF6B7280)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = onGrantPermission,
-                interactionSource = interactionSource,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
-                    .scale(scale)
-                    .shadow(
-                        elevation = 8.dp,
-                        shape = RoundedCornerShape(24.dp),
-                        ambientColor = Color(0xFFF97316).copy(alpha = 0.3f)
-                    ),
-                shape = RoundedCornerShape(24.dp),
+                    .height(50.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
+                    containerColor = Color(0xFFEC4899)
                 ),
-                contentPadding = PaddingValues(0.dp)
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 8.dp,
+                    pressedElevation = 2.dp
+                )
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color(0xFFF97316),
-                                    Color(0xFFEC4899)
-                                )
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.CheckCircle,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Grant Permission",
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            fontSize = 15.sp
-                        )
-                    }
-                }
+                Text(
+                    text = "Allow Access", 
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
