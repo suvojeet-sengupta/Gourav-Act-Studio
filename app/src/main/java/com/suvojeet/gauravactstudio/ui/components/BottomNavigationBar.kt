@@ -75,45 +75,48 @@ fun BottomNavigationBar(navController: NavHostController) {
         )
     )
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = Color(0xFFE5E7EB)
-        )
-        
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            color = Color.White
+    // Floating-style Card container
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 16.dp, // High elevation for that "floating" look
+                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+                ambientColor = Color.Black.copy(alpha = 0.1f),
+                spotColor = Color.Black.copy(alpha = 0.1f)
+            ),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp, horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween, // Better spacing for 5 items
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 6.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
 
-                items.forEach { item ->
-                    val isSelected = currentDestination?.hierarchy?.any {
-                        it.route == item.screen.route
-                    } == true
+            items.forEach { item ->
+                val isSelected = currentDestination?.hierarchy?.any {
+                    it.route == item.screen.route
+                } == true
 
-                    BottomNavItemContent(
-                        item = item,
-                        isSelected = isSelected,
-                        onClick = {
-                            navController.navigate(item.screen.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
+                BottomNavItemContent(
+                    item = item,
+                    isSelected = isSelected,
+                    onClick = {
+                        navController.navigate(item.screen.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
                             }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                    )
-                }
+                    }
+                )
             }
         }
     }
@@ -125,15 +128,19 @@ fun BottomNavItemContent(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
+    // Animate color for smooth transition
+    val activeColor = Color(0xFFEC4899) // Pink to match Home theme
+    val inactiveColor = Color(0xFF9CA3AF)
+
     val iconColor by animateColorAsState(
-        targetValue = if (isSelected) Color(0xFF1F2937) else Color(0xFF9CA3AF),
-        animationSpec = tween(200),
+        targetValue = if (isSelected) activeColor else inactiveColor,
+        animationSpec = tween(300),
         label = "Icon Color"
     )
 
     val labelColor by animateColorAsState(
-        targetValue = if (isSelected) Color(0xFF1F2937) else Color(0xFF9CA3AF),
-        animationSpec = tween(200),
+        targetValue = if (isSelected) activeColor else inactiveColor,
+        animationSpec = tween(300),
         label = "Label Color"
     )
 
@@ -144,41 +151,48 @@ fun BottomNavItemContent(
                 selected = isSelected,
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = null
+                indication = null // Remove ripple for cleaner look, or keep it if preferred
             )
-            .padding(vertical = 8.dp, horizontal = 10.dp)
+            .padding(8.dp)
+            .weight(1f) // Distribute click area evenly
     ) {
+        // Icon Box
         Box(
             contentAlignment = Alignment.Center
         ) {
+            // Optional: Add a subtle background indicator for selected state if desired, 
+            // but Swiggy/Zomato usually just use bold/color. 
+            // We will stick to the bold icon + color.
+            
+            // Top Indicator (Swiggy style often has a top bar, let's add a small one above or just rely on the icon)
+            // For this design, let's keep it clean with just the Icon and Text scaling slightly.
+            
             Icon(
                 imageVector = if (isSelected) item.iconSelected else item.iconUnselected,
                 contentDescription = item.label,
-                modifier = Modifier.size(26.dp),
+                modifier = Modifier.size(24.dp),
                 tint = iconColor
             )
             
-            // Bottom indicator line
             if (isSelected) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .offset(y = 20.dp)
-                        .width(32.dp)
-                        .height(2.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFF1F2937))
-                )
+                // Top border indicator line - positioned at the very top of the item or just below icon?
+                // Visual choice: Let's put a small dash BELOW the text or effectively just use color.
+                // The user asked for "Swiggy/Zomato like".
+                // Zomato uses a thick top border. Let's try to add a top border to the whole item 
+                // but that requires measuring correctly. 
+                // Simplest high-quality look: Color + Bold Text + maybe a glow?
+                // Let's stick to simple Color + Bold.
             }
         }
-        
-        Spacer(modifier = Modifier.height(6.dp))
-        
+
+        Spacer(modifier = Modifier.height(4.dp))
+
         Text(
             text = item.label,
-            fontSize = 11.sp,
-            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-            color = labelColor
+            fontSize = 10.sp,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+            color = labelColor,
+            maxLines = 1
         )
     }
 }
