@@ -35,12 +35,15 @@ import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import kotlinx.coroutines.delay
 
+import com.suvojeet.gauravactstudio.ui.components.AchievementsSheetContent
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(navController: NavController) {
     val context = LocalContext.current
     var isVisible by remember { mutableStateOf(false) }
     var showAboutDetails by remember { mutableStateOf(false) }
+    var showAchievements by remember { mutableStateOf(false) }
     
     LaunchedEffect(Unit) {
         delay(40)
@@ -54,6 +57,16 @@ fun AboutScreen(navController: NavController) {
             containerColor = Color.White
         ) {
             AboutDetailsContent(onClose = { showAboutDetails = false })
+        }
+    }
+
+    if (showAchievements) {
+        ModalBottomSheet(
+            onDismissRequest = { showAchievements = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = Color.White
+        ) {
+            AchievementsSheetContent(onClose = { showAchievements = false })
         }
     }
 
@@ -140,7 +153,7 @@ fun AboutScreen(navController: NavController) {
                     icon = Icons.Outlined.Verified,
                     title = "Achievements",
                     subtitle = "500+ Happy Clients, 1000+ Events covered",
-                    onClick = {}
+                    onClick = { showAchievements = true }
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
