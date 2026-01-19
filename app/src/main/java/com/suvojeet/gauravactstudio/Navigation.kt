@@ -19,6 +19,8 @@ import com.suvojeet.gauravactstudio.util.decodeURL
 import com.suvojeet.gauravactstudio.util.encodeURL
 
 import com.suvojeet.gauravactstudio.ui.screens.gallery.CategoryPhotosScreen
+import com.suvojeet.gauravactstudio.ui.screens.gallery.AlbumGalleryScreen
+import com.suvojeet.gauravactstudio.ui.screens.gallery.AlbumPhotosScreen
 import com.suvojeet.gauravactstudio.ui.screens.UpiPaymentScreen
 import com.suvojeet.gauravactstudio.ui.screens.YourPhotosScreen
 
@@ -35,6 +37,10 @@ sealed class Screen(val route: String, @StringRes val title: Int? = null) {
     }
     object CategoryPhotos : Screen("category_photos/{category}") {
         fun createRoute(category: String) = "category_photos/$category"
+    }
+    object AlbumGallery : Screen("album_gallery")
+    object AlbumPhotos : Screen("album_photos/{albumName}") {
+        fun createRoute(albumName: String) = "album_photos/$albumName"
     }
     object UpiPayment : Screen("upi_payment")
 }
@@ -92,6 +98,20 @@ fun AppNavHost(
         }
         composable(Screen.UpiPayment.route) {
             UpiPaymentScreen(navController = navController)
+        }
+        composable(Screen.AlbumGallery.route) {
+            AlbumGalleryScreen(navController = navController)
+        }
+        composable(
+            route = Screen.AlbumPhotos.route,
+            arguments = listOf(
+                navArgument("albumName") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val albumName = backStackEntry.arguments?.getString("albumName")
+            if (albumName != null) {
+                AlbumPhotosScreen(navController = navController, albumName = albumName)
+            }
         }
     }
 }
