@@ -12,7 +12,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 /**
- * Service for fetching images from Cloudinary
+ * Service for fetching images from Cloudinary with in-memory caching
  * 
  * Note: This uses Cloudinary's client-side resource list feature.
  * Make sure "Resource list" is enabled in Cloudinary Console -> Settings -> Security
@@ -25,6 +25,12 @@ object CloudinaryService {
     // Album configuration - folder name on Cloudinary
     private const val ALBUM_FOLDER = "album library"
     
+    // Cache for photos - prevents repeated API calls
+    private var cachedPhotos: List<CloudinaryResource>? = null
+    private var cachedAlbums: List<Album>? = null
+    private var lastFetchTime: Long = 0
+    private const val CACHE_DURATION_MS = 5 * 60 * 1000L // 5 minutes cache
+    
     // Create Ktor HTTP client
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
@@ -36,10 +42,32 @@ object CloudinaryService {
     }
     
     /**
-     * Get list of albums (currently returns single album from folder)
-     * In future, this can be expanded to support multiple folders
+     * Check if cache is still valid
+     */
+    private fun isCacheValid(): Boolean {
+        return cachedPhotos != null && 
+               (System.currentTimeMillis() - lastFetchTime) < CACHE_DURATION_MS
+    }
+    
+    /**
+     * Clear the cache - call this to force refresh
+     */
+    fun clearCache() {
+        cachedPhotos = null
+        cachedAlbums = null
+        lastFetchTime = 0
+    }
+    
+    /**
+     * Get list of albums with caching
+     * Returns cached data if available, otherwise fetches from API
      */
     suspend fun getAlbums(): Result<List<Album>> {
+        // Return cached albums if valid
+        if (isCacheValid() && cachedAlbums != null) {
+            return Result.success(cachedAlbums!!)
+        }
+        
         return try {
             val photos = getPhotosFromFolder(ALBUM_FOLDER)
             if (photos.isSuccess) {
@@ -51,7 +79,9 @@ object CloudinaryService {
                     photoCount = resources.size,
                     folderPath = ALBUM_FOLDER
                 )
-                Result.success(listOf(album))
+                val albums = listOf(album)
+                cachedAlbums = albums
+                Result.success(albums)
             } else {
                 Result.failure(photos.exceptionOrNull() ?: Exception("Failed to load albums"))
             }
@@ -62,14 +92,14 @@ object CloudinaryService {
     
     /**
      * Get all photos from a specific folder using Cloudinary's tag-based listing
-     * 
-     * Note: For this to work, you need to either:
-     * 1. Tag images with the folder name when uploading, OR
-     * 2. Use the Admin API (requires server-side implementation)
-     * 
-     * Alternative approach: Use direct folder URL structure
+     * Uses caching to prevent repeated API calls
      */
     suspend fun getPhotosFromFolder(folder: String): Result<List<CloudinaryResource>> {
+        // Return cached photos if valid
+        if (isCacheValid() && cachedPhotos != null) {
+            return Result.success(cachedPhotos!!)
+        }
+        
         return try {
             // Try to fetch using tag-based listing
             // Format: https://res.cloudinary.com/{cloud_name}/image/list/{tag}.json
@@ -77,27 +107,38 @@ object CloudinaryService {
             val url = "https://res.cloudinary.com/$CLOUD_NAME/image/list/$tagName.json"
             
             val response: CloudinaryListResponse = client.get(url).body()
+            
+            // Cache the result
+            cachedPhotos = response.resources
+            lastFetchTime = System.currentTimeMillis()
+            
             Result.success(response.resources)
         } catch (e: Exception) {
             // If tag-based listing fails, return empty list
-            // User may need to tag their images or use Admin API
             Result.failure(e)
         }
     }
     
     /**
-     * Get photos from the main album library
+     * Get photos from the main album library (with caching)
      */
     suspend fun getAlbumPhotos(): Result<List<CloudinaryResource>> {
         return getPhotosFromFolder(ALBUM_FOLDER)
     }
     
     /**
-     * Generate a list URL for searching by prefix (folder path)
-     * Note: This requires the Admin API and won't work client-side
+     * Get cached photos synchronously if available
+     * Returns null if no cache exists
      */
-    fun getSearchUrl(prefix: String): String {
-        return "https://res.cloudinary.com/$CLOUD_NAME/image/list/$prefix.json"
+    fun getCachedPhotos(): List<CloudinaryResource>? {
+        return if (isCacheValid()) cachedPhotos else null
+    }
+    
+    /**
+     * Get cached albums synchronously if available
+     */
+    fun getCachedAlbums(): List<Album>? {
+        return if (isCacheValid()) cachedAlbums else null
     }
     
     /**

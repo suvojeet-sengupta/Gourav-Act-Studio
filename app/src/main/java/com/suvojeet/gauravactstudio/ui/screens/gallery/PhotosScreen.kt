@@ -58,24 +58,33 @@ fun PhotosScreen(navController: NavController, modifier: Modifier = Modifier) {
         PortfolioItem(title, items.first().imageUrl, 1.2f)
     }
 
-    // Album state
-    var albums by remember { mutableStateOf<List<Album>>(emptyList()) }
-    var albumsLoading by remember { mutableStateOf(true) }
+    // Album state - try cached first
+    var albums by remember { mutableStateOf(CloudinaryService.getCachedAlbums() ?: emptyList()) }
+    var albumsLoading by remember { mutableStateOf(CloudinaryService.getCachedAlbums() == null) }
     var isVisible by remember { mutableStateOf(false) }
+    
+    // Scroll state for controlling scroll position
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
 
     LaunchedEffect(Unit) {
+        // Scroll to top when screen opens
+        listState.scrollToItem(0)
+        
         delay(20)
         isVisible = true
         
-        // Load albums from Cloudinary
-        val result = CloudinaryService.getAlbums()
-        if (result.isSuccess) {
-            albums = result.getOrNull() ?: emptyList()
+        // Only fetch if no cache
+        if (CloudinaryService.getCachedAlbums() == null) {
+            val result = CloudinaryService.getAlbums()
+            if (result.isSuccess) {
+                albums = result.getOrNull() ?: emptyList()
+            }
+            albumsLoading = false
         }
-        albumsLoading = false
     }
 
     LazyColumn(
+        state = listState,
         modifier = modifier
             .fillMaxSize()
             .background(Color.Transparent),

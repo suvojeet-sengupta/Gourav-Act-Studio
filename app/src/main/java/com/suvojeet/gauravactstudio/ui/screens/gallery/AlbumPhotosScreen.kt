@@ -40,8 +40,10 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumPhotosScreen(navController: NavController, albumName: String, modifier: Modifier = Modifier) {
-    var photos by remember { mutableStateOf<List<CloudinaryResource>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
+    // Try cached photos first
+    val cachedPhotos = CloudinaryService.getCachedPhotos()
+    var photos by remember { mutableStateOf(cachedPhotos ?: emptyList()) }
+    var isLoading by remember { mutableStateOf(cachedPhotos == null) }
     var error by remember { mutableStateOf<String?>(null) }
     var isVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -50,13 +52,16 @@ fun AlbumPhotosScreen(navController: NavController, albumName: String, modifier:
         delay(50)
         isVisible = true
         
-        val result = CloudinaryService.getPhotosFromFolder(albumName)
-        if (result.isSuccess) {
-            photos = result.getOrNull() ?: emptyList()
-        } else {
-            error = result.exceptionOrNull()?.message ?: "Failed to load photos"
+        // Only fetch if no cache
+        if (cachedPhotos == null) {
+            val result = CloudinaryService.getPhotosFromFolder(albumName)
+            if (result.isSuccess) {
+                photos = result.getOrNull() ?: emptyList()
+            } else {
+                error = result.exceptionOrNull()?.message ?: "Failed to load photos"
+            }
+            isLoading = false
         }
-        isLoading = false
     }
 
     Box(
