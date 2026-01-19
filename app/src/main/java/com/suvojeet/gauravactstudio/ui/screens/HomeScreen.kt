@@ -119,21 +119,96 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 5. Popular Services (Horizontal Scroll)
+            // 5. Your Photos Section (New)
             AnimatedContent(isVisible, delay = 200) {
+                YourPhotosSection(navController)
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 6. Popular Services (Horizontal Scroll)
+            AnimatedContent(isVisible, delay = 250) {
                 PopularServicesSection(navController)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 6. Address / Footer
-            AnimatedContent(isVisible, delay = 250) {
+            // 7. Address / Footer
+            AnimatedContent(isVisible, delay = 300) {
                  Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                     ModernAddressSection()
                  }
             }
 
             Spacer(modifier = Modifier.height(100.dp)) // Bottom padding for navigation bar
+        }
+    }
+}
+
+@Composable
+fun YourPhotosSection(navController: NavController) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clickable { navController.navigate(Screen.YourPhotos.route) }
+            .shadow(4.dp, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(Color(0xFF06B6D4), Color(0xFF3B82F6))
+                    )
+                )
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(Color.White.copy(alpha = 0.2f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.CloudDownload,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                
+                Spacer(modifier = Modifier.width(16.dp))
+                
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.your_photos_screen),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = stringResource(R.string.home_feature_your_photos_description),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.White.copy(alpha = 0.9f)
+                    )
+                }
+                
+                Icon(
+                    imageVector = Icons.Filled.ChevronRight,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
         }
     }
 }
