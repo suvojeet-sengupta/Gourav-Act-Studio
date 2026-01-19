@@ -63,13 +63,18 @@ fun PhotosScreen(navController: NavController, modifier: Modifier = Modifier) {
     var albumsLoading by remember { mutableStateOf(CloudinaryService.getCachedAlbums() == null) }
     var isVisible by remember { mutableStateOf(false) }
     
-    // Scroll state for controlling scroll position
-    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+    // Scroll state for controlling scroll position - initialFirstVisibleItemIndex = 0 ensures top
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState(
+        initialFirstVisibleItemIndex = 0,
+        initialFirstVisibleItemScrollOffset = 0
+    )
+
+    // Scroll to top when this composable enters composition
+    LaunchedEffect(key1 = "scroll_reset") {
+        listState.scrollToItem(0, 0)
+    }
 
     LaunchedEffect(Unit) {
-        // Scroll to top when screen opens
-        listState.scrollToItem(0)
-        
         delay(20)
         isVisible = true
         
