@@ -32,113 +32,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.Screen
+import com.suvojeet.gauravactstudio.data.model.Service
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 
-data class Service(
-    val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val gradient: List<Color> = listOf(Color(0xFF6366F1), Color(0xFF8B5CF6)),
-    val isHighlighted: Boolean = false,
-    val category: String = "All" 
-)
-
 @Composable
-fun ServicesScreen(navController: NavController) {
-    // Data (Using existing strings)
-    val allServices = listOf(
-        Service(
-            stringResource(R.string.service_wedding_photography_title),
-            stringResource(R.string.service_wedding_photography_description),
-            Icons.Filled.Camera,
-            listOf(Color(0xFFEC4899), Color(0xFFF97316)),
-            category = "Wedding"
-        ),
-        Service(
-            stringResource(R.string.service_ring_ceremony_title),
-            stringResource(R.string.service_ring_ceremony_description),
-            Icons.Filled.Favorite,
-            listOf(Color(0xFFEF4444), Color(0xFFF59E0B)),
-            category = "Wedding"
-        ),
-        Service(
-            stringResource(R.string.service_birthday_celebrations_title),
-            stringResource(R.string.service_birthday_celebrations_description),
-            Icons.Filled.CardGiftcard,
-            listOf(Color(0xFF8B5CF6), Color(0xFFEC4899)),
-            category = "Events"
-        ),
-        Service(
-            stringResource(R.string.service_pre_wedding_shoots_title),
-            stringResource(R.string.service_pre_wedding_shoots_description),
-            Icons.Filled.PhotoCamera,
-            listOf(Color(0xFF06B6D4), Color(0xFF3B82F6)),
-            category = "Wedding"
-        ),
-        Service(
-            stringResource(R.string.service_maternity_shoots_title),
-            stringResource(R.string.service_maternity_shoots_description),
-            Icons.Filled.ChildFriendly,
-            listOf(Color(0xFFF59E0B), Color(0xFFFBBF24)),
-             category = "Events"
-        ),
-        Service(
-            stringResource(R.string.service_baby_shoots_title),
-            stringResource(R.string.service_baby_shoots_description),
-            Icons.Filled.ChildFriendly,
-            listOf(Color(0xFF10B981), Color(0xFF14B8A6)),
-             category = "Events"
-        ),
-        Service(
-            stringResource(R.string.service_corporate_events_title),
-            stringResource(R.string.service_corporate_events_description),
-            Icons.Filled.CorporateFare,
-            listOf(Color(0xFF6366F1), Color(0xFF8B5CF6)),
-            category = "Corporate"
-        ),
-        Service(
-            stringResource(R.string.service_fashion_portfolio_title),
-            stringResource(R.string.service_fashion_portfolio_description),
-            Icons.Filled.Style,
-            listOf(Color(0xFFEC4899), Color(0xFFA855F7)),
-            category = "Corporate"
-        ),
-        Service(
-            stringResource(R.string.service_product_photography_title),
-            stringResource(R.string.service_product_photography_description),
-            Icons.Filled.Videocam,
-            listOf(Color(0xFF3B82F6), Color(0xFF06B6D4)),
-             category = "Corporate"
-        ),
-        Service(
-            stringResource(R.string.service_wedding_card_design_title),
-            stringResource(R.string.service_wedding_card_design_description),
-            Icons.Filled.Create,
-            listOf(Color(0xFFF97316), Color(0xFFFBBF24)),
-            category = "Wedding"
-        ),
-        Service(
-            stringResource(R.string.service_business_promotion_shoots_title),
-            stringResource(R.string.service_business_promotion_shoots_description),
-            Icons.Filled.Store,
-            listOf(Color(0xFF4CAF50), Color(0xFF8BC34A)),
-            isHighlighted = true,
-             category = "Corporate"
-        )
-    )
-
-    var searchQuery by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("All") }
-
-    val filteredServices = allServices.filter { service ->
-        (selectedCategory == "All" || service.category == selectedCategory) &&
-        (service.title.contains(searchQuery, ignoreCase = true) || 
-         service.description.contains(searchQuery, ignoreCase = true))
-    }
+fun ServicesScreen(
+    navController: NavController,
+    viewModel: ServicesViewModel = viewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -186,8 +93,8 @@ fun ServicesScreen(navController: NavController) {
                         Spacer(modifier = Modifier.width(8.dp))
                         // Note: Using BasicTextField for custom look would be better, but Text is fine for display
                          Text(
-                            text = if(searchQuery.isEmpty()) stringResource(R.string.services_search_placeholder) else searchQuery,
-                            color = if(searchQuery.isEmpty()) Color(0xFF9CA3AF) else Color.Black,
+                            text = if(uiState.searchQuery.isEmpty()) stringResource(R.string.services_search_placeholder) else uiState.searchQuery,
+                            color = if(uiState.searchQuery.isEmpty()) Color(0xFF9CA3AF) else Color.Black,
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
@@ -202,26 +109,13 @@ fun ServicesScreen(navController: NavController) {
                         .padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    FilterChip(
-                        selected = selectedCategory == "All",
-                        onClick = { selectedCategory = "All" },
-                        label = stringResource(R.string.services_category_all)
-                    )
-                    FilterChip(
-                        selected = selectedCategory == "Wedding",
-                        onClick = { selectedCategory = "Wedding" },
-                        label = stringResource(R.string.services_category_wedding)
-                    )
-                    FilterChip(
-                        selected = selectedCategory == "Events",
-                        onClick = { selectedCategory = "Events" },
-                        label = stringResource(R.string.services_category_events)
-                    )
-                     FilterChip(
-                        selected = selectedCategory == "Corporate",
-                        onClick = { selectedCategory = "Corporate" },
-                        label = stringResource(R.string.services_category_corporate)
-                    )
+                    uiState.categories.forEach { category ->
+                         FilterChip(
+                            selected = uiState.selectedCategory == category,
+                            onClick = { viewModel.onCategorySelected(category) },
+                            label = category
+                        )
+                    }
                 }
             }
         }
@@ -232,7 +126,7 @@ fun ServicesScreen(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            items(filteredServices) { service ->
+            items(uiState.filteredServices) { service ->
                 ModernServiceItem(service = service, navController = navController)
             }
             

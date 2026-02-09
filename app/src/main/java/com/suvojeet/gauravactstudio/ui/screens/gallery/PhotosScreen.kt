@@ -38,54 +38,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.data.CloudinaryService
 import com.suvojeet.gauravactstudio.data.model.Album
 import com.suvojeet.gauravactstudio.ui.model.PortfolioItem
+import com.suvojeet.gauravactstudio.ui.screens.gallery.PhotosViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun PhotosScreen(navController: NavController, modifier: Modifier = Modifier) {
-    // Portfolio Items for Categories
-    val portfolioItems = listOf(
-        PortfolioItem("Pre-wedding", "https://lh3.googleusercontent.com/pw/AP1GczNoNn9GeQvUIdclpmWPH-1z12Doisij77OnM1W4VBCtrA1aYzSc6cqThuU6Bt-gr0Hs9cMssVk1mYqLgJuUh0ThhndADvwwJUqF9Ov8HOmuJ-fsvVNXRsLxS8KbcSXRhm2jIHkeHpQ6DjpOBiD9pY458Q=w700-h466-s-no-gm?authuser=0", 1.5f),
-        PortfolioItem("Birthday", "https://lh3.googleusercontent.com/pw/AP1GczMvWUbuMW9A3HO43sP3KjxgarFqDKQxwz2aNRPyPGxdZV80nvYsP13jP4_S1KBKFLYQak5ZPbXEODV2pGlkS4Vb5l9Ov9I5hwJJtvufpf9I6O9a107-5wwZx_oc2YPSnNwxjQsKrhkgx_poQp5Z86iBYA=w1280-h853-s-no-gm?authuser=0", 1.5f),
-        PortfolioItem("Baby Shoot", "https://lh3.googleusercontent.com/pw/AP1GczMiTuKH7iVfYSYQSHJlan_LgL8cyVt-GfgjvzjkWE-e2q4N0xctRD4UIlMaW4ssf8RthnB_W9FFeZzbcNO0XRGQbfvDpXs6PkxyEZKohPpKkmxzT1CTfpb1OSnAXB98Wn6AqGlfEmjtSup28dZTtlQhPA=w1024-h683-s-no-gm?authuser=0", 1.5f),
-        PortfolioItem("Product Photography", "https://lh3.googleusercontent.com/pw/AP1GczN4OHR2tGmJ7T1ADMSyYqbAly10ZmIhnhkJ4vwYlnYiUq8DQhPsbCesTQus6SiEVvfg8Puk8MydH-qVxJTqO7VpxvxoIxbpWTEQDlDhUnCxfd9FbSomFN3BADuboxRbdoGzXNr6UZFFKsEeYyWJ2lgcwA=w736-h919-s-no-gm?authuser=0", 0.8f)
-    )
-    
-    val categories = portfolioItems.groupBy { it.title }.map { (title, items) ->
-        PortfolioItem(title, items.first().imageUrl, 1.2f)
-    }
-
-    // Album state - try cached first
-    var albums by remember { mutableStateOf(CloudinaryService.getCachedAlbums() ?: emptyList()) }
-    var albumsLoading by remember { mutableStateOf(CloudinaryService.getCachedAlbums() == null) }
+fun PhotosScreen(
+    navController: NavController, 
+    modifier: Modifier = Modifier,
+    viewModel: PhotosViewModel = viewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
     var isVisible by remember { mutableStateOf(false) }
     
-    // Scroll state for controlling scroll position - initialFirstVisibleItemIndex = 0 ensures top
-    val listState = androidx.compose.foundation.lazy.rememberLazyListState(
-        initialFirstVisibleItemIndex = 0,
-        initialFirstVisibleItemScrollOffset = 0
-    )
-
-    // Scroll to top when this composable enters composition
-    LaunchedEffect(key1 = "scroll_reset") {
-        listState.scrollToItem(0, 0)
-    }
+    // Scroll state for controlling scroll position
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
 
     LaunchedEffect(Unit) {
         delay(20)
         isVisible = true
-        
-        // Only fetch if no cache
-        if (CloudinaryService.getCachedAlbums() == null) {
-            val result = CloudinaryService.getAlbums()
-            if (result.isSuccess) {
-                albums = result.getOrNull() ?: emptyList()
-            }
-            albumsLoading = false
-        }
     }
 
     LazyColumn(
@@ -138,11 +115,11 @@ fun PhotosScreen(navController: NavController, modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.spacedBy(14.dp),
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .height((categories.size / 2 * 180 + 100).dp),
+                    .height((uiState.categories.size / 2 * 180 + 100).dp),
                 userScrollEnabled = false
             ) {
-                items(categories.size) { index ->
-                    val category = categories[index]
+                items(uiState.categories.size) { index ->
+                    val category = uiState.categories[index]
                     AnimatedStaggeredItem(visible = isVisible, index = index) {
                         PortfolioCard(
                             item = category,
@@ -162,8 +139,8 @@ fun PhotosScreen(navController: NavController, modifier: Modifier = Modifier) {
                 enter = fadeIn(tween(400)) + slideInVertically(initialOffsetY = { it / 4 })
             ) {
                 AlbumReviewSection(
-                    albums = albums,
-                    isLoading = albumsLoading,
+                    albums = uiState.albums,
+                    isLoading = uiState.isLoadingAlbums,
                     navController = navController
                 )
             }

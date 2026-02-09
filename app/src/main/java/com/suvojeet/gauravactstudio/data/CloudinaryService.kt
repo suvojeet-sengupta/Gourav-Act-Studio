@@ -118,6 +118,22 @@ object CloudinaryService {
             Result.failure(e)
         }
     }
+
+    /**
+     * Get list of videos from a specific folder (tag)
+     */
+    suspend fun getVideos(tag: String): Result<List<CloudinaryResource>> {
+        return try {
+            // Format: https://res.cloudinary.com/{cloud_name}/video/list/{tag}.json
+            val tagName = tag.replace(" ", "_").lowercase()
+            val url = "https://res.cloudinary.com/$CLOUD_NAME/video/list/$tagName.json"
+            
+            val response: CloudinaryListResponse = client.get(url).body()
+            Result.success(response.resources)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
     
     /**
      * Get photos from the main album library (with caching)

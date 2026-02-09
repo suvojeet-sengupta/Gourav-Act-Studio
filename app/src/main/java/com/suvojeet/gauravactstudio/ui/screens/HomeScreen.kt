@@ -1,13 +1,18 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
-import androidx.compose.animation.animateColorAsState
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Search
@@ -16,66 +21,60 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.suvojeet.gauravactstudio.Screen
-import com.suvojeet.gauravactstudio.ui.components.AppLogo
-import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
-import com.suvojeet.gauravactstudio.ui.components.LightDecorativeBackground
-import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
-import kotlinx.coroutines.delay
-import androidx.compose.ui.res.stringResource
+import coil.compose.AsyncImage
 import com.suvojeet.gauravactstudio.R
-import android.content.Intent
-import android.net.Uri
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.draw.blur
-import androidx.compose.foundation.Image
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
+import com.suvojeet.gauravactstudio.Screen
+import com.suvojeet.gauravactstudio.data.CloudinaryService
+import com.suvojeet.gauravactstudio.data.model.CloudinaryResource
+import com.suvojeet.gauravactstudio.data.model.Service
+import com.suvojeet.gauravactstudio.data.repository.BannerData
+import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+import kotlinx.coroutines.delay
 
 @Composable
-fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun HomeScreen(
+    navController: NavController, 
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = viewModel()
+) {
     val scrollState = rememberScrollState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val uiState by viewModel.uiState.collectAsState()
 
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(currentRoute) {
         if (currentRoute == Screen.Home.route) {
-            delay(20) // Keep a small delay for animation
+            delay(20)
             isVisible = true
-            scrollState.scrollTo(0) // Also scroll to top when Home is active
+            scrollState.scrollTo(0)
         } else {
-            isVisible = false // Reset when navigating away
+            isVisible = false
         }
     }
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFF4F5F9)) // Slightly grey background like apps
+            .background(Color(0xFFF4F5F9))
     ) {
-        // LightDecorativeBackground(scrollState.value) // Optional: Keep or remove for cleaner look
-
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
@@ -89,7 +88,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // 2. Categories ("What's on your mind?")
+            // 2. Categories
             AnimatedContent(isVisible, delay = 50) {
                 CategorySection(navController)
             }
@@ -98,7 +97,9 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
 
             // 3. Hero / Banners
             AnimatedContent(isVisible, delay = 100) {
-                PromoBannerSection(navController)
+                if (uiState.banners.isNotEmpty()) {
+                    PromoBannerSection(navController, uiState.banners)
+                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -119,29 +120,97 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 5. Your Photos Section (New)
+            // 5. Featured Works (Actual Data)
+            if (uiState.featuredWorks.isNotEmpty()) {
+                AnimatedContent(isVisible, delay = 180) {
+                    FeaturedWorksSection(navController, uiState.featuredWorks)
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+            }
+
+            // 6. Your Photos Section
             AnimatedContent(isVisible, delay = 200) {
                 YourPhotosSection(navController)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 6. Popular Services (Horizontal Scroll)
+            // 7. Popular Services
             AnimatedContent(isVisible, delay = 250) {
-                PopularServicesSection(navController)
+                if (uiState.popularServices.isNotEmpty()) {
+                    PopularServicesSection(navController, uiState.popularServices)
+                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 7. Address / Footer
+            // 8. Address / Footer
             AnimatedContent(isVisible, delay = 300) {
                  Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                     ModernAddressSection()
                  }
             }
 
-            Spacer(modifier = Modifier.height(100.dp)) // Bottom padding for navigation bar
+            Spacer(modifier = Modifier.height(100.dp))
         }
+    }
+}
+
+@Composable
+fun FeaturedWorksSection(navController: NavController, works: List<CloudinaryResource>) {
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Recent Works", // New Section Title
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1F2937)
+            )
+            TextButton(onClick = { navController.navigate(Screen.Gallery.route) }) {
+                Text(
+                    text = "See All",
+                    color = Color(0xFFEC4899),
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            works.forEach { work ->
+                FeaturedWorkCard(work)
+            }
+        }
+    }
+}
+
+@Composable
+fun FeaturedWorkCard(work: CloudinaryResource) {
+    Card(
+        modifier = Modifier
+            .width(140.dp)
+            .height(180.dp)
+            .shadow(4.dp, RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        AsyncImage(
+            model = work.getThumbnailUrl(CloudinaryService.CLOUD_NAME),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }
 
@@ -252,7 +321,6 @@ fun TopHeaderSection() {
         }
         Spacer(modifier = Modifier.weight(1f))
         
-        // Profile or Menu Icon
         Box(
             modifier = Modifier
                 .size(40.dp)
@@ -325,6 +393,7 @@ fun CategorySection(navController: NavController) {
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+            // These act as filters/shortcuts, so they can remain static navigation items
             CategoryItem("Wedding", Icons.Filled.Favorite, Color(0xFFFFE4E6), Color(0xFFEC4899))
             CategoryItem("Events", Icons.Filled.Event, Color(0xFFE0E7FF), Color(0xFF6366F1))
             CategoryItem("Portraits", Icons.Filled.Face, Color(0xFFDCFCE7), Color(0xFF10B981))
@@ -350,7 +419,7 @@ fun CategoryItem(
                 .size(64.dp)
                 .clip(CircleShape)
                 .background(bgColor)
-                .clickable { /* Handle click */ },
+                .clickable { },
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -372,29 +441,21 @@ fun CategoryItem(
 }
 
 @Composable
-fun PromoBannerSection(navController: NavController) {
-    // A simplified horizontal scroll for banners
+fun PromoBannerSection(navController: NavController, banners: List<BannerData>) {
     Row(
         modifier = Modifier
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Banner 1
-        PromoBannerCard(
-            title = stringResource(R.string.home_banner_1_title),
-            subtitle = stringResource(R.string.home_banner_1_subtitle),
-            gradientColors = listOf(Color(0xFFEC4899), Color(0xFFF43F5E)),
-            onClick = { navController.navigate(Screen.Services.route) }
-        )
-        
-        // Banner 2
-        PromoBannerCard(
-            title = stringResource(R.string.home_banner_2_title),
-            subtitle = stringResource(R.string.home_banner_2_subtitle),
-            gradientColors = listOf(Color(0xFF8B5CF6), Color(0xFF6366F1)),
-             onClick = { navController.navigate(Screen.Services.route) }
-        )
+        banners.forEach { banner ->
+            PromoBannerCard(
+                title = banner.title,
+                subtitle = banner.subtitle,
+                gradientColors = banner.gradient,
+                onClick = { navController.navigate(Screen.Services.route) }
+            )
+        }
     }
 }
 
@@ -473,7 +534,7 @@ fun PromoBannerCard(
 }
 
 @Composable
-fun PopularServicesSection(navController: NavController) {
+fun PopularServicesSection(navController: NavController, services: List<Service>) {
     Column {
         Row(
             modifier = Modifier
@@ -506,27 +567,15 @@ fun PopularServicesSection(navController: NavController) {
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            PopularServiceCard(
-                title = stringResource(R.string.home_popular_service_1_title),
-                price = stringResource(R.string.home_popular_service_1_price),
-                rating = "4.8",
-                imageColor = Color(0xFFFFE4E6),
-                icon = Icons.Filled.CameraAlt
-            )
-            PopularServiceCard(
-                title = stringResource(R.string.home_popular_service_2_title),
-                price = stringResource(R.string.home_popular_service_2_price),
-                rating = "4.9",
-                imageColor = Color(0xFFE0E7FF),
-                icon = Icons.Filled.Videocam
-            )
-             PopularServiceCard(
-                title = stringResource(R.string.home_popular_service_3_title),
-                price = stringResource(R.string.home_popular_service_3_price),
-                rating = "5.0",
-                imageColor = Color(0xFFDCFCE7),
-                icon = Icons.Filled.Flight
-            )
+            services.take(4).forEach { service ->
+                PopularServiceCard(
+                    title = service.title,
+                    price = "Contact for Price", // Or use service.priceRange if available
+                    rating = "4.9",
+                    imageColor = service.gradient.first().copy(alpha = 0.1f),
+                    icon = service.icon
+                )
+            }
         }
     }
 }

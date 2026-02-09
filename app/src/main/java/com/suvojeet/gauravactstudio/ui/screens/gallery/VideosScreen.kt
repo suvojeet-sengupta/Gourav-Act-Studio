@@ -37,16 +37,19 @@ import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.ui.model.VideoItem // Import VideoItem
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.suvojeet.gauravactstudio.ui.screens.gallery.VideosViewModel
+
 @Composable
-fun VideosScreen(navController: NavController, modifier: Modifier = Modifier) {
-    val videoItems = listOf(
-        VideoItem(
-            title = stringResource(R.string.service_business_promotion_shoots_title),
-            thumbnailUrl = "https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg", // Placeholder thumbnail, replace with actual
-            videoUrl = "https://drive.google.com/uc?export=download&id=1Jg8eOA0AgvjOdyzAKsiQExI0PZBBgtbq"
-        )
-        // Add more video items here
-    )
+fun VideosScreen(
+    navController: NavController, 
+    modifier: Modifier = Modifier,
+    viewModel: VideosViewModel = viewModel()
+) {
+    val videoItems by viewModel.videos.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Column(
         modifier = modifier
@@ -54,20 +57,27 @@ fun VideosScreen(navController: NavController, modifier: Modifier = Modifier) {
             .padding(16.dp)
     ) {
         Text(
-            text = "Our Videos", // Changed title
+            text = "Our Videos", 
             style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 16.dp)
         )
-
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 160.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(videoItems) { item ->
-                VideoCard(item = item, navController = navController)
+        
+        if (isLoading) {
+            // Simple loading text or shimmer could be here
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Loading videos...")
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 160.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(videoItems) { item ->
+                    VideoCard(item = item, navController = navController)
+                }
             }
         }
     }
