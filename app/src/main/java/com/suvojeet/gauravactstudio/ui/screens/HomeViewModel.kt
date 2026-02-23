@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class HomeUiState(
-    val banners: List<BannerData> = emptyList(),
-    val popularServices: List<Service> = emptyList(),
+    val banners: List<BannerData> = StudioRepository.banners,
+    val popularServices: List<Service> = StudioRepository.services.filter { it.isHighlighted },
     val featuredWorks: List<CloudinaryResource> = emptyList(),
-    val isLoading: Boolean = true,
+    val isLoadingFeatured: Boolean = true,
     val errorMessage: String? = null
 )
 
@@ -25,22 +25,18 @@ class HomeViewModel : ViewModel() {
     val uiState = _uiState.asStateFlow()
 
     init {
-        loadData()
+        loadDynamicData()
     }
 
     fun retry() {
-        loadData()
+        loadDynamicData()
     }
 
-    private fun loadData() {
+    private fun loadDynamicData() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            _uiState.update { it.copy(isLoadingFeatured = true, errorMessage = null) }
 
             try {
-                // Load static data
-                val banners = StudioRepository.banners
-                val services = StudioRepository.services.filter { it.isHighlighted }
-
                 // Load dynamic data (Featured Works)
                 val featuredResult = StudioRepository.getFeaturedPhotos()
                 
@@ -48,25 +44,23 @@ class HomeViewModel : ViewModel() {
                     val featuredWorks = featuredResult.getOrNull() ?: emptyList()
                     _uiState.update { 
                         it.copy(
-                            banners = banners,
-                            popularServices = services,
                             featuredWorks = featuredWorks,
-                            isLoading = false
+                            isLoadingFeatured = false
                         )
                     }
                 } else {
                     _uiState.update { 
                         it.copy(
-                            errorMessage = "Failed to load gallery. Please check your connection.",
-                            isLoading = false
+                            errorMessage = "Gallery partially unavailable.",
+                            isLoadingFeatured = false
                         )
                     }
                 }
             } catch (e: Exception) {
                 _uiState.update { 
                     it.copy(
-                        errorMessage = "An unexpected error occurred.",
-                        isLoading = false
+                        errorMessage = "Error loading latest works.",
+                        isLoadingFeatured = false
                     )
                 }
             }

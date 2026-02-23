@@ -2,6 +2,7 @@ package com.suvojeet.gauravactstudio.ui.screens
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -37,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.data.CloudinaryService
@@ -45,6 +46,7 @@ import com.suvojeet.gauravactstudio.data.model.CloudinaryResource
 import com.suvojeet.gauravactstudio.data.model.Service
 import com.suvojeet.gauravactstudio.data.repository.BannerData
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+import com.suvojeet.gauravactstudio.ui.components.shimmerEffect
 import kotlinx.coroutines.delay
 
 @Composable
@@ -64,7 +66,6 @@ fun HomeScreen(
         if (currentRoute == Screen.Home.route) {
             delay(20)
             isVisible = true
-            scrollState.scrollTo(0)
         } else {
             isVisible = false
         }
@@ -75,105 +76,100 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color(0xFFF4F5F9))
     ) {
-        if (uiState.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+        Column(
+            modifier = Modifier
+                .verticalScroll(scrollState)
+        ) {
+            // 1. Top Bar & Search Section (Immediate)
+            TopHeaderSection()
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            SearchSection()
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // 2. Categories (Immediate)
+            AnimatedContent(isVisible, delay = 50) {
+                CategorySection(navController)
             }
-        } else if (uiState.errorMessage != null) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(uiState.errorMessage!!, color = Color.Red, textAlign = TextAlign.Center, modifier = Modifier.padding(16.dp))
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { viewModel.retry() }) {
-                        Text("Retry")
-                    }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // 3. Hero / Banners (Immediate)
+            AnimatedContent(isVisible, delay = 100) {
+                if (uiState.banners.isNotEmpty()) {
+                    PromoBannerSection(navController, uiState.banners)
                 }
             }
-        } else {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(scrollState)
-            ) {
-                // 1. Top Bar & Search Section
-                TopHeaderSection()
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                SearchSection()
 
-                Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-                // 2. Categories
-                AnimatedContent(isVisible, delay = 50) {
-                    CategorySection(navController)
+            // 4. Quick Stats (Immediate)
+            AnimatedContent(isVisible, delay = 150) {
+                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                     Text(
+                        text = stringResource(R.string.home_studio_highlights),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1F2937),
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                    ModernQuickStatsSection()
                 }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // 3. Hero / Banners
-                AnimatedContent(isVisible, delay = 100) {
-                    if (uiState.banners.isNotEmpty()) {
-                        PromoBannerSection(navController, uiState.banners)
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // 4. Quick Stats
-                AnimatedContent(isVisible, delay = 150) {
-                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                         Text(
-                            text = stringResource(R.string.home_studio_highlights),
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1F2937),
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-                        ModernQuickStatsSection()
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // 5. Featured Works (Actual Data)
-                if (uiState.featuredWorks.isNotEmpty()) {
-                    AnimatedContent(isVisible, delay = 180) {
-                        FeaturedWorksSection(navController, uiState.featuredWorks)
-                    }
-                    Spacer(modifier = Modifier.height(32.dp))
-                }
-
-                // 6. Your Photos Section
-                AnimatedContent(isVisible, delay = 200) {
-                    YourPhotosSection(navController)
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // 7. Popular Services
-                AnimatedContent(isVisible, delay = 250) {
-                    if (uiState.popularServices.isNotEmpty()) {
-                        PopularServicesSection(navController, uiState.popularServices)
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // 8. Address / Footer
-                AnimatedContent(isVisible, delay = 300) {
-                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        ModernAddressSection()
-                     }
-                }
-
-                Spacer(modifier = Modifier.height(100.dp))
             }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 5. Featured Works (Dynamic with Shimmer)
+            FeaturedWorksContainer(
+                isVisible = isVisible,
+                isLoading = uiState.isLoadingFeatured,
+                works = uiState.featuredWorks,
+                error = uiState.errorMessage,
+                onRetry = { viewModel.retry() },
+                onSeeAll = { navController.navigate(Screen.Gallery.route) }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 6. Your Photos Section (Immediate)
+            AnimatedContent(isVisible, delay = 200) {
+                YourPhotosSection(navController)
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 7. Popular Services (Immediate)
+            AnimatedContent(isVisible, delay = 250) {
+                if (uiState.popularServices.isNotEmpty()) {
+                    PopularServicesSection(navController, uiState.popularServices)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 8. Address / Footer (Immediate)
+            AnimatedContent(isVisible, delay = 300) {
+                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    ModernAddressSection()
+                 }
+            }
+
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
 
 @Composable
-fun FeaturedWorksSection(navController: NavController, works: List<CloudinaryResource>) {
+fun FeaturedWorksContainer(
+    isVisible: Boolean,
+    isLoading: Boolean,
+    works: List<CloudinaryResource>,
+    error: String?,
+    onRetry: () -> Unit,
+    onSeeAll: () -> Unit
+) {
     Column {
         Row(
             modifier = Modifier
@@ -188,7 +184,7 @@ fun FeaturedWorksSection(navController: NavController, works: List<CloudinaryRes
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF1F2937)
             )
-            TextButton(onClick = { navController.navigate(Screen.Gallery.route) }) {
+            TextButton(onClick = onSeeAll) {
                 Text(
                     text = "See All",
                     color = Color(0xFFEC4899),
@@ -199,14 +195,52 @@ fun FeaturedWorksSection(navController: NavController, works: List<CloudinaryRes
         
         Spacer(modifier = Modifier.height(12.dp))
 
-        Row(
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            works.forEach { work ->
-                FeaturedWorkCard(work)
+        if (isLoading && works.isEmpty()) {
+            Row(
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                repeat(4) {
+                    Box(
+                        modifier = Modifier
+                            .width(140.dp)
+                            .height(180.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .shimmerEffect()
+                    )
+                }
+            }
+        } else if (error != null && works.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(error, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+                    TextButton(onClick = onRetry) {
+                        Text("Retry", color = Color(0xFFEC4899))
+                    }
+                }
+            }
+        } else {
+            AnimatedContent(isVisible, delay = 180) {
+                Row(
+                    modifier = Modifier
+                        .horizontalScroll(rememberScrollState())
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    works.forEach { work ->
+                        FeaturedWorkCard(work)
+                    }
+                }
             }
         }
     }
