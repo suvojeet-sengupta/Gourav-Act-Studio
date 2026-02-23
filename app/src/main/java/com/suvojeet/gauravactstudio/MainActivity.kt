@@ -29,8 +29,11 @@ class MainActivity : AppCompatActivity() {
 
         val selectedLanguage = Prefs.getLanguage(this)
         if (selectedLanguage != null) {
-            val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(selectedLanguage)
-            AppCompatDelegate.setApplicationLocales(appLocale)
+            val currentLocales = AppCompatDelegate.getApplicationLocales()
+            if (currentLocales.isEmpty || currentLocales.toLanguageTags() != selectedLanguage) {
+                val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(selectedLanguage)
+                AppCompatDelegate.setApplicationLocales(appLocale)
+            }
         }
 
         showWelcomeScreen = Prefs.isFirstLaunch(this)

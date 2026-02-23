@@ -6,7 +6,7 @@
     <string name="gallery_screen">गैलरी</string>
     <string name="about_screen">हमारे बारे में</string>
     <string name="about_studio_title">स्टूडियो के बारे में</string>
-    <string name="about_studio_description">स्टूडियो शादी की शूटिंग, जन्मदिन की शूटिंग, वीडियो फोटोशूट, सिनेमैटिक वीडियो और पारंपरिक वीडियो सहित सभी प्रकार की शूटिंग प्रदान करता है। वे शादी के कार्ड भी डिजाइन करते हैं।</string>
+    <string name="about_studio_description">स्टूडियो ईवेंट शूटिंग, जन्मदिन की शूटिंग, वीडियो फोटोशूट, सिनेमैटिक वीडियो और पारंपरिक वीडियो सहित सभी प्रकार की शूटिंग प्रदान करता है। हम पेशेवर डिज़ाइन सेवाएँ भी प्रदान करते हैं।</string>
     <string name="contact_us_title">हमसे संपर्क करें</string>
     <string name="app_logo_gaurav">गौरव</string>
     <string name="app_logo_act_studio">एक्ट स्टूडियो</string>
@@ -47,12 +47,12 @@
     <string name="contact_tap_to_directions">दिशा-निर्देश प्राप्त करने के लिए टैप करें</string>
     <string name="gallery_title">हमारी गैलरी</string>
     <string-array name="portfolio_items">
-        <item>वेडिंग एल्बम 1</item>
-        <item>वेडिंग एल्बम 2</item>
+        <item>ईवेंट एल्बम 1</item>
+        <item>सेलिब्रेशन एल्बम 1</item>
         <item>जन्मदिन एल्बम 1</item>
-        <item>प्री-वेडिंग एल्बम 1</item>
+        <item>आउटडोर एल्बम 1</item>
         <item>मैटरनिटी एल्बम 1</item>
-        <item>इवेंट एल्बम 1</item>
+        <item>ईवेंट एल्बम 2</item>
         <item>फैशन पोर्टफोलियो 1</item>
         <item>उत्पाद शोकेस 1</item>
     </string-array>
@@ -87,9 +87,9 @@
     </string-array>
     <string name="pricing_package_elite_name">एलीट पैकेज</string>
     <string-array name="pricing_package_elite_features">
-        <item>स्थान पर प्री-वेडिंग शूट</item>
-        <item>अंगूठी समारोह का पूरा कवरेज</item>
-        <item>पूरी शादी की शूटिंग (सिनेमैटिक + पारंपरिक)</item>
+        <item>कलात्मक आउटडोर शूट</item>
+        <item>सगाई का पूरा कवरेज</item>
+        <item>पूरी ईवेंट शूटिंग (सिनेमैटिक + पारंपरिक)</item>
         <item>2 पेशेवर वीडियोग्राफर</item>
         <item>2 पेशेवर फोटोग्राफर</item>
         <item>हवाई शॉट्स के लिए कई ड्रोन</item>
@@ -106,7 +106,7 @@
     <string name="pricing_contact_for_custom_quote">कस्टम बुकिंग का अनुरोध करें</string>
     <string name="services_title">हमारी सेवाएं</string>
     <string name="services_subtitle">जीवन के सबसे खूबसूरत पलों को कैद करना</string>
-    <string name="service_wedding_photography_title">शादी की फोटोग्राफी और वीडियोग्राफी</string>
+    <string name="service_wedding_photography_title">ईवेंट फोटोग्राफी और वीडियोग्राफी</string>
     <string name="service_wedding_photography_description">हर कीमती पल को शान से कैद करने के लिए सिनेमैटिक और पारंपरिक शैलियाँ।</string>
     <string name="service_ring_ceremony_title">अंगूठी समारोह</string>
     <string name="service_ring_ceremony_description">आपकी एक साथ यात्रा की शुरुआत का खूबसूरती से दस्तावेजीकरण।</string>
@@ -124,8 +124,8 @@
     <string name="service_fashion_portfolio_description">आश्चर्यजनक दृश्यों के साथ अपनी शैली और व्यक्तित्व का प्रदर्शन।</string>
     <string name="service_product_photography_title">उत्पाद फोटोग्राफी</string>
     <string name="service_product_photography_description">अपने उत्पादों को पेशेवर रूप से उजागर करने के लिए उच्च-गुणवत्ता वाली छवियां।</string>
-    <string name="service_wedding_card_design_title">शादी का कार्ड डिजाइन</string>
-    <string name="service_wedding_card_design_description">आपकी शैली से मेल खाने के लिए सुंदर और अद्वितीय शादी के कार्ड डिजाइन।</string>
+    <string name="service_wedding_card_design_title">कस्टम डिज़ाइन सेवाएँ</string>
+    <string name="service_wedding_card_design_description">आपकी व्यक्तिगत शैली से मेल खाने के लिए सुंदर और अद्वितीय डिज़ाइन।</string>
     <string name="service_business_promotion_shoots_title">व्यापार और प्रचार शूट</string>
     <string name="service_business_promotion_shoots_description">व्यापार प्रचार और ई-कॉमर्स की दुकानों के लिए उच्च गुणवत्ता वाली फोटोग्राफी और वीडियोग्राफी।</string>
     <string name="settings_title">सेटिंग्स</string>
@@ -163,8 +163,8 @@
     <string name="booking_select_date_placeholder">तारीख चुनें</string>
     <string name="booking_notes_placeholder">कोई विशेष अनुरोध या आवश्यकताएं...</string>
     <string-array name="event_types">
-        <item>शादी</item>
-        <item>प्री-वेडिंग</item>
+        <item>ईवेंट</item>
+        <item>सेलिब्रेशन</item>
         <item>सगाई</item>
         <item>जन्मदिन की पार्टी</item>
         <item>कॉर्पोरेट इवेंट</item>

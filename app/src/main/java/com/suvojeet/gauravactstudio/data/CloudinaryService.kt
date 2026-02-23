@@ -26,7 +26,7 @@ object CloudinaryService {
 
     fun initialize(context: Context) {
         if (connectivityObserver == null) {
-            connectivityObserver = NetworkConnectivityObserver(context)
+            connectivityObserver = NetworkConnectivityObserver(context.applicationContext)
         }
     }
     
