@@ -45,6 +45,7 @@ import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.data.model.Album
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import com.suvojeet.gauravactstudio.ui.components.PortfolioCard
+import com.suvojeet.gauravactstudio.ui.components.shimmerEffect
 import kotlinx.coroutines.delay
 
 @Composable
@@ -400,7 +401,7 @@ fun AlbumReviewCardSkeleton() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.LightGray.copy(alpha = 0.3f))
+                .shimmerEffect()
         )
     }
 }

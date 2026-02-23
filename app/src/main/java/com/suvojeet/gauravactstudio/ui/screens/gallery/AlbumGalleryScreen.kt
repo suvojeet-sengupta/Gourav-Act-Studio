@@ -37,6 +37,7 @@ import coil.compose.AsyncImage
 import com.suvojeet.gauravactstudio.data.CloudinaryService
 import com.suvojeet.gauravactstudio.data.model.Album
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+import com.suvojeet.gauravactstudio.ui.components.shimmerEffect
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
