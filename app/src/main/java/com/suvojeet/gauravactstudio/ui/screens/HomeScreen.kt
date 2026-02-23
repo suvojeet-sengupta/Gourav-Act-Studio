@@ -94,79 +94,80 @@ fun HomeScreen(
                 modifier = Modifier
                     .verticalScroll(scrollState)
             ) {
-            // 1. Top Bar & Search Section
-            TopHeaderSection()
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            SearchSection()
+                // 1. Top Bar & Search Section
+                TopHeaderSection()
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                SearchSection()
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            // 2. Categories
-            AnimatedContent(isVisible, delay = 50) {
-                CategorySection(navController)
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // 3. Hero / Banners
-            AnimatedContent(isVisible, delay = 100) {
-                if (uiState.banners.isNotEmpty()) {
-                    PromoBannerSection(navController, uiState.banners)
+                // 2. Categories
+                AnimatedContent(isVisible, delay = 50) {
+                    CategorySection(navController)
                 }
-            }
 
-            Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            // 4. Quick Stats
-            AnimatedContent(isVisible, delay = 150) {
-                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                     Text(
-                        text = stringResource(R.string.home_studio_highlights),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1F2937),
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                    ModernQuickStatsSection()
+                // 3. Hero / Banners
+                AnimatedContent(isVisible, delay = 100) {
+                    if (uiState.banners.isNotEmpty()) {
+                        PromoBannerSection(navController, uiState.banners)
+                    }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // 5. Featured Works (Actual Data)
-            if (uiState.featuredWorks.isNotEmpty()) {
-                AnimatedContent(isVisible, delay = 180) {
-                    FeaturedWorksSection(navController, uiState.featuredWorks)
-                }
                 Spacer(modifier = Modifier.height(32.dp))
-            }
 
-            // 6. Your Photos Section
-            AnimatedContent(isVisible, delay = 200) {
-                YourPhotosSection(navController)
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // 7. Popular Services
-            AnimatedContent(isVisible, delay = 250) {
-                if (uiState.popularServices.isNotEmpty()) {
-                    PopularServicesSection(navController, uiState.popularServices)
+                // 4. Quick Stats
+                AnimatedContent(isVisible, delay = 150) {
+                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                         Text(
+                            text = stringResource(R.string.home_studio_highlights),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF1F2937),
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                        ModernQuickStatsSection()
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // 5. Featured Works (Actual Data)
+                if (uiState.featuredWorks.isNotEmpty()) {
+                    AnimatedContent(isVisible, delay = 180) {
+                        FeaturedWorksSection(navController, uiState.featuredWorks)
+                    }
+                    Spacer(modifier = Modifier.height(32.dp))
+                }
+
+                // 6. Your Photos Section
+                AnimatedContent(isVisible, delay = 200) {
+                    YourPhotosSection(navController)
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // 7. Popular Services
+                AnimatedContent(isVisible, delay = 250) {
+                    if (uiState.popularServices.isNotEmpty()) {
+                        PopularServicesSection(navController, uiState.popularServices)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // 8. Address / Footer
+                AnimatedContent(isVisible, delay = 300) {
+                     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        ModernAddressSection()
+                     }
+                }
+
+                Spacer(modifier = Modifier.height(100.dp))
             }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // 8. Address / Footer
-            AnimatedContent(isVisible, delay = 300) {
-                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    ModernAddressSection()
-                 }
-            }
-
-            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
@@ -182,7 +183,7 @@ fun FeaturedWorksSection(navController: NavController, works: List<CloudinaryRes
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Recent Works", // New Section Title
+                text = "Recent Works",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF1F2937)
@@ -242,7 +243,8 @@ fun YourPhotosSection(navController: NavController) {
     ) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .height(88.dp)
                 .background(
                     brush = Brush.horizontalGradient(
                         colors = listOf(Color(0xFF06B6D4), Color(0xFF3B82F6))
@@ -355,8 +357,6 @@ fun TopHeaderSection() {
 
 @Composable
 fun SearchSection() {
-    var text by remember { mutableStateOf("") }
-    
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -408,7 +408,6 @@ fun CategorySection(navController: NavController) {
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // These act as filters/shortcuts, so they can remain static navigation items
             CategoryItem("Wedding", Icons.Filled.Favorite, Color(0xFFFFE4E6), Color(0xFFEC4899))
             CategoryItem("Events", Icons.Filled.Event, Color(0xFFE0E7FF), Color(0xFF6366F1))
             CategoryItem("Portraits", Icons.Filled.Face, Color(0xFFDCFCE7), Color(0xFF10B981))
@@ -494,7 +493,6 @@ fun PromoBannerCard(
                 .fillMaxSize()
                 .background(Brush.horizontalGradient(gradientColors))
         ) {
-            // Decorative circles
             Box(
                 modifier = Modifier
                     .offset(x = 200.dp, y = (-20).dp)
@@ -575,7 +573,6 @@ fun PopularServicesSection(navController: NavController, services: List<Service>
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Horizontal List of Vertical Cards
         Row(
             modifier = Modifier
                 .horizontalScroll(rememberScrollState())
@@ -585,7 +582,7 @@ fun PopularServicesSection(navController: NavController, services: List<Service>
             services.take(4).forEach { service ->
                 PopularServiceCard(
                     title = service.title,
-                    price = "Contact for Price", // Or use service.priceRange if available
+                    price = "Contact for Price",
                     rating = "4.9",
                     imageColor = service.gradient.first().copy(alpha = 0.1f),
                     icon = service.icon
@@ -611,7 +608,6 @@ fun PopularServiceCard(
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column {
-            // Placeholder Image Area
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -709,8 +705,8 @@ fun ModernStatCard(
     Card(
         modifier = modifier
             .shadow(
-                elevation = 4.dp, // Reduced elevation for cleaner look
-                shape = RoundedCornerShape(16.dp), // Reduced corner radius
+                elevation = 4.dp,
+                shape = RoundedCornerShape(16.dp),
                 ambientColor = gradientColors[0].copy(alpha = 0.25f)
             ),
         shape = RoundedCornerShape(16.dp),
@@ -807,7 +803,6 @@ fun ModernAddressSection() {
                 modifier = Modifier.padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Header with icon
                 Row(verticalAlignment = Alignment.CenterVertically) {
                      Box(
                         modifier = Modifier

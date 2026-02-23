@@ -168,18 +168,19 @@ object CloudinaryService {
     }
     
     /**
-     * Get cached photos synchronously if available
-     * Returns null if no cache exists
+     * Get cached photos synchronously if available for a specific folder
+     * Returns null if no cache exists or is expired
      */
-    fun getCachedPhotos(): List<CloudinaryResource>? {
-        return if (isCacheValid()) cachedPhotos else null
+    fun getCachedPhotos(folder: String): List<CloudinaryResource>? {
+        val tagName = folder.replace(" ", "_").lowercase()
+        return if (isCacheValid(tagName)) cachedPhotosMap[tagName] else null
     }
     
     /**
      * Get cached albums synchronously if available
      */
     fun getCachedAlbums(): List<Album>? {
-        return if (isCacheValid()) cachedAlbums else null
+        return if (isAlbumsCacheValid()) cachedAlbums else null
     }
     
     /**

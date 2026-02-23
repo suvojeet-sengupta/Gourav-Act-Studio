@@ -19,10 +19,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Collections
 import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,19 +33,18 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.data.CloudinaryService
 import com.suvojeet.gauravactstudio.data.model.Album
 import com.suvojeet.gauravactstudio.ui.model.PortfolioItem
-import com.suvojeet.gauravactstudio.ui.screens.gallery.PhotosViewModel
+import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import kotlinx.coroutines.delay
 
 @Composable
@@ -57,7 +56,6 @@ fun PhotosScreen(
     val uiState by viewModel.uiState.collectAsState()
     var isVisible by remember { mutableStateOf(false) }
     
-    // Scroll state for controlling scroll position
     val listState = androidx.compose.foundation.lazy.rememberLazyListState()
 
     LaunchedEffect(Unit) {
@@ -87,82 +85,121 @@ fun PhotosScreen(
         } else {
             // Categories Header
             item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Color(0xFF8B5CF6).copy(alpha = 0.1f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Collections,
-                            contentDescription = null,
-                            tint = Color(0xFF8B5CF6),
-                            modifier = Modifier.size(18.dp)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color(0xFF8B5CF6).copy(alpha = 0.1f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Collections,
+                                contentDescription = null,
+                                tint = Color(0xFF8B5CF6),
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = "Categories",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF1A1A1A)
                         )
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = "Categories",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1A1A1A)
+                }
+            }
+
+            // Categories Grid
+            item {
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Fixed(2),
+                    verticalItemSpacing = 14.dp,
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .height((uiState.categories.size / 2 * 180 + 100).dp),
+                    userScrollEnabled = false
+                ) {
+                    items(uiState.categories.size) { index ->
+                        val category = uiState.categories[index]
+                        AnimatedStaggeredItem(visible = isVisible, index = index) {
+                            PortfolioCard(
+                                item = category,
+                                navController = navController
+                            )
+                        }
+                    }
+                }
+            }
+
+            // Album Review Section
+            item {
+                AnimatedVisibility(
+                    visible = isVisible,
+                    enter = fadeIn(tween(400)) + slideInVertically(initialOffsetY = { it / 4 })
+                ) {
+                    AlbumReviewSection(
+                        albums = uiState.albums,
+                        isLoading = uiState.isLoadingAlbums,
+                        navController = navController
                     )
                 }
-            }
-        }
-
-        // Categories Grid
-        item {
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
-                verticalItemSpacing = 14.dp,
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .height((uiState.categories.size / 2 * 180 + 100).dp),
-                userScrollEnabled = false
-            ) {
-                items(uiState.categories.size) { index ->
-                    val category = uiState.categories[index]
-                    AnimatedStaggeredItem(visible = isVisible, index = index) {
-                        PortfolioCard(
-                            item = category,
-                            navController = navController,
-                            isCategory = true,
-                            onShareClick = {}
-                        )
-                    }
-                }
-            }
-        }
-
-        // Album Review Section
-        item {
-            AnimatedVisibility(
-                visible = isVisible,
-                enter = fadeIn(tween(400)) + slideInVertically(initialOffsetY = { it / 4 })
-            ) {
-                AlbumReviewSection(
-                    albums = uiState.albums,
-                    isLoading = uiState.isLoadingAlbums,
-                    navController = navController
-                )
             }
         }
     }
 }
 
 @Composable
-private fun AlbumReviewSection(
+fun PortfolioCard(item: PortfolioItem, navController: NavController) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(180.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .clickable { navController.navigate(Screen.CategoryPhotos.createRoute(item.title)) }
+            .shadow(4.dp, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            AsyncImage(
+                model = item.imageUrl,
+                contentDescription = item.title,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))
+                        )
+                    )
+            )
+            Text(
+                text = item.title,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(12.dp),
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    }
+}
+
+@Composable
+fun AlbumReviewSection(
     albums: List<Album>,
     isLoading: Boolean,
     navController: NavController
@@ -247,8 +284,8 @@ private fun AlbumReviewSection(
                 AlbumReviewCard(
                     title = "Sample Album",
                     photoCount = 25,
-                    coverUrl = "https://res.cloudinary.com/dujg9rmfh/image/upload/v1/album%20library/sample",
-                    onClick = { navController.navigate("album_photos/album library") }
+                    coverUrl = "",
+                    onClick = { navController.navigate(Screen.AlbumPhotos.createRoute("album library")) }
                 )
             }
         } else {
@@ -263,7 +300,7 @@ private fun AlbumReviewSection(
                         title = album.displayName,
                         photoCount = album.photoCount,
                         coverUrl = album.coverUrl,
-                        onClick = { navController.navigate("album_photos/${album.name}") }
+                        onClick = { navController.navigate(Screen.AlbumPhotos.createRoute(album.name)) }
                     )
                 }
             }
@@ -272,7 +309,7 @@ private fun AlbumReviewSection(
 }
 
 @Composable
-private fun AlbumReviewCard(
+fun AlbumReviewCard(
     title: String,
     photoCount: Int,
     coverUrl: String,
@@ -294,16 +331,11 @@ private fun AlbumReviewCard(
         Box(modifier = Modifier.fillMaxSize()) {
             // Cover Image
             if (coverUrl.isNotEmpty()) {
-                var isLoading by remember { mutableStateOf(true) }
                 AsyncImage(
                     model = coverUrl,
                     contentDescription = title,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .then(if (isLoading) Modifier.shimmerEffect() else Modifier),
-                    onSuccess = { isLoading = false },
-                    onError = { isLoading = false }
+                    modifier = Modifier.fillMaxSize()
                 )
             } else {
                 Box(
@@ -396,7 +428,7 @@ private fun AlbumReviewCard(
 }
 
 @Composable
-private fun AlbumReviewCardSkeleton() {
+fun AlbumReviewCardSkeleton() {
     Card(
         modifier = Modifier
             .width(160.dp)
@@ -407,7 +439,7 @@ private fun AlbumReviewCardSkeleton() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .shimmerEffect()
+                .background(Color.LightGray.copy(alpha = 0.3f))
         )
     }
 }

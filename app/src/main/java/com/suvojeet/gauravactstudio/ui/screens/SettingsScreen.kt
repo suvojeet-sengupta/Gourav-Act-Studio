@@ -1,11 +1,7 @@
 package com.suvojeet.gauravactstudio.ui.screens
 
 import android.content.Intent
-import android.net.Uri
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,7 +18,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
@@ -31,12 +26,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.LocaleListCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.suvojeet.gauravactstudio.MainActivity
 import com.suvojeet.gauravactstudio.R
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
 import com.suvojeet.gauravactstudio.ui.components.LightDecorativeBackground
@@ -46,7 +42,6 @@ import kotlinx.coroutines.delay
 @Composable
 fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val activity = (LocalContext.current as? MainActivity)
     var showLanguageDialog by remember { mutableStateOf(false) }
     var isVisible by remember { mutableStateOf(false) }
 
@@ -113,7 +108,8 @@ fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) 
             onDismiss = { showLanguageDialog = false },
             onSelectLanguage = { lang ->
                 com.suvojeet.gauravactstudio.util.Prefs.setLanguage(context, lang)
-                activity?.setLocale(lang)
+                val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(lang)
+                AppCompatDelegate.setApplicationLocales(appLocale)
                 showLanguageDialog = false
             }
         )
@@ -133,14 +129,14 @@ fun SettingsHeader(navController: NavController, isVisible: Boolean) {
                 onClick = { navController.popBackStack() },
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .size(48.dp) // Give it a fixed size
-                    .clip(CircleShape) // Make it circular
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)) // Subtle background
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f))
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.onSurface // Darker tint for contrast
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -151,7 +147,7 @@ fun SettingsHeader(navController: NavController, isVisible: Boolean) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(start = 32.dp) // Move text slightly to the right
+                    .padding(start = 32.dp)
             )
         }
     }

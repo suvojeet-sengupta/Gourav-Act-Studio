@@ -11,16 +11,14 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import io.ktor.client.plugins.expectSuccess
 import io.ktor.client.statement.bodyAsText
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.SerialName // <-- YEH HAI ASLI HERO
+import kotlinx.serialization.SerialName
 
-// STEP 1: Saari fields ko @SerialName se annotate kar diya
 @Serializable
 data class EmailRequest(
     @SerialName("service_id") val service_id: String,
     @SerialName("template_id") val template_id: String,
-    @SerialName("user_id") val user_id: String, // R8 isko 'a' bhi bana de, JSON mein 'user_id' hi jaayega
-    @SerialName("accessToken") val accessToken: String, // R8 isko 'b' bhi bana de, JSON mein 'accessToken' hi jaayega
+    @SerialName("user_id") val user_id: String,
+    @SerialName("accessToken") val accessToken: String,
     @SerialName("template_params") val template_params: TemplateParams
 )
 
@@ -38,7 +36,7 @@ data class TemplateParams(
     @SerialName("name") val name: String,
     @SerialName("phone") val phone: String,
     @SerialName("event_type") val event_type: String,
-    @SerialName("date") val_date: String,
+    @SerialName("date") val date: String,
     @SerialName("event_time") val event_time: String,
     @SerialName("event_address") val event_address: String,
     @SerialName("package_name") val package_name: String,
@@ -46,7 +44,7 @@ data class TemplateParams(
     @SerialName("user_email") val user_email: String,
     @SerialName("custom_package_details") val custom_package_details: String? = null,
     @SerialName("location") val location: String,
-    @SerialName("booking_request_number") val booking_request_number: String? = null // New field
+    @SerialName("booking_request_number") val booking_request_number: String? = null
 )
 
 @Serializable
@@ -84,11 +82,10 @@ class EmailService {
         packageName: String,
         customPackageDetails: String? = null,
         location: String,
-        bookingRequestNumber: String? = null // New parameter
+        bookingRequestNumber: String? = null
     ) {
         val finalEventType = if (eventType == "Other") otherEventType else eventType
 
-        // STEP 2: Request object ab R8-proof hai
         val request = EmailRequest(
             service_id = "service_ovxd5wh",
             template_id = "template_z67rf0m",
@@ -106,7 +103,7 @@ class EmailService {
                 user_email = "gauravkumarpjt@gmail.com",
                 custom_package_details = customPackageDetails,
                 location = location,
-                booking_request_number = bookingRequestNumber // Pass booking number
+                booking_request_number = bookingRequestNumber
             )
         )
 
@@ -118,7 +115,7 @@ class EmailService {
             Log.d("EmailService", "Got response: ${response.status} ${response.bodyAsText()}")
         } catch (e: Exception) {
             Log.e("EmailService", "Failed to send email", e)
-            throw Exception("Failed to send booking request. Please try again later.") // Updated error message
+            throw Exception("Failed to send booking request. Please try again later.")
         }
     }
 
@@ -130,7 +127,7 @@ class EmailService {
     ) {
         val request = YourPhotosEmailRequest(
             service_id = "service_ovxd5wh",
-            template_id = "template_f11y90n", // Replace with your actual template ID
+            template_id = "template_f11y90n",
             user_id = PUBLIC_KEY,
             accessToken = PRIVATE_KEY,
             template_params = YourPhotosTemplateParams(

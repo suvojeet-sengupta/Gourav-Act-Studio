@@ -1,39 +1,21 @@
 package com.suvojeet.gauravactstudio
 
-import android.content.res.Configuration
-import java.util.Locale
-import androidx.activity.enableEdgeToEdge
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import com.suvojeet.gauravactstudio.ui.screens.WelcomeScreen
-import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
-import com.suvojeet.gauravactstudio.util.Prefs
-
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
-import java.util.Locale
-import androidx.activity.enableEdgeToEdge
-import android.os.Bundle
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.os.LocaleListCompat
+import com.suvojeet.gauravactstudio.data.CloudinaryService
 import com.suvojeet.gauravactstudio.ui.screens.WelcomeScreen
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import com.suvojeet.gauravactstudio.util.Prefs
-
-import com.suvojeet.gauravactstudio.data.CloudinaryService
 
 class MainActivity : AppCompatActivity() {
 
