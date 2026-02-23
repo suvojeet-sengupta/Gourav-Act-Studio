@@ -220,11 +220,6 @@ fun PricingScreen(
                                 label = stringResource(R.string.pricing_category_all)
                             )
                             FilterChip(
-                                selected = selectedCategory == "Wedding",
-                                onClick = { selectedCategory = "Wedding" },
-                                label = stringResource(R.string.pricing_category_wedding)
-                            )
-                            FilterChip(
                                 selected = selectedCategory == "Events",
                                 onClick = { selectedCategory = "Events" },
                                 label = stringResource(R.string.pricing_category_events)

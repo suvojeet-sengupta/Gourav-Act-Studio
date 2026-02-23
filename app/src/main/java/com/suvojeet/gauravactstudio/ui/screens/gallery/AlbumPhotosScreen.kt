@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PhotoLibrary
@@ -30,10 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.data.CloudinaryService
-import com.suvojeet.gauravactstudio.data.model.CloudinaryResource
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+import com.suvojeet.gauravactstudio.ui.components.PortfolioCard
 import com.suvojeet.gauravactstudio.ui.model.PortfolioItem
 import kotlinx.coroutines.delay
 
@@ -41,7 +39,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun AlbumPhotosScreen(navController: NavController, albumName: String, modifier: Modifier = Modifier) {
     // Try cached photos first
-    val cachedPhotos = CloudinaryService.getCachedPhotos()
+    val cachedPhotos = CloudinaryService.getCachedPhotos(albumName)
     var photos by remember { mutableStateOf(cachedPhotos ?: emptyList()) }
     var isLoading by remember { mutableStateOf(cachedPhotos == null) }
     var error by remember { mutableStateOf<String?>(null) }

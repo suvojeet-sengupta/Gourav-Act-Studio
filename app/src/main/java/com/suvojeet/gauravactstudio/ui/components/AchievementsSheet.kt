@@ -91,7 +91,7 @@ fun AchievementsSheetContent(onClose: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "• Best Wedding Photographer in Firozabad (2024)\n• Featured in 'WedMeGood' Top Vendors\n• 10 Years of Excellence in Visual Arts",
+            text = "• Best Photography Studio in Firozabad (2024)\n• Featured in Top Visual Arts Vendors\n• 10 Years of Excellence in Visual Arts",
             style = MaterialTheme.typography.bodyMedium,
             color = Color(0xFF4B5563),
             lineHeight = 24.sp

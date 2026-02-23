@@ -255,7 +255,7 @@ fun AboutDetailsContent(onClose: () -> Unit) {
         )
 
         Text(
-            text = "Capture your life's most precious moments with Gaurav Act Studio, your professional partner for stunning photography and videography. Whether it's a grand wedding, a special birthday, or a corporate event, our passionate team is dedicated to transforming your vision into timeless art.",
+            text = "Capture your life's most precious moments with Gaurav Act Studio, your professional partner for stunning photography and videography. Whether it's a grand event, a special birthday, or a corporate function, our passionate team is dedicated to transforming your vision into timeless art.",
             style = MaterialTheme.typography.bodyMedium,
             color = Color(0xFF4B5563),
             lineHeight = 24.sp
@@ -284,12 +284,12 @@ fun AboutDetailsContent(onClose: () -> Unit) {
             color = Color(0xFFEC4899)
         )
         Spacer(modifier = Modifier.height(8.dp))
-        BulletPoint("Weddings & Pre-Wedding Shoots")
+        BulletPoint("Event & Celebration Coverage")
         BulletPoint("Birthdays & Ring Ceremonies")
         BulletPoint("Maternity & Baby Shoots")
         BulletPoint("Corporate & Business Events")
         BulletPoint("Fashion Portfolios")
-        BulletPoint("Custom Wedding Card Design")
+        BulletPoint("Custom Graphic Design")
 
         Spacer(modifier = Modifier.height(32.dp))
         

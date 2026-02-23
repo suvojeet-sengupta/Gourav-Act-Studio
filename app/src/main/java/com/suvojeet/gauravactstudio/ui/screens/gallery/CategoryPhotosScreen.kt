@@ -1,5 +1,6 @@
 package com.suvojeet.gauravactstudio.ui.screens.gallery
 
+import android.content.Intent
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -7,17 +8,11 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
-import androidx.compose.ui.platform.LocalContext
-import android.content.Intent
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,14 +23,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,24 +33,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.ui.components.AnimatedContent
+import com.suvojeet.gauravactstudio.ui.components.PortfolioCard
 import com.suvojeet.gauravactstudio.ui.model.PortfolioItem
 import kotlinx.coroutines.delay
 
@@ -127,7 +108,7 @@ fun CategoryPhotosScreen(navController: NavController, category: String, modifie
             Spacer(modifier = Modifier.height(24.dp))
 
             AnimatedContent(isVisible, delay = 100) {
-                val context = LocalContext.current // Get context here
+                val context = LocalContext.current
                 LazyVerticalStaggeredGrid(
                     columns = StaggeredGridCells.Adaptive(minSize = 160.dp),
                     verticalItemSpacing = 16.dp,
@@ -212,155 +193,4 @@ private fun LightDecorativeBackground(scrollOffset: Int = 0) {
                 )
         )
     }
-}
-
-@Composable
-fun PortfolioCard(item: PortfolioItem, navController: NavController, isCategory: Boolean = false, onShareClick: (PortfolioItem) -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            // Use aspect ratio from item, or 1f if it's a category card
-            .aspectRatio(if (isCategory) 1.2f else item.aspectRatio)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable {
-                if (isCategory) {
-                    navController.navigate("category_photos/${item.title}")
-                } else {
-                    navController.navigate(Screen.Detail.createRoute("image", item.imageUrl))
-                }
-            },
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        Box(contentAlignment = Alignment.Center) {
-            var isLoading by remember { mutableStateOf(true) }
-            AsyncImage(
-                model = item.imageUrl,
-                contentDescription = item.title,
-                contentScale = ContentScale.Crop,
-                modifier = if (isLoading) Modifier.fillMaxSize().shimmerEffect() else Modifier.fillMaxSize(),
-                onSuccess = { isLoading = false },
-                onError = { isLoading = false }
-            )
-
-            // Title overlay
-            if (isCategory) {
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .background(Color.Black.copy(alpha = 0.4f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = item.title,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.headlineSmall,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            } else {
-                // Heart Icon for Photos
-                var isLiked by remember { mutableStateOf(false) }
-                val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
-                
-                // Animation for the heart burst
-                val scale by androidx.compose.animation.core.animateFloatAsState(
-                    targetValue = if (isLiked) 1.3f else 1.0f,
-                    animationSpec = androidx.compose.animation.core.spring(
-                        dampingRatio = androidx.compose.animation.core.Spring.DampingRatioMediumBouncy,
-                        stiffness = androidx.compose.animation.core.Spring.StiffnessLow
-                    ),
-                    label = "HeartScale"
-                )
-
-                // Secondary animation to return to 1.0f after burst
-                var animatedScale by remember { mutableStateOf(1f) }
-                LaunchedEffect(isLiked) {
-                    if (isLiked) {
-                        animatedScale = 1.3f
-                        kotlinx.coroutines.delay(100)
-                        animatedScale = 1f
-                    }
-                }
-
-                val finalScale by androidx.compose.animation.core.animateFloatAsState(
-                    targetValue = animatedScale,
-                    animationSpec = androidx.compose.animation.core.spring(
-                        dampingRatio = androidx.compose.animation.core.Spring.DampingRatioHighBouncy,
-                        stiffness = androidx.compose.animation.core.Spring.StiffnessMedium
-                    ),
-                    label = "FinalHeartScale"
-                )
-                
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(8.dp)
-                ) {
-                    Row {
-                        IconButton(
-                            onClick = { 
-                                isLiked = !isLiked
-                                haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
-                            },
-                            modifier = Modifier
-                                .size(32.dp)
-                                .background(Color.Black.copy(alpha = 0.3f), CircleShape)
-                                .scale(finalScale)
-                        ) {
-                            Icon(
-                                imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                                contentDescription = "Like",
-                                tint = if (isLiked) Color(0xFFEC4899) else Color.White,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(8.dp)) // Space between icons
-                        IconButton(
-                            onClick = { onShareClick(item) },
-                            modifier = Modifier
-                                .size(32.dp)
-                                .background(Color.Black.copy(alpha = 0.3f), CircleShape)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Share,
-                                contentDescription = "Share",
-                                tint = Color.White,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-fun Modifier.shimmerEffect(): Modifier = composed {
-    var size by remember { mutableStateOf(IntSize.Zero) }
-    val transition = rememberInfiniteTransition(label = "Shimmer Transition")
-    val startOffsetX by transition.animateFloat(
-        initialValue = -2 * size.width.toFloat(),
-        targetValue = 2 * size.width.toFloat(),
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "Shimmer Offset"
-    )
-
-    background(
-        brush = Brush.linearGradient(
-            colors = listOf(
-                Color(0xFFB8B5B5),
-                Color(0xFF8F8B8B),
-                Color(0xFFB8B5B5),
-            ),
-            start = Offset(startOffsetX, 0f),
-            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
-        )
-    )
-        .onGloballyPositioned {
-            size = it.size
-        }
 }

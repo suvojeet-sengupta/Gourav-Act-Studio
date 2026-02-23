@@ -23,26 +23,26 @@ object StudioRepository {
 
     val services = listOf(
         Service(
-            "Wedding Photography",
-            "Capturing the most beautiful moments of your special day with cinematic excellence.",
+            "Event Photography",
+            "Capturing the most beautiful moments of your special celebrations with cinematic excellence.",
             Icons.Filled.Camera,
             listOf(Color(0xFFEC4899), Color(0xFFF97316)),
-            category = "Wedding",
+            category = "Events",
             isHighlighted = true
         ),
         Service(
-            "Pre-Wedding Shoots",
-            "Romantic and creative pre-wedding shoots at exotic locations.",
+            "Outdoor Shoots",
+            "Creative and artistic outdoor shoots at exotic locations.",
             Icons.Filled.PhotoCamera,
             listOf(Color(0xFF06B6D4), Color(0xFF3B82F6)),
-            category = "Wedding"
+            category = "Events"
         ),
         Service(
             "Cinematic Films",
-            "High-quality cinematic wedding films and teasers.",
+            "High-quality cinematic event films and teasers.",
             Icons.Filled.Videocam,
             listOf(Color(0xFF8B5CF6), Color(0xFF6366F1)),
-            category = "Wedding"
+            category = "Events"
         ),
         Service(
             "Birthday & Events",
@@ -97,7 +97,7 @@ object StudioRepository {
     )
 
     val portfolioCategories = listOf(
-        PortfolioItem("Pre-wedding", "https://lh3.googleusercontent.com/pw/AP1GczNoNn9GeQvUIdclpmWPH-1z12Doisij77OnM1W4VBCtrA1aYzSc6cqThuU6Bt-gr0Hs9cMssVk1mYqLgJuUh0ThhndADvwwJUqF9Ov8HOmuJ-fsvVNXRsLxS8KbcSXRhm2jIHkeHpQ6DjpOBiD9pY458Q=w700-h466-s-no-gm?authuser=0", 1.5f),
+        PortfolioItem("Outdoors", "https://lh3.googleusercontent.com/pw/AP1GczNoNn9GeQvUIdclpmWPH-1z12Doisij77OnM1W4VBCtrA1aYzSc6cqThuU6Bt-gr0Hs9cMssVk1mYqLgJuUh0ThhndADvwwJUqF9Ov8HOmuJ-fsvVNXRsLxS8KbcSXRhm2jIHkeHpQ6DjpOBiD9pY458Q=w700-h466-s-no-gm?authuser=0", 1.5f),
         PortfolioItem("Birthday", "https://lh3.googleusercontent.com/pw/AP1GczMvWUbuMW9A3HO43sP3KjxgarFqDKQxwz2aNRPyPGxdZV80nvYsP13jP4_S1KBKFLYQak5ZPbXEODV2pGlkS4Vb5l9Ov9I5hwJJtvufpf9I6O9a107-5wwZx_oc2YPSnNwxjQsKrhkgx_poQp5Z86iBYA=w1280-h853-s-no-gm?authuser=0", 1.5f),
         PortfolioItem("Baby Shoot", "https://lh3.googleusercontent.com/pw/AP1GczMiTuKH7iVfYSYQSHJlan_LgL8cyVt-GfgjvzjkWE-e2q4N0xctRD4UIlMaW4ssf8RthnB_W9FFeZzbcNO0XRGQbfvDpXs6PkxyEZKohPpKkmxzT1CTfpb1OSnAXB98Wn6AqGlfEmjtSup28dZTtlQhPA=w1024-h683-s-no-gm?authuser=0", 1.5f),
         PortfolioItem("Product Photography", "https://lh3.googleusercontent.com/pw/AP1GczN4OHR2tGmJ7T1ADMSyYqbAly10ZmIhnhkJ4vwYlnYiUq8DQhPsbCesTQus6SiEVvfg8Puk8MydH-qVxJTqO7VpxvxoIxbpWTEQDlDhUnCxfd9FbSomFN3BADuboxRbdoGzXNr6UZFFKsEeYyWJ2lgcwA=w736-h919-s-no-gm?authuser=0", 0.8f)
@@ -106,7 +106,7 @@ object StudioRepository {
     // Fallback videos if Cloudinary fetch fails
     private val fallbackVideos = listOf(
          VideoItem(
-            title = "Wedding Cinematic Teaser",
+            title = "Studio Cinematic Teaser",
             thumbnailUrl = "https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg", 
             videoUrl = "https://drive.google.com/uc?export=download&id=1Jg8eOA0AgvjOdyzAKsiQExI0PZBBgtbq" 
         )

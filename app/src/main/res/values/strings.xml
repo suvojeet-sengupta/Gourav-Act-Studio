@@ -49,12 +49,12 @@
     <string name="contact_tap_to_directions">Tap to get directions</string>
     <string name="gallery_title">Our Gallery</string>
     <string-array name="portfolio_items">
-        <item>Wedding Album 1</item>
-        <item>Wedding Album 2</item>
-        <item>Birthday Album 1</item>
-        <item>Pre-Wedding Album 1</item>
-        <item>Maternity Album 1</item>
         <item>Event Album 1</item>
+        <item>Celebration Album 1</item>
+        <item>Birthday Album 1</item>
+        <item>Outdoor Album 1</item>
+        <item>Maternity Album 1</item>
+        <item>Event Album 2</item>
         <item>Fashion Portfolio 1</item>
         <item>Product Showcase 1</item>
     </string-array>
@@ -89,9 +89,9 @@
     </string-array>
     <string name="pricing_package_elite_name">Elite Package</string>
     <string-array name="pricing_package_elite_features">
-        <item>Pre-wedding shoot at location</item>
-        <item>Ring ceremony complete coverage</item>
-        <item>Full wedding shoot (Cinematic + Traditional)</item>
+        <item>Artistic outdoor shoot</item>
+        <item>Engagement complete coverage</item>
+        <item>Full event shoot (Cinematic + Traditional)</item>
         <item>2 professional videographers</item>
         <item>2 professional photographers</item>
         <item>Multiple drones for aerial shots</item>
@@ -108,7 +108,7 @@
     <string name="pricing_contact_for_custom_quote">Request Custom Booking</string>
     <string name="services_title">Our Services</string>
     <string name="services_subtitle">Capturing life\'s most beautiful moments</string>
-    <string name="service_wedding_photography_title">Wedding Photography &amp; Videography</string>
+    <string name="service_wedding_photography_title">Event Photography &amp; Videography</string>
     <string name="service_wedding_photography_description">Cinematic and traditional styles to capture every precious moment with elegance.</string>
     <string name="service_ring_ceremony_title">Ring Ceremony</string>
     <string name="service_ring_ceremony_description">Beautifully documenting the start of your journey together.</string>
@@ -126,8 +126,8 @@
     <string name="service_fashion_portfolio_description">Showcasing your style and personality with stunning visuals.</string>
     <string name="service_product_photography_title">Product Photography</string>
     <string name="service_product_photography_description">High-quality images to highlight your products professionally.</string>
-    <string name="service_wedding_card_design_title">Wedding Card Design</string>
-    <string name="service_wedding_card_design_description">Beautiful and unique wedding card designs to match your style.</string>
+    <string name="service_wedding_card_design_title">Custom Design Services</string>
+    <string name="service_wedding_card_design_description">Beautiful and unique designs to match your personal style.</string>
     <string name="service_business_promotion_shoots_title">Business &amp; Promotion Shoots</string>
     <string name="service_business_promotion_shoots_description">High-quality photography and videography for business promotion and e-commerce shops.</string>
     <string name="settings_title">Settings</string>
@@ -165,8 +165,8 @@
     <string name="booking_select_date_placeholder">Select date</string>
     <string name="booking_notes_placeholder">Any special requests or requirements...</string>
     <string-array name="event_types">
-        <item>Wedding</item>
-        <item>Pre-wedding</item>
+        <item>Event</item>
+        <item>Celebration</item>
         <item>Engagement</item>
         <item>Birthday Party</item>
         <item>Corporate Event</item>
@@ -234,13 +234,13 @@
     <string name="services_search_placeholder">Search for services...</string>
     <string name="services_action_check_prices">Check Prices</string>
     <string name="services_category_all">All</string>
-    <string name="services_category_wedding">Wedding</string>
-    <string name="services_category_events">Events</string>
+    <string name="services_category_wedding">Events</string>
+    <string name="services_category_events">Celebrations</string>
     <string name="services_category_corporate">Corporate</string>
     <string name="pricing_header_title">Pricing Plans</string>
     <string name="pricing_category_all">All</string>
-    <string name="pricing_category_wedding">Wedding</string>
-    <string name="pricing_category_events">Events</string>
+    <string name="pricing_category_wedding">Events</string>
+    <string name="pricing_category_events">Celebrations</string>
     <string name="pricing_category_corporate">Corporate</string>
     <string name="about_header_title">Studio Profile</string>
     <string name="about_section_info">Information</string>

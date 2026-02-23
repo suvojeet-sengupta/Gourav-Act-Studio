@@ -408,11 +408,11 @@ fun CategorySection(navController: NavController) {
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            CategoryItem("Wedding", Icons.Filled.Favorite, Color(0xFFFFE4E6), Color(0xFFEC4899))
-            CategoryItem("Events", Icons.Filled.Event, Color(0xFFE0E7FF), Color(0xFF6366F1))
+            CategoryItem("Events", Icons.Filled.Favorite, Color(0xFFFFE4E6), Color(0xFFEC4899))
+            CategoryItem("Celebrations", Icons.Filled.Event, Color(0xFFE0E7FF), Color(0xFF6366F1))
             CategoryItem("Portraits", Icons.Filled.Face, Color(0xFFDCFCE7), Color(0xFF10B981))
             CategoryItem("Videos", Icons.Filled.Videocam, Color(0xFFFEF3C7), Color(0xFFF59E0B))
-            CategoryItem("Pre-Wed", Icons.Filled.FavoriteBorder, Color(0xFFF3E8FF), Color(0xFFA855F7))
+            CategoryItem("Outdoors", Icons.Filled.FavoriteBorder, Color(0xFFF3E8FF), Color(0xFFA855F7))
         }
     }
 }
