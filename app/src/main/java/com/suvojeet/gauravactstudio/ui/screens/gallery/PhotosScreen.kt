@@ -39,7 +39,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.data.model.Album

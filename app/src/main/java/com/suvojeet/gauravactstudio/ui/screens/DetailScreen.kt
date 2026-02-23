@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import com.suvojeet.gauravactstudio.ui.components.VideoPlayer
 import java.util.Locale

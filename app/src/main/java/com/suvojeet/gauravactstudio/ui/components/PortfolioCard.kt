@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.suvojeet.gauravactstudio.Screen
 import com.suvojeet.gauravactstudio.ui.model.PortfolioItem
 import kotlinx.coroutines.delay
