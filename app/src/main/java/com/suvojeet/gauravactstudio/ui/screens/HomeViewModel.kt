@@ -15,7 +15,8 @@ data class HomeUiState(
     val banners: List<BannerData> = emptyList(),
     val popularServices: List<Service> = emptyList(),
     val featuredWorks: List<CloudinaryResource> = emptyList(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val errorMessage: String? = null
 )
 
 class HomeViewModel : ViewModel() {
@@ -27,25 +28,47 @@ class HomeViewModel : ViewModel() {
         loadData()
     }
 
+    fun retry() {
+        loadData()
+    }
+
     private fun loadData() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            // Load static data
-            val banners = StudioRepository.banners
-            val services = StudioRepository.services.filter { it.isHighlighted }
+            try {
+                // Load static data
+                val banners = StudioRepository.banners
+                val services = StudioRepository.services.filter { it.isHighlighted }
 
-            // Load dynamic data (Featured Works)
-            val featuredResult = StudioRepository.getFeaturedPhotos()
-            val featuredWorks = featuredResult.getOrNull() ?: emptyList()
-
-            _uiState.update { 
-                it.copy(
-                    banners = banners,
-                    popularServices = services,
-                    featuredWorks = featuredWorks,
-                    isLoading = false
-                )
+                // Load dynamic data (Featured Works)
+                val featuredResult = StudioRepository.getFeaturedPhotos()
+                
+                if (featuredResult.isSuccess) {
+                    val featuredWorks = featuredResult.getOrNull() ?: emptyList()
+                    _uiState.update { 
+                        it.copy(
+                            banners = banners,
+                            popularServices = services,
+                            featuredWorks = featuredWorks,
+                            isLoading = false
+                        )
+                    }
+                } else {
+                    _uiState.update { 
+                        it.copy(
+                            errorMessage = "Failed to load gallery. Please check your connection.",
+                            isLoading = false
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                _uiState.update { 
+                    it.copy(
+                        errorMessage = "An unexpected error occurred.",
+                        isLoading = false
+                    )
+                }
             }
         }
     }

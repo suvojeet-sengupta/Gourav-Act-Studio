@@ -290,22 +290,12 @@ fun calculateCustomPackagePrice(
     videoType: VideoType,
     albumSheets: AlbumSheets
 ): Int {
-    // Specific pricing for wedding packages as per user's request
-    if (eventType == "Wedding" && numCameras == 2 && numDays == 1) {
-        if (albumSheets == AlbumSheets.SHEETS_30 && videoType == VideoType.CINEMATIC) {
-            return 12000
-        }
-        if (albumSheets == AlbumSheets.SHEETS_20 && videoType == VideoType.TRADITIONAL) {
-            return 11000
-        }
-    }
-
-    // General pricing for other configurations or event types
+    // General pricing for configurations or event types
     var price = 0
 
     // Base price for any event
     price += when (eventType) {
-        "Wedding" -> 8000 // Base for wedding, if not one of the specific packages above
+        "Wedding" -> 8000
         "Birthday Party" -> 2000
         "Pre-wedding" -> 5000
         else -> 1000 // Default for unknown event types

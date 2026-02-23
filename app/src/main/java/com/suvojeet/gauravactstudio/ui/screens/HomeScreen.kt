@@ -75,10 +75,25 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color(0xFFF4F5F9))
     ) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(scrollState)
-        ) {
+        if (uiState.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else if (uiState.errorMessage != null) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(uiState.errorMessage!!, color = Color.Red, textAlign = TextAlign.Center, modifier = Modifier.padding(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(onClick = { viewModel.retry() }) {
+                        Text("Retry")
+                    }
+                }
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
+            ) {
             // 1. Top Bar & Search Section
             TopHeaderSection()
             

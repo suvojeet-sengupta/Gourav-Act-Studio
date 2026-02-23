@@ -2,7 +2,7 @@ package com.suvojeet.gauravactstudio.util
 
 import android.util.Log
 import io.ktor.client.*
-import io.ktor.client.engine.cio.*
+import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -38,7 +38,7 @@ data class TemplateParams(
     @SerialName("name") val name: String,
     @SerialName("phone") val phone: String,
     @SerialName("event_type") val event_type: String,
-    @SerialName("date") val date: String,
+    @SerialName("date") val_date: String,
     @SerialName("event_time") val event_time: String,
     @SerialName("event_address") val event_address: String,
     @SerialName("package_name") val package_name: String,
@@ -59,7 +59,7 @@ data class YourPhotosTemplateParams(
 )
 
 class EmailService {
-    private val client = HttpClient(CIO) {
+    private val client = HttpClient(Android) {
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true

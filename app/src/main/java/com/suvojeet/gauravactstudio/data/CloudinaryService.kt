@@ -5,11 +5,14 @@ import com.suvojeet.gauravactstudio.data.model.CloudinaryListResponse
 import com.suvojeet.gauravactstudio.data.model.CloudinaryResource
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.engine.cio.*
+import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import java.util.concurrent.ConcurrentHashMap
+import android.content.Context
+import com.suvojeet.gauravactstudio.util.NetworkConnectivityObserver
 
 /**
  * Service for fetching images from Cloudinary with in-memory caching
@@ -18,6 +21,14 @@ import kotlinx.serialization.json.Json
  * Make sure "Resource list" is enabled in Cloudinary Console -> Settings -> Security
  */
 object CloudinaryService {
+
+    private var connectivityObserver: NetworkConnectivityObserver? = null
+
+    fun initialize(context: Context) {
+        if (connectivityObserver == null) {
+            connectivityObserver = NetworkConnectivityObserver(context)
+        }
+    }
     
     // Your Cloudinary Cloud Name
     const val CLOUD_NAME = "dujg9rmfh"
@@ -25,14 +36,16 @@ object CloudinaryService {
     // Album configuration - folder name on Cloudinary
     private const val ALBUM_FOLDER = "album library"
     
-    // Cache for photos - prevents repeated API calls
-    private var cachedPhotos: List<CloudinaryResource>? = null
+    // Cache for photos - keyed by folder name/tag
+    private val cachedPhotosMap = ConcurrentHashMap<String, List<CloudinaryResource>>()
+    private val lastFetchTimeMap = ConcurrentHashMap<String, Long>()
+    
     private var cachedAlbums: List<Album>? = null
-    private var lastFetchTime: Long = 0
+    private var lastAlbumsFetchTime: Long = 0
     private const val CACHE_DURATION_MS = 5 * 60 * 1000L // 5 minutes cache
     
-    // Create Ktor HTTP client
-    private val client = HttpClient(CIO) {
+    // Create Ktor HTTP client with Android engine
+    private val client = HttpClient(Android) {
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
@@ -42,20 +55,27 @@ object CloudinaryService {
     }
     
     /**
-     * Check if cache is still valid
+     * Check if cache is still valid for a specific key
      */
-    private fun isCacheValid(): Boolean {
-        return cachedPhotos != null && 
-               (System.currentTimeMillis() - lastFetchTime) < CACHE_DURATION_MS
+    private fun isCacheValid(key: String): Boolean {
+        val lastTime = lastFetchTimeMap[key] ?: 0
+        return cachedPhotosMap.containsKey(key) && 
+               (System.currentTimeMillis() - lastTime) < CACHE_DURATION_MS
+    }
+
+    private fun isAlbumsCacheValid(): Boolean {
+        return cachedAlbums != null && 
+               (System.currentTimeMillis() - lastAlbumsFetchTime) < CACHE_DURATION_MS
     }
     
     /**
      * Clear the cache - call this to force refresh
      */
     fun clearCache() {
-        cachedPhotos = null
+        cachedPhotosMap.clear()
+        lastFetchTimeMap.clear()
         cachedAlbums = null
-        lastFetchTime = 0
+        lastAlbumsFetchTime = 0
     }
     
     /**
@@ -64,7 +84,7 @@ object CloudinaryService {
      */
     suspend fun getAlbums(): Result<List<Album>> {
         // Return cached albums if valid
-        if (isCacheValid() && cachedAlbums != null) {
+        if (isAlbumsCacheValid() && cachedAlbums != null) {
             return Result.success(cachedAlbums!!)
         }
         
@@ -81,6 +101,7 @@ object CloudinaryService {
                 )
                 val albums = listOf(album)
                 cachedAlbums = albums
+                lastAlbumsFetchTime = System.currentTimeMillis()
                 Result.success(albums)
             } else {
                 Result.failure(photos.exceptionOrNull() ?: Exception("Failed to load albums"))
@@ -95,26 +116,30 @@ object CloudinaryService {
      * Uses caching to prevent repeated API calls
      */
     suspend fun getPhotosFromFolder(folder: String): Result<List<CloudinaryResource>> {
+        val tagName = folder.replace(" ", "_").lowercase()
+        
         // Return cached photos if valid
-        if (isCacheValid() && cachedPhotos != null) {
-            return Result.success(cachedPhotos!!)
+        if (isCacheValid(tagName)) {
+            return Result.success(cachedPhotosMap[tagName]!!)
+        }
+
+        if (connectivityObserver?.isConnected() == false) {
+            return Result.failure(Exception("No internet connection"))
         }
         
         return try {
             // Try to fetch using tag-based listing
             // Format: https://res.cloudinary.com/{cloud_name}/image/list/{tag}.json
-            val tagName = folder.replace(" ", "_").lowercase()
             val url = "https://res.cloudinary.com/$CLOUD_NAME/image/list/$tagName.json"
             
             val response: CloudinaryListResponse = client.get(url).body()
             
             // Cache the result
-            cachedPhotos = response.resources
-            lastFetchTime = System.currentTimeMillis()
+            cachedPhotosMap[tagName] = response.resources
+            lastFetchTimeMap[tagName] = System.currentTimeMillis()
             
             Result.success(response.resources)
         } catch (e: Exception) {
-            // If tag-based listing fails, return empty list
             Result.failure(e)
         }
     }

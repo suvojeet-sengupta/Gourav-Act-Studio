@@ -83,16 +83,16 @@ object StudioRepository {
 
     val banners = listOf(
         BannerData(
-            "Wedding Season Offer",
-            "Get 20% off on complete wedding packages",
-            listOf(Color(0xFFEC4899), Color(0xFFF43F5E)),
-            "service_wedding"
+            "Event Excellence",
+            "Capture your special moments with our professional team",
+            listOf(Color(0xFFF59E0B), Color(0xFFFBBF24)),
+            "services"
         ),
         BannerData(
-            "Pre-Wedding Magic",
-            "Book a pre-wedding shoot and get a free mini-album",
-            listOf(Color(0xFF8B5CF6), Color(0xFF6366F1)),
-            "service_pre_wedding"
+            "Portfolio Perfection",
+            "Get a professional portfolio that stands out",
+            listOf(Color(0xFFEC4899), Color(0xFFA855F7)),
+            "gallery"
         )
     )
 

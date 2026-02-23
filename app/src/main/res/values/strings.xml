@@ -6,7 +6,7 @@
     <string name="gallery_screen">Gallery</string>
     <string name="about_screen">About</string>
     <string name="about_studio_title">About the Studio</string>
-    <string name="about_studio_description">The studio offers all types of shoots including wedding shoots, birthday shoots, video photoshoots, cinematic videos, and traditional videos. They also design wedding cards.</string>
+    <string name="about_studio_description">The studio offers all types of shoots including event shoots, birthday shoots, video photoshoots, cinematic videos, and traditional videos. We also offer professional design services.</string>
     <string name="contact_us_title">Contact Us</string>
     <string name="app_logo_gaurav">Gaurav</string>
     <string name="app_logo_act_studio">Act Studio</string>
@@ -210,14 +210,14 @@
     <string name="your_photos_screen">Your Photos</string>
 
     <!-- New Home Screen Strings -->
-    <string name="home_search_placeholder">Search for \'Wedding Photography\'...</string>
+    <string name="home_search_placeholder">Search for photography services...</string>
     <string name="home_location_label">Tundla, Firozabad, UP</string>
     <string name="home_category_title">What\'s on your mind?</string>
     <string name="home_popular_services_title">Popular Services</string>
     <string name="home_see_all">See All</string>
-    <string name="home_banner_1_title">Wedding Season Special</string>
-    <string name="home_banner_1_subtitle">Get 20% OFF on Pre-booking</string>
-    <string name="home_banner_2_title">Cinematic Video</string>
+    <string name="home_banner_1_title">Capture Your Best Moments</string>
+    <string name="home_banner_1_subtitle">Professional photography for all occasions</string>
+    <string name="home_banner_2_title">Cinematic Excellence</string>
     <string name="home_banner_2_subtitle">4K Drone Shots Included</string>
     <string name="home_popular_service_1_title">Traditional Photography</string>
     <string name="home_popular_service_1_price">Starting ₹15,000</string>

@@ -70,6 +70,7 @@ android {
 dependencies {
 
     implementation("androidx.core:core-ktx:1.17.0")
+    implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.8.0")
     implementation(platform("androidx.compose:compose-bom:2025.10.00"))
@@ -81,8 +82,8 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-permissions:0.37.3")
 
-    // Navigation
-    implementation("io.ktor:ktor-client-cio:2.3.2")
+    // Ktor
+    implementation("io.ktor:ktor-client-android:2.3.2")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.2")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")

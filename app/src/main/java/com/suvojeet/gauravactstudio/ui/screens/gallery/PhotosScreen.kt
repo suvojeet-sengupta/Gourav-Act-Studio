@@ -72,8 +72,21 @@ fun PhotosScreen(
             .background(Color.Transparent),
         contentPadding = PaddingValues(bottom = 100.dp)
     ) {
-        // Categories Header
-        item {
+        if (uiState.errorMessage != null) {
+            item {
+                Box(modifier = Modifier.fillMaxWidth().height(300.dp), contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(uiState.errorMessage!!, color = Color.Red, textAlign = TextAlign.Center, modifier = Modifier.padding(16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(onClick = { viewModel.retry() }) {
+                            Text("Retry")
+                        }
+                    }
+                }
+            }
+        } else {
+            // Categories Header
+            item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

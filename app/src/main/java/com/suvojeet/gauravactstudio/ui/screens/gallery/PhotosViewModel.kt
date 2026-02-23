@@ -13,7 +13,8 @@ import kotlinx.coroutines.launch
 data class PhotosUiState(
     val categories: List<PortfolioItem> = emptyList(),
     val albums: List<Album> = emptyList(),
-    val isLoadingAlbums: Boolean = true
+    val isLoadingAlbums: Boolean = true,
+    val errorMessage: String? = null
 )
 
 class PhotosViewModel : ViewModel() {
@@ -25,19 +26,44 @@ class PhotosViewModel : ViewModel() {
         loadData()
     }
 
+    fun retry() {
+        loadData()
+    }
+
     private fun loadData() {
         viewModelScope.launch {
-            // Load categories from repository
-            val categories = StudioRepository.portfolioCategories
-            _uiState.update { it.copy(categories = categories) }
+            _uiState.update { it.copy(isLoadingAlbums = true, errorMessage = null) }
+            
+            try {
+                // Load categories from repository
+                val categories = StudioRepository.portfolioCategories
+                _uiState.update { it.copy(categories = categories) }
 
-            // Load albums from repository
-            val result = StudioRepository.getAlbums()
-            _uiState.update { 
-                it.copy(
-                    albums = result.getOrNull() ?: emptyList(),
-                    isLoadingAlbums = false
-                )
+                // Load albums from repository
+                val result = StudioRepository.getAlbums()
+                
+                if (result.isSuccess) {
+                    _uiState.update { 
+                        it.copy(
+                            albums = result.getOrNull() ?: emptyList(),
+                            isLoadingAlbums = false
+                        )
+                    }
+                } else {
+                    _uiState.update { 
+                        it.copy(
+                            errorMessage = "Failed to load albums. Please check your connection.",
+                            isLoadingAlbums = false
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                _uiState.update { 
+                    it.copy(
+                        errorMessage = "An unexpected error occurred.",
+                        isLoadingAlbums = false
+                    )
+                }
             }
         }
     }

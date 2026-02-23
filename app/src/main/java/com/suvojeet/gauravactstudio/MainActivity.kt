@@ -16,7 +16,26 @@ import com.suvojeet.gauravactstudio.ui.screens.WelcomeScreen
 import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
 import com.suvojeet.gauravactstudio.util.Prefs
 
-class MainActivity : ComponentActivity() {
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import java.util.Locale
+import androidx.activity.enableEdgeToEdge
+import android.os.Bundle
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import com.suvojeet.gauravactstudio.ui.screens.WelcomeScreen
+import com.suvojeet.gauravactstudio.ui.theme.GauravActStudioTheme
+import com.suvojeet.gauravactstudio.util.Prefs
+
+import com.suvojeet.gauravactstudio.data.CloudinaryService
+
+class MainActivity : AppCompatActivity() {
 
     private var showWelcomeScreen by mutableStateOf(false)
 
@@ -24,9 +43,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        CloudinaryService.initialize(this)
+
         val selectedLanguage = Prefs.getLanguage(this)
         if (selectedLanguage != null) {
-            setLocale(selectedLanguage)
+            val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(selectedLanguage)
+            AppCompatDelegate.setApplicationLocales(appLocale)
         }
 
         showWelcomeScreen = Prefs.isFirstLaunch(this)
@@ -46,13 +68,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    fun setLocale(languageCode: String) {
-        val locale = Locale(languageCode)
-        Locale.setDefault(locale)
-        val config: Configuration = resources.configuration
-        config.setLocale(locale)
-        resources.updateConfiguration(config, resources.displayMetrics)
     }
 }
